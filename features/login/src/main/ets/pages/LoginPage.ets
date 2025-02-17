@@ -48,6 +48,7 @@ struct LoginPageStruct {
                 })
             }
             .margin({ bottom: 15 })
+
             Column() {
               Text('密码')
                 .fontSize(15)

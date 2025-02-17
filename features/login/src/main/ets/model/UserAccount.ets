@@ -8,10 +8,10 @@ export class UserAccount {
   imgResource: Resource = $r('app.media.userImg')
   balance: string = '0.00'
 }
-
+@Observed
 export class SginUser {
   email: string = ''
-  password: String = ''
+  password: string = ''
 }
 
 export enum UserTypeEnum {
