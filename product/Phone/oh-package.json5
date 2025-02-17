@@ -8,6 +8,7 @@
   "dependencies": {
     "routermodule": "file:../../commons/RouterModule",
     "utils": "file:../../commons/utils",
-    "login": "file:../../features/login"
+    "login": "file:../../features/login",
+    "datastore": "file:../../commons/datastore"
   }
 }

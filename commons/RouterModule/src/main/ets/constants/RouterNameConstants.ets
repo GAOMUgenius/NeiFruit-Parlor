@@ -4,4 +4,5 @@ export class RouterNameConstants {
 
 export class BuilderNameConstants {
   static readonly LOGIN_LOGINPAGE: string = 'login_loginPage';
+  static readonly LOGIN_SGINPAGE: string = 'login_sginPage';
 }

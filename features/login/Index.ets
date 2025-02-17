@@ -9,6 +9,8 @@ export function harInit(builderName: string): void {
       Logger.info(TAG, `匹配到LOGIN_LOGINPAGE分支，准备导入LoginPage模块`); // case分支添加日志
       import ("./src/main/ets/pages/LoginPage");
       break;
+      case BuilderNameConstants.LOGIN_SGINPAGE:
+        import ("./src/main/ets/pages/SignPage")
     default:
       Logger.info(TAG, `进入default分支`);
       break;

@@ -1,11 +1,28 @@
+import { PreferenceManager } from 'datastore';
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule';
 import { Logger } from 'utils';
-
+import { AppConstants } from '../constants/AppConstants'
 @Entry
 @Component
 struct Index {
   @State indexPathStack: NavPathStack = new NavPathStack()
-  aboutToAppear() {
+
+  async aboutToAppear() {
+    const preferenceManager = PreferenceManager.getInstance();
+    try {
+      // 检查是否存在表示是否为初次打开的键
+      const hasValue = await preferenceManager.hasValue(AppConstants.IS_FIRST_OPEN_KEY);
+
+      if (!hasValue) {
+        // 如果不存在该键，则设置用户为初次打开
+        await preferenceManager.setValue(AppConstants.IS_FIRST_OPEN_KEY, true);
+        console.log('用户是初次打开 app');
+      } else {
+        console.log('用户不是初次打开 app');
+      }
+    } catch (error) {
+      console.error('初始化 app 时发生错误:', error);
+    }
     if (!this.indexPathStack) {
       this.indexPathStack = new NavPathStack();
     }
