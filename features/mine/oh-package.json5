@@ -1,5 +1,5 @@
 {
-  "name": "login",
+  "name": "mine",
   "version": "1.0.0",
   "description": "Please describe the basic information.",
   "main": "Index.ets",
@@ -7,9 +7,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "utils": "file:../../commons/utils",
-    "routermodule": "file:../../commons/RouterModule",
-    "datastore": "file:../../commons/datastore",
-    "network": "file:../../commons/network",
-    "tab": "file:../../features/tab"
+    "routermodule": "file:../../commons/RouterModule"
   }
 }

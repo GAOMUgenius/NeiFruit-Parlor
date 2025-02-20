@@ -75,7 +75,7 @@ struct LoginPageStruct {
             .backgroundColor('#ff180258')
             .width('80%')
             .onClick(() => {
-
+              buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE)
             })
 
           Row() {

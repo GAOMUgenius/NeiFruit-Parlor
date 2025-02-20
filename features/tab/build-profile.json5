@@ -1,18 +1,6 @@
 {
   "apiType": "stageMode",
   "buildOption": {
-    "arkOptions": {
-      "runtimeOnly": {
-        "sources": [
-        ],
-        "packages": [
-          "tab",
-        ]
-      }
-    },
-    "externalNativeOptions": {
-      "abiFilters": ["arm64-v8a", "x86_64"]
-    }
   },
   "buildOptionSet": [
     {

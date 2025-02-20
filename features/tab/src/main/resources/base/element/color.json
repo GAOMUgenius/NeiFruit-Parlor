@@ -1,0 +1,20 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "challenge_light",
+      "value": "#00CCD7"
+    },
+    {
+      "name": "challenge_night",
+      "value": "#99FFFFFF"
+    },
+    {
+      "name": "mainpage_background",
+      "value": "#ebf5f5f5"
+    }
+  ]
+}

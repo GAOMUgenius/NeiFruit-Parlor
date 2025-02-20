@@ -72,6 +72,18 @@
     {
       "name": "datastore",
       "srcPath": "./commons/datastore",
+    },
+    {
+      "name": "network",
+      "srcPath": "./commons/network",
+    },
+    {
+      "name": "mine",
+      "srcPath": "./features/mine"
+    },
+    {
+      "name": "tab",
+      "srcPath": "./features/tab",
     }
   ]
 }

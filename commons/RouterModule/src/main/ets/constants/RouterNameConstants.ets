@@ -5,4 +5,6 @@ export class RouterNameConstants {
 export class BuilderNameConstants {
   static readonly LOGIN_LOGINPAGE: string = 'login_loginPage';
   static readonly LOGIN_SGINPAGE: string = 'login_sginPage';
+  static readonly TAB_TABPAGE: string = 'tab_tabpage';
+  static readonly MINE_MINEPAGE: string = 'mine_minepage';
 }

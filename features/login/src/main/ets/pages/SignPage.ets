@@ -2,6 +2,7 @@ import { BuilderNameConstants, RouterModule } from 'routermodule'
 import { AccountInputView } from '../components/AccountInPutView'
 import { SginUser } from '../model/UserAccount'
 import { promptAction } from '@kit.ArkUI'
+import { getVerificationCode } from 'network/src/main/ets/usercharge/usercharge'
 
 @Component
 struct SginPageStruct {
@@ -74,14 +75,19 @@ struct SginPageStruct {
             .backgroundColor(this.isCounting ? '#CCCCCC' : '#ff201d5d')
             .enabled(!this.isCounting)
             .margin({ right: 40 })
-            .onClick(() => {
-              if(!this.sginuser.email) {
-                promptAction.showToast({
-                  message: "邮箱不能为空"
-                })
+            .onClick(async () => {
+              if(!this.isCounting) {
+                if(!this.sginuser.email) {
+                  promptAction.showToast({
+                    message: "邮箱不能为空"
+                  })
+                } else {
+                  this.startCountdown()
+                  // 获取验证码
+                  this.code =  await getVerificationCode(this.sginuser.email)
+                }
               } else {
-                this.startCountdown()
-                // 这里添加实际获取验证码的逻辑
+                // 什么也不做
               }
 
             })
@@ -167,6 +173,7 @@ struct SginPageStruct {
     }
   }
 }
+
 @Builder
 export function SginPage(value: object) {
   SginPageStruct()
