@@ -1,15 +1,6 @@
 {
   "apiType": "stageMode",
   "buildOption": {
-    "arkOptions": {
-      "runtimeOnly": {
-        "sources": [
-        ],
-        "packages": [
-          "mine",
-        ]
-      }
-    }
   },
   "buildOptionSet": [
     {

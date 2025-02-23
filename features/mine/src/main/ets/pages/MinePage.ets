@@ -1,16 +1,35 @@
+import { UserAccount } from "datastore";
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
+import { MineHeaderView } from "../views/MineHeaderView";
+import { PayManangeView } from "../views/PayManageView";
+import { UserInfoView } from "../views/UserInfoView";
+
 @Component
 export struct MinePageStruct {
-  @State message: string = '我的';
+  // @Link user: UserAccount
 
   build() {
-    Row() {
-      Column() {
-        Text(this.message)
-          .fontSize(50)
-          .fontWeight(FontWeight.Bold)
+    Navigation() {
+      Row() {
+        Column() {
+          MineHeaderView()
+            .margin({ top: 10 })
+
+          UserInfoView()
+            .margin({ top: 20 })
+
+
+          PayManangeView()
+            .margin({ top: 20 })
+
+        }
+        .justifyContent(FlexAlign.Start)
+        .alignItems(HorizontalAlign.Center)
+        .width('100%')
       }
+      .alignItems(VerticalAlign.Top)
       .width('100%')
+      .height('100%')
     }
-    .height('100%')
   }
 }

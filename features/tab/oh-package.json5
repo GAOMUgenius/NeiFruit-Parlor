@@ -8,6 +8,8 @@
   "dependencies": {
     "utils": "file:../../commons/utils",
     "routermodule": "file:../../commons/RouterModule",
-    "mine": "file:../../features/mine"
+    "mine": "file:../../features/mine",
+    "home": "file:../../features/home",
+    "datastore": "file:../../commons/datastore"
   }
 }

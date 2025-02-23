@@ -7,4 +7,5 @@ export class BuilderNameConstants {
   static readonly LOGIN_SGINPAGE: string = 'login_sginPage';
   static readonly TAB_TABPAGE: string = 'tab_tabpage';
   static readonly MINE_MINEPAGE: string = 'mine_minepage';
+  static readonly MINE_USERINFORMATION: string = 'mine_userinformation';
 }

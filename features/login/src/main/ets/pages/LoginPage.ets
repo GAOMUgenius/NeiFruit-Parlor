@@ -1,11 +1,11 @@
 import { RouterModule, BuilderNameConstants, RouterNameConstants, buildRouterModel } from "routermodule";
 import { promptAction } from "@kit.ArkUI";
 import { ResourceConstants } from "../constants/ResourceConstants";
-import { UserAccount } from "../model/UserAccount";
+import { UserAccount } from "datastore";
 
 @Component
 struct LoginPageStruct {
-  @Prop user: UserAccount = new UserAccount()
+  @Prop userAccount: UserAccount = new UserAccount()
   @State rememberPassword: boolean = false
   @State stopLogin: boolean = false
   @State loading: boolean = false
@@ -40,11 +40,11 @@ struct LoginPageStruct {
                 .fontColor('#ff201d5d')
                 .grayscale(0)
                 .padding({ bottom: 5 })
-              TextInput({ text: this.user.userAccount })
+              TextInput({ text: this.userAccount.userAccount })
                 .type(InputType.Email)
                 .width('80%')
                 .onChange((value: string) => {
-                  this.user.userAccount = value
+                  this.userAccount.userAccount = value
                 })
             }
             .margin({ bottom: 15 })
@@ -59,11 +59,11 @@ struct LoginPageStruct {
                 .grayscale(0)
                 .padding({ bottom: 5 })
 
-              TextInput({ text: this.user.password })
+              TextInput({ text: this.userAccount.password })
                 .type(InputType.Password)
                 .width('80%')
                 .onChange((value: string) => {
-                  this.user.password = value
+                  this.userAccount.password = value
                 })
             }
           }
@@ -75,7 +75,7 @@ struct LoginPageStruct {
             .backgroundColor('#ff180258')
             .width('80%')
             .onClick(() => {
-              buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE)
+              buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE, new Object({ userAccount: this.userAccount }))
             })
 
           Row() {
