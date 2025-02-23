@@ -2,15 +2,19 @@ import { BuilderNameConstants, RouterModule } from "routermodule"
 import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
+import { HomePageStruct } from "home/src/main/ets/components/MainPage"
+import { UserAccount } from "datastore"
+
 @Component
 export struct TabPageStruct {
   @State currentIndex: TabBarType = TabBarType.MAINPAGE
+  // @StorageProp user: UserAccount = new UserAccount()
   build() {
     NavDestination() {
       Flex({ direction: FlexDirection.Column }) {
         Tabs({ index: this.currentIndex }) {
           TabContent() {
-
+            HomePageStruct()
           }
           TabContent() {
             MinePageStruct()
@@ -26,6 +30,7 @@ export struct TabPageStruct {
       .backgroundColor($r('app.color.mainpage_background'))
       .width('100%')
     }
+    .hideTitleBar(true)
   }
 }
 

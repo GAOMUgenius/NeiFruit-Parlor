@@ -84,6 +84,10 @@
     {
       "name": "tab",
       "srcPath": "./features/tab",
+    },
+    {
+      "name": "home",
+      "srcPath": "./features/home",
     }
   ]
 }

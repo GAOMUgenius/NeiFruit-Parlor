@@ -39,6 +39,7 @@ export struct CustomTabBar {
     })
   }
 }
+
 @Component
 struct TabItem {
   @Prop index: number

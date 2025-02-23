@@ -1,6 +1,6 @@
 import { BuilderNameConstants, RouterModule } from 'routermodule'
 import { AccountInputView } from '../components/AccountInPutView'
-import { SginUser } from '../model/UserAccount'
+import { SginUser } from 'datastore'
 import { promptAction } from '@kit.ArkUI'
 import { getVerificationCode } from 'network/src/main/ets/usercharge/usercharge'
 
