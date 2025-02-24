@@ -8,5 +8,8 @@ export class BuilderNameConstants {
   static readonly TAB_TABPAGE: string = 'tab_tabpage';
   static readonly MINE_MINEPAGE: string = 'mine_minepage';
   static readonly MINE_USERINFORMATION: string = 'mine_userinformation';
+<<<<<<< HEAD
   static readonly MINE_NAMECHANGE: string = 'mine_namechange';
+=======
+>>>>>>> origin/main
 }

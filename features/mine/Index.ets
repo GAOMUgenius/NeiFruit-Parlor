@@ -7,8 +7,11 @@ export function harInit(builderName: string): void {
     case BuilderNameConstants.MINE_USERINFORMATION:
       import ("./src/main/ets/pages/UserInformation");
       break;
+<<<<<<< HEAD
       case BuilderNameConstants.MINE_NAMECHANGE:
         import ("./src/main/ets/pages/NameChange")
+=======
+>>>>>>> origin/main
     default:
       break;
   }

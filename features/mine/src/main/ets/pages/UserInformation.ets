@@ -1,6 +1,9 @@
 import { UserAccount } from 'datastore'
 import { BuilderNameConstants, RouterModule } from 'routermodule';
+<<<<<<< HEAD
 import { CustomUserInfomation } from '../compenents/CustomUserInformation';
+=======
+>>>>>>> origin/main
 
 @Component
 struct UserInformationStruct {
@@ -8,7 +11,11 @@ struct UserInformationStruct {
   build() {
     NavDestination() {
       Row(){
+<<<<<<< HEAD
         CustomUserInfomation()
+=======
+
+>>>>>>> origin/main
       }
       .width('100%')
       .height('100%')
