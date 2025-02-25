@@ -8,8 +8,17 @@ struct UserInformationStruct {
   build() {
     NavDestination() {
       Row(){
-        CustomUserInfomation()
+        Column() {
+          CustomUserInfomation()
+            .height('30%')
+            .width('80%')
+        }
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
       }
+      .backgroundColor("#ebf5f5f5")
+      .alignItems(VerticalAlign.Top)
+      .justifyContent(FlexAlign.Center)
       .width('100%')
       .height('100%')
     }
