@@ -58,9 +58,11 @@ struct TabItem {
         .fontSize(10)
         .margin({ top: 5 })
         .fontWeight(600)
-        .fontColor(this.index === this.selectedIndex ? $r('sys.color.ohos_id_color_bottom_tab_text_on') : $r('sys.color.ohos_id_color_bottom_tab_text_off'))
+        .fontColor(this.index === this.selectedIndex ? $r('app.color.tab_title_text_on') : $r('app.color.tab_title_text_off'))
 
     }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
     .clip(false)
     .padding({ left: 4, right: 4 , top: 5 })
     .layoutWeight(1)

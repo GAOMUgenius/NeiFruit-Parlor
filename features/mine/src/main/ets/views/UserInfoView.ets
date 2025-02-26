@@ -15,7 +15,7 @@ export struct UserInfoView {
           .width(60)
           .height(60)
           .margin({ left: 20 })
-        Text(this.userAccount.userAccount)
+        Text((!this.userAccount.userName) ? this.userAccount.userAccount : this.userAccount.userName)
           .fontSize(20)
           .fontWeight(FontWeight.Medium)
           .margin({ left: 25, top: 10 })
@@ -86,7 +86,7 @@ export struct UserInfoView {
         [0xa6c1ee, 1.0],
       ]
     })
-    .borderRadius(20)
+    .borderRadius(30)
     .width('90%')
   }
 }

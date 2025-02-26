@@ -8,6 +8,7 @@ export interface TabBarData {
 
 export enum TabBarType {
   MAINPAGE = 0,
+  SHOPPINGCAR,
   MINE
 }
 
@@ -17,6 +18,12 @@ export const TabsInfo: TabBarData[] = [
     title: '首页',
     activeIcon: $r('app.media.ic_tab_mainpage_on'),
     defaultIcon: $r('app.media.ic_tab_mainpage_off')
+  },
+  {
+    id: TabBarType.SHOPPINGCAR,
+    title: '购物车',
+    activeIcon: $r('app.media.ic_tab_shoppingcar_on'),
+    defaultIcon: $r('app.media.ic_tab_shoppingcar_off')
   },
   {
     id: TabBarType.MINE,

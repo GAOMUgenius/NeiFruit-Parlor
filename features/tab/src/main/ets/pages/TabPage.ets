@@ -17,6 +17,9 @@ export struct TabPageStruct {
             HomePageStruct()
           }
           TabContent() {
+
+          }
+          TabContent() {
             MinePageStruct()
           }
         }

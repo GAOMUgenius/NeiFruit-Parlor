@@ -86,9 +86,13 @@ struct ProductItem {
       Row() {
         //价格区域
         Row() {
-          Text('￥' + this.product_price)
+          Text('￥')
             .fontWeight(FontWeight.Bold)
-            .fontColor('#ff180258')
+            .fontColor('#fffd2626')
+            .fontSize(15)
+          Text(this.product_price)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#fffd2626')
             .fontSize(20)
           Text('/' + this.product_unit)
             .fontWeight(FontWeight.Medium)
@@ -105,6 +109,7 @@ struct ProductItem {
               height: 15,
               width: 15
             })
+            .margin({ top: 2 })
         }
         .size({
           height: 20,

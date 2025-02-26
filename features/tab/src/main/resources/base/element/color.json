@@ -15,6 +15,14 @@
     {
       "name": "mainpage_background",
       "value": "#ebf5f5f5"
+    },
+    {
+      "name": "tab_title_text_on",
+      "value": "#FF309FFF"
+    },
+    {
+      "name": "tab_title_text_off",
+      "value": "#FF8D8D8D"
     }
   ]
 }
