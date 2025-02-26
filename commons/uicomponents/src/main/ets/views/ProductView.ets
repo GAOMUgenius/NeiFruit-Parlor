@@ -2,7 +2,7 @@ import { ProductData, productDataSource, ProductData_List } from '../model/Produ
 
 @Component
 export struct ProductView {
-  
+
   build() {
     WaterFlow({ footer: (): void => this.itemFoot() }){
       LazyForEach(productDataSource, (item: ProductData) => {
@@ -64,41 +64,58 @@ struct ProductItem {
         })
         .borderRadius(15)
 
+      //商品信息区域
       Row() {
-        Text(this.product_name)
-          .fontSize(15)
-          .maxLines(3)
+        Text(`${this.product_name} `) // 添加空格分隔
+          .fontWeight(FontWeight.Bold)
+          .fontSize(13)
+          .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .flexShrink(1)
 
         Text(this.product_capacity + this.product_capacity_unit)
-          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(13)
           .flexShrink(0) // 禁止容量部分被截断
       }
       .width('45%')
-      .alignItems(VerticalAlign.Bottom)
+      .margin({ bottom: 8 })
+      .alignItems(VerticalAlign.Top) // 顶部对齐
+      .justifyContent(FlexAlign.Start) // 确保内容从行首开始排列
 
       Row() {
+        //价格区域
         Row() {
           Text('￥' + this.product_price)
+            .fontWeight(FontWeight.Bold)
             .fontColor('#ff180258')
             .fontSize(20)
           Text('/' + this.product_unit)
+            .fontWeight(FontWeight.Medium)
             .fontSize(10)
             .fontColor(Color.Gray)
         }
         .width('45%')
-        .alignItems(VerticalAlign.Center)
+        .alignItems(VerticalAlign.Bottom)
         .justifyContent(FlexAlign.Start)
 
-        Image($r('app.media.shopping_car'))
-          .borderRadius(8)
-          .size({
-            height: 15,
-            width: 15
-          })
-          .backgroundColor('#ff22c1ff')
+        Row() {
+          Image($r('app.media.shopping_car'))
+            .size({
+              height: 15,
+              width: 15
+            })
+        }
+        .size({
+          height: 20,
+          width: 20
+        })
+        .alignItems(VerticalAlign.Center)
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor('#ff22c1ff')
+        .borderRadius(10)
       }
+      .margin({ bottom: 8 })
       .width('45%')
       .justifyContent(FlexAlign.SpaceBetween)
     }

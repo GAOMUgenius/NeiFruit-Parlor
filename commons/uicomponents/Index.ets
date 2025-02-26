@@ -1,0 +1,1 @@
+export { ProductView } from './src/main/ets/views/ProductView'

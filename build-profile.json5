@@ -88,6 +88,10 @@
     {
       "name": "home",
       "srcPath": "./features/home",
+    },
+    {
+      "name": "uicomponents",
+      "srcPath": "./commons/uicomponents",
     }
   ]
 }

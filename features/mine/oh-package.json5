@@ -8,6 +8,7 @@
   "dependencies": {
     "utils": "file:../../commons/utils",
     "routermodule": "file:../../commons/RouterModule",
-    "datastore": "file:../../commons/datastore"
+    "datastore": "file:../../commons/datastore",
+    "uicomponents": "file:../../commons/uicomponents"
   }
 }

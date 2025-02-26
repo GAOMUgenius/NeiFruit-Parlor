@@ -66,12 +66,12 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
-  product_picture: $r('app.media.OIP'),
-  product_name: "有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米",
-  product_price: "78.5",
-  product_unit: "袋",
-  product_capacity: "1.8",
-  product_capacity_unit: "kg",
+    product_picture: $r('app.media.OIP'),
+    product_name: "有机小米有机小",
+    product_price: "78.5",
+    product_unit: "袋",
+    product_capacity: "1.8",
+    product_capacity_unit: "kg",
   },
   {
     product_picture: $r('app.media.OIP'),

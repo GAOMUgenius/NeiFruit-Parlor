@@ -2,7 +2,7 @@ import { UserAccount } from "datastore";
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 import { MineHeaderView } from "../views/MineHeaderView";
 import { PayManangeView } from "../views/PayManageView";
-import { ProductView } from "../views/ProductView";
+import { ProductView } from "uicomponents";
 import { UserInfoView } from "../views/UserInfoView";
 
 @Component

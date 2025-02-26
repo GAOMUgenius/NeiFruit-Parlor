@@ -5,20 +5,24 @@ export interface PayManageData {
 
 export const PayManageInfo: PayManageData[] = [
   {
-    img: $r('app.media.pay_manage_orders'),
-    title: '订单管理'
+    img: $r('app.media.pay_manage_pay'),
+    title: '待付款'
   },
   {
-    img: $r("app.media.pay_manage_renewal"),
-    title: '续费管理'
+    img: $r("app.media.pay_manage_delivery"),
+    title: '待发货'
   },
   {
-    img: $r('app.media.pay_manage_bill'),
-    title: '费用账单'
+    img: $r('app.media.pay_manage_takeover'),
+    title: '待收货'
   },
   {
-    img: $r('app.media.pay_manage_invoice'),
-    title: '发票管理'
+    img: $r('app.media.pay_manage_evaluate'),
+    title: '待评价'
+  },
+  {
+    img: $r('app.media.pay_manage_service'),
+    title: '退款/售后'
   }
 ]
 
