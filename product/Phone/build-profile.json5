@@ -6,7 +6,7 @@
         "sources": [
         ],
         "packages": [
-          "login",
+          "login"
         ]
       }
     },

@@ -58,6 +58,34 @@ export class RouterModule {
     }
   }
 
+  // 通过replacePath跳转到指定的Page
+  public static async replace(router: RouterModel, animated: boolean = true): Promise<void> {
+    try {
+      const harName = router.builderName.split('_')[0];
+      // 动态导入要重定向到的页面。
+      try {
+        Logger.info(TAG, `即将调用harInit函数，当前router.builderName的值为: ${router.builderName}`);
+        await import(harName).then((ns: ESObject): Promise<void> => ns.harInit(router.builderName));
+      } catch (importError) {
+        // 捕获动态导入页面时出现的错误，比如模块不存在、路径错误等
+        Logger.error(`动态导入页面失败，harName: ${harName}，错误信息:`, importError + TAG);
+        Logger.error(`调用栈信息:`, importError.stack + TAG);
+      }
+      try {
+        const routerStack = RouterModule.getRouter(router.routerName);
+        const navPathInfo: NavPathInfo = { name: router.builderName, param: router.param };
+        routerStack.replacePath(navPathInfo, animated);
+      } catch (replacePathError) {
+        // 捕获操作页面栈的replacePath方法时出现的错误，比如页面栈不可用、参数格式错误等
+        Logger.error(`页面栈replacePath操作失败，routerName: ${router.routerName}，builderName: ${router.builderName}，错误信息:`,
+          replacePathError + TAG);
+      }
+    } catch (overallError) {
+      // 捕获整个replace方法执行过程中未被内层catch处理的其他异常，提供更通用的错误提示
+      Logger.error(`执行replace方法出现整体错误，错误信息:`, overallError + TAG);
+    }
+  }
+
   // 获取页面堆栈并弹出它。
   public static pop(routerName: string): void {
     // 查找 pop 的相应路由堆栈。

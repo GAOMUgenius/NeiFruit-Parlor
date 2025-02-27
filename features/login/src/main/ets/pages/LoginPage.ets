@@ -75,6 +75,7 @@ struct LoginPageStruct {
             .backgroundColor('#ff180258')
             .width('80%')
             .onClick(() => {
+              RouterModule.pop( RouterNameConstants.PHONE_INDEX)
               buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE, new Object({ userAccount: this.userAccount }))
             })
 

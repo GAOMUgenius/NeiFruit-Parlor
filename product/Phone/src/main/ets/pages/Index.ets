@@ -1,11 +1,19 @@
 import { PreferenceManager } from 'datastore';
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule';
+import { replaceRouterModel } from 'routermodule/src/main/ets/model/RouterModel';
 import { Logger } from 'utils';
 import { AppConstants } from '../constants/AppConstants'
+import { common } from '@kit.AbilityKit';
+
 @Entry
 @Component
 struct Index {
+  // 控制闪屏页可见性的状态变量
+  @State showSplash: boolean = true
+  // 主路由堆栈
   @State indexPathStack: NavPathStack = new NavPathStack()
+  // 获取 UIAbility 上下文用于退出应用
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
 
   async aboutToAppear() {
     const preferenceManager = PreferenceManager.getInstance();
@@ -37,19 +45,47 @@ struct Index {
   };
 
 
+
   build() {
-    Navigation(this.indexPathStack) {
-      Row() {
-        Text('这里是闪屏页')
-        Button('点击进入登录界面')
-          .onClick(() => {
-            //通过routermap路由进行跳转，跳转到loginpage页面
-            buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE)
-          })
+    Column() {
+      if (this.showSplash) {
+        Row() {
+          Button('点击跳转')
+            .onClick(() => {
+              this.showSplash = false; // 销毁闪屏页
+              replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE);
+            })
+        }
+
+      } else {
+        Navigation(this.indexPathStack) {
+          // 主路由容器（空内容，由路由控制）
+          Column() {
+            // 此处可以为空，实际内容由路由控制
+            Row() {
+              Button('退出应用')
+                .type(ButtonType.Capsule)
+                .backgroundColor('#ff4500')
+                .onClick(() => {
+                  this.context.terminateSelf(); // 执行退出
+                })
+
+              Button('取消')
+                .type(ButtonType.Capsule)
+                .backgroundColor('#228b22')
+                .margin({ left: 20 })
+                .onClick(() => {
+                  replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE)
+                })
+            }
+            .justifyContent(FlexAlign.Center)
+            .width('100%')
+            .height('10%')
+            .padding(20)
+          }
+        }
+        .navDestination(this.routerMap)
       }
-      .height('100%')
-      .width('100%')
     }
-    .navDestination(this.routerMap);
   }
 }

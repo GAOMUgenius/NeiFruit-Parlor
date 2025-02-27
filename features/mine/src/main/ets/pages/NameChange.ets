@@ -13,7 +13,7 @@ struct NameChangeStruct {
               this.name = value
             })
             .textAlign(TextAlign.JUSTIFY)
-            .width('80%')
+            .width('100%')
             .height('5%')
             .margin({
               top: 10

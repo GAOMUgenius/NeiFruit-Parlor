@@ -10,8 +10,7 @@ struct UserInformationStruct {
       Row(){
         Column() {
           CustomUserInfomation()
-            .height('30%')
-            .width('80%')
+            .width('90%')
         }
         .justifyContent(FlexAlign.Center)
         .alignItems(HorizontalAlign.Center)

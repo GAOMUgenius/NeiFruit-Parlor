@@ -21,3 +21,12 @@ export function buildRouterModel(routerName: string, builderName: string, param?
   RouterModule.push(router);
 }
 
+//替换栈顶页面
+export function replaceRouterModel(routerName: string, builderName: string, param?: object, animated: boolean = false) {
+  let router: RouterModel = new RouterModel();
+  router.builderName = builderName;
+  router.routerName = routerName;
+  router.param = param;
+  RouterModule.replace(router, animated);
+}
+
