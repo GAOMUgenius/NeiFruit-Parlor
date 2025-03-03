@@ -1,16 +1,24 @@
-import { BuilderNameConstants, RouterModule } from "routermodule"
+import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routermodule"
 import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/components/MainPage"
 import { UserAccount } from "datastore"
-
+@Entry({ routeName: 'TabPage' })
 @Component
-export struct TabPageStruct {
+struct TabPage {
   @State currentIndex: TabBarType = TabBarType.MAINPAGE
-  // @StorageProp user: UserAccount = new UserAccount()
+  @State tabPathStack: NavPathStack = new NavPathStack()
+
+  aboutToAppear(): void {
+    if (!this.tabPathStack) {
+      this.tabPathStack = new NavPathStack();
+    }
+    RouterModule.createRouter(RouterNameConstants.TABPAGE, this.tabPathStack);
+  }
+
   build() {
-    NavDestination() {
+    Navigation(this.tabPathStack) {
       Flex({ direction: FlexDirection.Column }) {
         Tabs({ index: this.currentIndex }) {
           TabContent() {
@@ -33,17 +41,28 @@ export struct TabPageStruct {
       .backgroundColor($r('app.color.mainpage_background'))
       .width('100%')
     }
+    .navDestination(this.routerMap)
     .hideTitleBar(true)
   }
+
+  @Builder
+  routerMap(builderName: string, param: object) {
+    // 根据模块名称获取 WrappedBuilder 对象，通过 builder 界面创建页面，并导入 param 参数。
+    RouterModule.getBuilder(builderName).builder(param);
+  };
+
 }
 
-@Builder
-export function TabPage(value: object) {
-  TabPageStruct()
-}
 
-const builderName = BuilderNameConstants.TAB_TABPAGE;
-if (!RouterModule.getBuilder(builderName)) {
-  const builder: WrappedBuilder<[object]> = wrapBuilder(TabPage);
-  RouterModule.registerBuilder(builderName, builder);
-}
+export { TabPage }
+
+// @Builder
+// export function TabPage(value: object) {
+//   TabPageStruct()
+// }
+
+// const builderName = BuilderNameConstants.TAB_TABPAGE;
+// if (!RouterModule.getBuilder(builderName)) {
+//   const builder: WrappedBuilder<[object]> = wrapBuilder(TabPage);
+//   RouterModule.registerBuilder(builderName, builder);
+// }

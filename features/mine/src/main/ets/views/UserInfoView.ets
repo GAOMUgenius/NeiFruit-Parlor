@@ -30,7 +30,7 @@ export struct UserInfoView {
         bottom: 10
       })
       .onClick(() => {
-        buildRouterModel( RouterNameConstants.PHONE_INDEX, BuilderNameConstants.MINE_USERINFORMATION )
+        buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION )
       })
 
       Row() {

@@ -1,5 +1,6 @@
 export class RouterNameConstants {
   static readonly PHONE_INDEX: string = 'phone_index';
+  static readonly TABPAGE: string = 'tab_tabpage';
 }
 
 export class BuilderNameConstants {

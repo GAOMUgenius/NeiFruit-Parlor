@@ -1,9 +1,12 @@
 import { PreferenceManager } from 'datastore';
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule';
 import { replaceRouterModel } from 'routermodule/src/main/ets/model/RouterModel';
-import { Logger } from 'utils';
+import { Logger, PromptActionClass } from 'utils';
 import { AppConstants } from '../constants/AppConstants'
 import { common } from '@kit.AbilityKit';
+import { ComponentContent, router } from '@kit.ArkUI';
+import { bundleManager } from '@kit.MDMKit';
+
 
 @Entry
 @Component
@@ -54,6 +57,19 @@ struct Index {
             .onClick(() => {
               this.showSplash = false; // 销毁闪屏页
               replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE);
+              // const bundleName = (getContext(this) as common.UIAbilityContext).applicationInfo.name;
+              // router.pushUrl({
+              //   url: `@bundle:${bundleName}/login/ets/pages/LoginPage`,
+              //   params: {
+              //     data1: 'message'
+              //   }
+              // }, router.RouterMode.Standard, (err) => {
+              //   if (err) {
+              //     console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+              //     return;
+              //   }
+              //   console.info('replaceNamedRoute success');
+              // })
             })
         }
 

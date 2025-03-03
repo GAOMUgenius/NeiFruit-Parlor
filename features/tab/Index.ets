@@ -9,4 +9,5 @@ export function harInit(builderName: string): void {
       break;
   }
 }
+// export { TabPageStruct } from './src/main/ets/pages/TabPage'
 

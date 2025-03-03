@@ -10,8 +10,9 @@ export class UserAccount {
 }
 @Observed
 export class SginUser {
-  email: string = ''
-  password: string = ''
+  email: string = '2047772125@qq.com'
+  password1: string = ''
+  password2: string = ''
 }
 
 export enum UserTypeEnum {

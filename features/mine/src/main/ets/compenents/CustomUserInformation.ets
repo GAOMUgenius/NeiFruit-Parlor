@@ -11,17 +11,17 @@ export struct CustomUserInfomation {
           title: item.title,
           infoRouter: item.infoRouter
         })
-          .margin({
-            bottom: 10
-          })
+          .margin(
+            item.id === 0
+            ? { bottom: 10, top: 10 }
+            : { bottom: 10 }
+          )
       }, (item: UserInfoData) => item.id.toString())
     }
     .alignItems(HorizontalAlign.Center)
     .justifyContent(FlexAlign.Center)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .height('100%')
-    .width('100%')
     .margin({
       top: 20
     })
@@ -38,26 +38,32 @@ struct UserInfoItem {
       Row() {
         Text(this.title)
           .fontSize(15)
+          .margin({ left: 15 })
 
         Image($r('app.media.right'))
           .size({
             width: 15,
             height: 20
           })
+          .margin({ right: 8 })
 
       }
-      .height(23)
-      .width('95%')
+      .height(25)
+      .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
       .onClick(() => {
         if (this.infoRouter) {
-          buildRouterModel(RouterNameConstants.PHONE_INDEX, this.infoRouter)
+          buildRouterModel(RouterNameConstants.TABPAGE, this.infoRouter)
         }
       })
 
-      Line()
-        .width('100%')
-        .height(2)
+      if ( this.index != 4 ) {
+        Line()
+          .margin({ top: 5 })
+          .width('95%')
+          .height(1)
+          .backgroundColor("#3ebcbcbc")
+      }
     }
   }
 }

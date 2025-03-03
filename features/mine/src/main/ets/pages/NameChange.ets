@@ -13,7 +13,7 @@ struct NameChangeStruct {
               this.name = value
             })
             .textAlign(TextAlign.JUSTIFY)
-            .width('100%')
+            .width('80%')
             .height('5%')
             .margin({
               top: 10
@@ -24,11 +24,13 @@ struct NameChangeStruct {
               //上传逻辑
 
               //回到上一级
-              RouterModule.pop(RouterNameConstants.PHONE_INDEX)
+              RouterModule.pop(RouterNameConstants.TABPAGE)
             })
+            .backgroundColor($r('app.color.mine_namechange_save_button'))
             .margin({
-              top: 30
+              top: 40
             })
+            .width(100)
 
         }
       }

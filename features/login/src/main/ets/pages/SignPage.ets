@@ -1,15 +1,19 @@
 import { BuilderNameConstants, RouterModule } from 'routermodule'
 import { AccountInputView } from '../components/AccountInPutView'
 import { SginUser } from 'datastore'
-import { promptAction } from '@kit.ArkUI'
-import { getVerificationCode } from 'network/src/main/ets/usercharge/usercharge'
+import { promptAction, router } from '@kit.ArkUI'
+import { login, getVerificationCode, register} from '../model/userchargeServer'
+import { UserTypeEnum } from 'datastore/src/main/ets/model/UserAccount'
 
 @Component
 struct SginPageStruct {
   @State sginuser: SginUser = new SginUser()
   @State code: string = ''
+  @State codeInPut: string = ''
   @State countdownTime: number = 60
   @State isCounting: boolean = false
+  @State userType: UserTypeEnum = UserTypeEnum.OWNER
+  @State token: string | null = null
   private timerId: number = -1
 
   // 启动倒计时
@@ -76,20 +80,28 @@ struct SginPageStruct {
             .enabled(!this.isCounting)
             .margin({ right: 40 })
             .onClick(async () => {
-              if(!this.isCounting) {
-                if(!this.sginuser.email) {
+              if (!this.isCounting) {
+                if (!this.sginuser.email) {
                   promptAction.showToast({
                     message: "邮箱不能为空"
-                  })
+                  });
                 } else {
-                  this.startCountdown()
-                  // 获取验证码
-                  this.code =  await getVerificationCode(this.sginuser.email)
+                  this.startCountdown();
+                  try {
+                    // 获取验证码
+                    this.code = await getVerificationCode(this.sginuser.email);
+                  } catch (error) {
+                    // 捕获错误并显示提示信息
+                    promptAction.showToast({
+                      message: `获取验证码失败: ${error.message}`
+                    });
+                    // 停止倒计时
+                    this.resetCountdown()
+                  }
                 }
               } else {
                 // 什么也不做
               }
-
             })
 
           Column() {
@@ -102,11 +114,11 @@ struct SginPageStruct {
               .grayscale(0)
               .margin({ bottom: 10 })
 
-            TextInput({ text: this.code })
+            TextInput({ text: this.codeInPut })
               .type(InputType.Email)
               .width('80%')
               .onChange((value: string) => {
-                this.code = value
+                this.codeInPut = value
               })
               .margin({ bottom: 10 })
           }
@@ -123,11 +135,11 @@ struct SginPageStruct {
               .grayscale(0)
               .margin({ bottom: 10 })
 
-            TextInput({ text: this.sginuser.password })
+            TextInput({ text: this.sginuser.password1 })
               .type(InputType.Password)
               .width('80%')
               .onChange((value: string) => {
-                this.sginuser.password = value
+                this.sginuser.password1 = value
               })
               .margin({ bottom: 10 })
           }
@@ -144,11 +156,11 @@ struct SginPageStruct {
               .grayscale(0)
               .margin({ bottom: 10 })
 
-            TextInput({ text: this.sginuser.password })
+            TextInput({ text: this.sginuser.password2 })
               .type(InputType.Password)
               .width('80%')
               .onChange((value: string) => {
-                this.sginuser.password = value
+                this.sginuser.password2 = value
               })
               .margin({ bottom: 10 })
           }
@@ -166,6 +178,32 @@ struct SginPageStruct {
           .width('60%')
           .height(30)
           .margin({ top: 50 })
+          .onClick(async () => {
+            if(!(this.sginuser.password1 === this.sginuser.password2)) {
+              promptAction.showToast({
+                message: "两次输入密码不一致，请重试"
+              })
+            } else {
+              if (await register(this.sginuser.email, this.sginuser.password1, 'USER', this.codeInPut)) {
+                let token = await login(this.sginuser.email, this.sginuser.password1)
+                if(token) {
+                  //登录成功后进行页面跳转
+                  router.replaceNamedRoute({
+                    name: `TabPage`,
+                    params: {
+                      data1: token
+                    }
+                  }, router.RouterMode.Standard, (err) => {
+                    if (err) {
+                      console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+                      return;
+                    }
+                    console.info('replaceNamedRoute success');
+                  })
+                }
+              }
+            }
+          })
 
       }
       .width('100%')

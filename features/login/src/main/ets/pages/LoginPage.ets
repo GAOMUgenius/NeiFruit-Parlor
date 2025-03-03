@@ -1,16 +1,68 @@
 import { RouterModule, BuilderNameConstants, RouterNameConstants, buildRouterModel } from "routermodule";
-import { promptAction } from "@kit.ArkUI";
+import { ComponentContent, promptAction, router } from "@kit.ArkUI";
 import { ResourceConstants } from "../constants/ResourceConstants";
 import { UserAccount } from "datastore";
+import { PromptActionClass } from "utils";
+import { common } from "@kit.AbilityKit";
+import  'tab/src/main/ets/pages/TabPage'
+import { login } from "../model/userchargeServer";
 
+
+class Params {
+  text: string = ""
+  context: common.UIAbilityContext | null = null;
+
+  constructor(text: string, context: common.UIAbilityContext) { // 修改构造函数
+    this.text = text;
+    this.context = context;
+  }
+}
+
+@Builder
+function buildText(params: Params) {
+  Column() {
+    Text(params.text)
+      .fontSize(50)
+      .fontWeight(FontWeight.Bold)
+      .margin({ bottom: 36 })
+    Button('Close')
+      .onClick(() => {
+        PromptActionClass.closeDialog()
+        if (params.context) {
+          params.context.terminateSelf(); // 退出应用
+        }
+      })
+  }.backgroundColor('#FFF0F0F0')
+}
+@Entry
 @Component
 struct LoginPageStruct {
-  @Prop userAccount: UserAccount = new UserAccount()
+  @State message: string = '您确定要退出吗'
+  @State userAccount: UserAccount = new UserAccount()
   @State rememberPassword: boolean = false
   @State stopLogin: boolean = false
   @State loading: boolean = false
-  @Prop isAccountShow: boolean = false
+  @State isAccountShow: boolean = false
   @State accountImg: string = this.isAccountShow ? 'app.media.up' : 'app.media.down'
+  // private  bundleName = (getContext(this) as common.UIAbilityContext).applicationInfo.name;
+
+  @State showExitDialog: boolean = false; // 控制退出弹窗显示
+  // 获取 UIAbility 上下文用于退出应用
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+  private ctx: UIContext = this.getUIContext();
+  private contentNode: ComponentContent<Object> =
+    new ComponentContent(this.ctx, wrapBuilder(buildText), new Params(this.message, this.context));
+
+  aboutToAppear(): void {
+    PromptActionClass.setContext(this.ctx);
+    PromptActionClass.setContentNode(this.contentNode);
+    PromptActionClass.setOptions({ alignment: DialogAlignment.Top, offset: { dx: 0, dy: 50 } });
+  }
+
+  aboutToDisappear(): void {
+    // this.context.terminateSelf();
+  }
+
   build() {
     NavDestination() {
       Column() {
@@ -74,9 +126,24 @@ struct LoginPageStruct {
             .borderRadius(8)
             .backgroundColor('#ff180258')
             .width('80%')
-            .onClick(() => {
-              RouterModule.pop( RouterNameConstants.PHONE_INDEX)
-              buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE, new Object({ userAccount: this.userAccount }))
+            .onClick(async () => {
+              // buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE)
+              let token = await login(this.userAccount.userAccount, this.userAccount.password)
+              if(token) {
+                router.replaceNamedRoute({
+                  name: `TabPage`,
+                  params: {
+                    data1: 'message'
+                  }
+                }, router.RouterMode.Standard, (err) => {
+                  if (err) {
+                    console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+                    return;
+                  }
+                  console.info('replaceNamedRoute success');
+                })
+              }
+
             })
 
           Row() {

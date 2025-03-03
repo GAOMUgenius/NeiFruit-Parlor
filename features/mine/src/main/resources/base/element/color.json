@@ -1,0 +1,12 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "mine_namechange_save_button",
+      "value": "#ff201d5d"
+    }
+  ]
+}
