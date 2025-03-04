@@ -5,24 +5,37 @@ import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "rou
 //用户信息卡片片
 @Component
 export struct UserInfoView {
-  @State userAccount: UserAccount = new UserAccount()
+  @Link userAccount: UserAccount
   @State isBalanceShow: boolean = false
   build() {
     Column() {
       Row() {
-        Image(this.userAccount.imgResource)
+        Image($r(this.userAccount.imgResource))
           .borderRadius(30)
           .width(60)
           .height(60)
           .margin({ left: 20 })
-        Text((!this.userAccount.userName) ? this.userAccount.userAccount : this.userAccount.userName)
-          .fontSize(20)
-          .fontWeight(FontWeight.Medium)
-          .margin({ left: 25, top: 10 })
+        Column(){
+          Text((!this.userAccount.userName) ? this.userAccount.userEmail : this.userAccount.userName)
+            .fontSize(20)
+            .fontWeight(FontWeight.Medium)
+            .margin({ top: 10, bottom: 10 })
+
+          Text(this.userAccount.introduce)
+            .fontSize(10)
+            .fontWeight(FontWeight.Regular)
+            .maxLines(1)
+            .width('60%')
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+        }
+        .margin({ right: 30 })
+        .justifyContent(FlexAlign.Start)
+        .alignItems(HorizontalAlign.Start)
       }
       .width('100%')
-      .justifyContent(FlexAlign.Start)
-      .alignItems(VerticalAlign.Top)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .alignItems(VerticalAlign.Center)
       .margin({
         left: 20,
         right: 20,
@@ -30,7 +43,10 @@ export struct UserInfoView {
         bottom: 10
       })
       .onClick(() => {
-        buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION )
+        buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION, new Object({
+          UserAccount: this.userAccount
+        }))
+
       })
 
       Row() {

@@ -2,13 +2,13 @@ import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routerm
 import { UserNameJSONToParse } from "../model/JSONToParse";
 
 @Builder
-export function NameChange(value: object) {
+export function EmailChange(value: object) {
   NavDestination() {
     Row() {
       Column() {
         TextInput({ text: UserNameJSONToParse(value) })
           .onChange((value: string) => {
-            let userAame = value
+            let email = value
           })
           .textAlign(TextAlign.JUSTIFY)
           .width('80%')
@@ -40,11 +40,11 @@ export function NameChange(value: object) {
       width: '100%'
     })
   }
-  .title('昵称')
+  .title('邮箱')
 }
 
-const builderName = BuilderNameConstants.MINE_NAMECHANGE;
+const builderName = BuilderNameConstants.MINE_EMAILCHANGE;
 if (!RouterModule.getBuilder(builderName)) {
-  const builder: WrappedBuilder<[object]> = wrapBuilder(NameChange);
+  const builder: WrappedBuilder<[object]> = wrapBuilder(EmailChange);
   RouterModule.registerBuilder(builderName, builder);
 }

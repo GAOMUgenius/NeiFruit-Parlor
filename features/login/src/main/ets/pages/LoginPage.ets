@@ -92,11 +92,11 @@ struct LoginPageStruct {
                 .fontColor('#ff201d5d')
                 .grayscale(0)
                 .padding({ bottom: 5 })
-              TextInput({ text: this.userAccount.userAccount })
+              TextInput({ text: this.userAccount.userEmail })
                 .type(InputType.Email)
                 .width('80%')
                 .onChange((value: string) => {
-                  this.userAccount.userAccount = value
+                  this.userAccount.userEmail = value
                 })
             }
             .margin({ bottom: 15 })
@@ -127,22 +127,34 @@ struct LoginPageStruct {
             .backgroundColor('#ff180258')
             .width('80%')
             .onClick(async () => {
+              router.replaceNamedRoute({
+                name: `TabPage`,
+                params: {
+                  data1: 'message'
+                }
+              }, router.RouterMode.Standard, (err) => {
+                if (err) {
+                  console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+                  return;
+                }
+                console.info('replaceNamedRoute success');
+              })
               // buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE)
-              let token = await login(this.userAccount.userAccount, this.userAccount.password)
-              if(token) {
-                router.replaceNamedRoute({
-                  name: `TabPage`,
-                  params: {
-                    data1: 'message'
-                  }
-                }, router.RouterMode.Standard, (err) => {
-                  if (err) {
-                    console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
-                    return;
-                  }
-                  console.info('replaceNamedRoute success');
-                })
-              }
+              // let token = await login(this.userAccount.userEmail, this.userAccount.password)
+              // if(token) {
+              //   router.replaceNamedRoute({
+              //     name: `TabPage`,
+              //     params: {
+              //       data1: 'message'
+              //     }
+              //   }, router.RouterMode.Standard, (err) => {
+              //     if (err) {
+              //       console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+              //       return;
+              //     }
+              //     console.info('replaceNamedRoute success');
+              //   })
+              // }
 
             })
 

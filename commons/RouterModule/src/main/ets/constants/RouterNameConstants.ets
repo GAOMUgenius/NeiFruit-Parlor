@@ -10,4 +10,5 @@ export class BuilderNameConstants {
   static readonly MINE_MINEPAGE: string = 'mine_minepage';
   static readonly MINE_USERINFORMATION: string = 'mine_userinformation';
   static readonly MINE_NAMECHANGE: string = 'mine_namechange';
+  static readonly MINE_EMAILCHANGE: string = 'mine_emailchange';
 }

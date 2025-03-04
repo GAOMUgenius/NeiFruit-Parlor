@@ -8,7 +8,11 @@ export function harInit(builderName: string): void {
       import ("./src/main/ets/pages/UserInformation");
       break;
       case BuilderNameConstants.MINE_NAMECHANGE:
-        import ("./src/main/ets/pages/NameChange")
+        import ("./src/main/ets/pages/NameChange");
+        break
+      case BuilderNameConstants.MINE_EMAILCHANGE:
+        import ("./src/main/ets/pages/EmailChange");
+        break
     default:
       break;
   }

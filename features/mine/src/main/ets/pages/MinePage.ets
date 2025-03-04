@@ -7,7 +7,7 @@ import { UserInfoView } from "../views/UserInfoView";
 
 @Component
 export struct MinePageStruct {
-  // @Link user: UserAccount
+  @State userAccount: UserAccount = new UserAccount()
 
   build() {
     Navigation() {
@@ -18,7 +18,7 @@ export struct MinePageStruct {
               MineHeaderView()
                 .margin({ top: 10 })
 
-              UserInfoView()
+              UserInfoView({ userAccount: $userAccount })
                 .margin({ top: 20 })
             }
             .linearGradient({
