@@ -1,27 +1,26 @@
-import { UserAccount } from "datastore"
+import { UserData } from "datastore/src/main/ets/model/UserDataModel"
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule"
 
 
 //用户信息卡片片
 @Component
 export struct UserInfoView {
-  @Link userAccount: UserAccount
-  @State isBalanceShow: boolean = false
+  @Prop userData: UserData
   build() {
     Column() {
       Row() {
-        Image($r(this.userAccount.imgResource))
+        Image($r(this.userData.user_picture))
           .borderRadius(30)
           .width(60)
           .height(60)
           .margin({ left: 20 })
         Column(){
-          Text((!this.userAccount.userName) ? this.userAccount.userEmail : this.userAccount.userName)
+          Text((!this.userData.username) ? this.userData.useremail : this.userData.username)
             .fontSize(20)
             .fontWeight(FontWeight.Medium)
             .margin({ top: 10, bottom: 10 })
 
-          Text(this.userAccount.introduce)
+          Text(this.userData.user_introduction)
             .fontSize(10)
             .fontWeight(FontWeight.Regular)
             .maxLines(1)
@@ -44,55 +43,9 @@ export struct UserInfoView {
       })
       .onClick(() => {
         buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION, new Object({
-          UserAccount: this.userAccount
+          UserData: this.userData
         }))
 
-      })
-
-      Row() {
-        Column() {
-          Row() {
-            Text('可用额度')
-              .fontSize(17)
-              .fontWeight(FontWeight.Regular)
-              .margin({ right: 10 })
-
-            Image(this.isBalanceShow ? $r('app.media.balance_appear') : $r('app.media.balance_disappear'))
-              .size({
-                width: 20,
-                height: 20
-              })
-              .onClick(() => {
-                this.isBalanceShow = !this.isBalanceShow
-              })
-          }
-          .alignItems(VerticalAlign.Center)
-          .margin({ bottom: 10 })
-
-          Text( this.isBalanceShow ? '￥' + this.userAccount.balance : '******')
-            .fontSize(30)
-            .fontWeight(FontWeight.Bold)
-            // .textAlign(TextAlign.Start)
-        }
-        // .justifyContent(FlexAlign.Start)
-        .alignItems(HorizontalAlign.Start)
-
-        Button('立即充值')
-          .backgroundColor(Color.Black)
-          .size({
-            width: 90,
-            height: 40
-          })
-          .margin({ top: 15 })
-
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.SpaceBetween)
-      .padding({
-        left: 20,
-        right: 20,
-        top: 10,
-        bottom: 20
       })
     }
     .linearGradient({

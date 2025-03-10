@@ -1,9 +1,8 @@
 import { BuilderNameConstants, RouterModule } from 'routermodule'
-import { AccountInputView } from '../components/AccountInPutView'
 import { SginUser } from 'datastore'
 import { promptAction, router } from '@kit.ArkUI'
 import { login, getVerificationCode, register} from '../model/userchargeServer'
-import { UserTypeEnum } from 'datastore/src/main/ets/model/UserAccount'
+import { UserTypeEnum } from 'datastore/src/main/ets/model/UserDataModel'
 
 @Component
 struct SginPageStruct {

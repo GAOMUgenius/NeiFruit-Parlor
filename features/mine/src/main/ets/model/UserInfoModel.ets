@@ -1,17 +1,18 @@
-import { UserAccount } from "datastore"
+import { UserData } from "datastore"
 import { BuilderNameConstants } from "routermodule"
 
 export interface UserInfoData {
   id: InfoType
   title: string
   infoRouter?: string
-  key: keyof UserAccount//对个人信息的关联
+  key: keyof UserData//对个人信息的关联
 }
 
 export enum InfoType {
   NAME = 0,
   EMAIL,
   INTRODUCE,
+  PASSWORD,
   BACKGROUND
 }
 export const UserInfo: UserInfoData[] = [
@@ -19,18 +20,23 @@ export const UserInfo: UserInfoData[] = [
     id: InfoType.NAME,
     title: "昵称",
     infoRouter: BuilderNameConstants.MINE_NAMECHANGE,
-    key: 'userName'
+    key: 'username'
   },
   {
     id: InfoType.EMAIL,
     title: "邮箱",
     infoRouter: BuilderNameConstants.MINE_EMAILCHANGE,
-    key: 'userEmail'
+    key: 'useremail'
   },
   {
     id: InfoType.INTRODUCE,
     title: "个人简介",
-    key: "introduce"
+    key: "user_introduction"
+  },
+  {
+    id: InfoType.PASSWORD,
+    title: "密码",
+    key: 'password'
   },
   {
     id: InfoType.BACKGROUND,

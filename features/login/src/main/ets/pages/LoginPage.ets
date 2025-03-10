@@ -1,67 +1,52 @@
 import { RouterModule, BuilderNameConstants, RouterNameConstants, buildRouterModel } from "routermodule";
 import { ComponentContent, promptAction, router } from "@kit.ArkUI";
-import { ResourceConstants } from "../constants/ResourceConstants";
-import { UserAccount } from "datastore";
-import { PromptActionClass } from "utils";
-import { common } from "@kit.AbilityKit";
+import { PreferenceManager, UserData } from "datastore";
 import  'tab/src/main/ets/pages/TabPage'
-import { login } from "../model/userchargeServer";
+import { UserService } from "../model/userchargeServer";
 
+const TAG = '[LoginPage]'
 
-class Params {
-  text: string = ""
-  context: common.UIAbilityContext | null = null;
-
-  constructor(text: string, context: common.UIAbilityContext) { // 修改构造函数
-    this.text = text;
-    this.context = context;
-  }
-}
-
-@Builder
-function buildText(params: Params) {
-  Column() {
-    Text(params.text)
-      .fontSize(50)
-      .fontWeight(FontWeight.Bold)
-      .margin({ bottom: 36 })
-    Button('Close')
-      .onClick(() => {
-        PromptActionClass.closeDialog()
-        if (params.context) {
-          params.context.terminateSelf(); // 退出应用
-        }
-      })
-  }.backgroundColor('#FFF0F0F0')
-}
 @Entry
 @Component
 struct LoginPageStruct {
-  @State message: string = '您确定要退出吗'
-  @State userAccount: UserAccount = new UserAccount()
-  @State rememberPassword: boolean = false
+  @State userData: UserData = new UserData
+  @State rememberMe: boolean = false
   @State stopLogin: boolean = false
-  @State loading: boolean = false
+  @State loging: boolean = false
   @State isAccountShow: boolean = false
   @State accountImg: string = this.isAccountShow ? 'app.media.up' : 'app.media.down'
-  // private  bundleName = (getContext(this) as common.UIAbilityContext).applicationInfo.name;
 
-  @State showExitDialog: boolean = false; // 控制退出弹窗显示
-  // 获取 UIAbility 上下文用于退出应用
-  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-  private ctx: UIContext = this.getUIContext();
-  private contentNode: ComponentContent<Object> =
-    new ComponentContent(this.ctx, wrapBuilder(buildText), new Params(this.message, this.context));
+  async aboutToAppear(): Promise<void> {
+    const userService = new UserService();
 
-  aboutToAppear(): void {
-    PromptActionClass.setContext(this.ctx);
-    PromptActionClass.setContentNode(this.contentNode);
-    PromptActionClass.setOptions({ alignment: DialogAlignment.Top, offset: { dx: 0, dy: 50 } });
+    try {
+      // 尝试自动登录
+      const autoLoginSuccess = await userService.checkAutoLogin();
+      if (autoLoginSuccess) {
+        router.replaceNamedRoute({
+          name: `TabPage`,
+          params: {
+            data1: 'message'
+          }
+        }, router.RouterMode.Standard, (err) => {
+          if (err) {
+            console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
+            return;
+          }
+          console.info('replaceNamedRoute success');
+        })
+
+        // 跳转到主界面
+        console.log('自动登录成功，进入主界面');
+      } else {
+        // 显示登录界面
+        console.log('需要手动登录');
+      }
+    } catch (error) {
+      console.error('应用启动异常:', error);
+    }
   }
 
-  aboutToDisappear(): void {
-    // this.context.terminateSelf();
-  }
 
   build() {
     NavDestination() {
@@ -92,11 +77,11 @@ struct LoginPageStruct {
                 .fontColor('#ff201d5d')
                 .grayscale(0)
                 .padding({ bottom: 5 })
-              TextInput({ text: this.userAccount.userEmail })
+              TextInput({ text: this.userData.useremail })
                 .type(InputType.Email)
                 .width('80%')
                 .onChange((value: string) => {
-                  this.userAccount.userEmail = value
+                  this.userData.useremail = value
                 })
             }
             .margin({ bottom: 15 })
@@ -111,51 +96,66 @@ struct LoginPageStruct {
                 .grayscale(0)
                 .padding({ bottom: 5 })
 
-              TextInput({ text: this.userAccount.password })
+              TextInput({ text: this.userData.password })
                 .type(InputType.Password)
                 .width('80%')
                 .onChange((value: string) => {
-                  this.userAccount.password = value
+                  this.userData.password = value
                 })
             }
           }
           .margin({ bottom: 15 })
 
+          // 修改登录按钮的onClick事件
           Button('登录')
             .type(ButtonType.Capsule)
             .borderRadius(8)
             .backgroundColor('#ff180258')
             .width('80%')
+            .enabled(!this.loging) // 防止重复点击
             .onClick(async () => {
-              router.replaceNamedRoute({
-                name: `TabPage`,
-                params: {
-                  data1: 'message'
-                }
-              }, router.RouterMode.Standard, (err) => {
-                if (err) {
-                  console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
-                  return;
-                }
-                console.info('replaceNamedRoute success');
-              })
-              // buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.TAB_TABPAGE)
-              // let token = await login(this.userAccount.userEmail, this.userAccount.password)
-              // if(token) {
-              //   router.replaceNamedRoute({
-              //     name: `TabPage`,
-              //     params: {
-              //       data1: 'message'
-              //     }
-              //   }, router.RouterMode.Standard, (err) => {
-              //     if (err) {
-              //       console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
-              //       return;
-              //     }
-              //     console.info('replaceNamedRoute success');
-              //   })
+              // if (this.loging) return;
+              //
+              // this.loging = true;
+              // const userService = new UserService();
+              //
+              // try {
+              //   // 执行实际登录操作
+              //   const success = await userService.manualLogin(
+              //     this.userData.useremail,
+              //     this.userData.password,
+              //     this.rememberMe
+              //   );
+              //
+              //   if (success) {
+              //     // 登录成功跳转
+              //     router.replaceNamedRoute({
+              //       name: `TabPage`,
+              //       params: { data1: 'message' }
+              //     }, router.RouterMode.Standard, (err) => {
+              //       if (err) {
+              //         console.error(`跳转失败: ${err.message}`);
+              //         promptAction.showToast({ message: '页面跳转异常' });
+              //       }
+              //     });
+              //   }
+              // } catch (error) {
+              //   console.error('登录失败:', error);
+              //   promptAction.showToast({
+              //     message: error.message || '登录失败，请检查账号密码'
+              //   });
+              // } finally {
+              //   this.loging = false;
               // }
-
+              router.replaceNamedRoute({
+                      name: `TabPage`,
+                      params: { data1: 'message' }
+                    }, router.RouterMode.Standard, (err) => {
+                      if (err) {
+                        console.error(`跳转失败: ${err.message}`);
+                        promptAction.showToast({ message: '页面跳转异常' });
+                      }
+                    });
             })
 
           Row() {
@@ -169,7 +169,7 @@ struct LoginPageStruct {
             Row() {
               Checkbox()
                 .onChange((value: boolean) => {
-
+                  this.rememberMe = value
                 })
 
               Text('自动登录')

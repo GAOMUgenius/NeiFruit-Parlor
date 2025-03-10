@@ -1,46 +1,57 @@
+import { UserData } from "datastore";
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routermodule";
-import { UserNameJSONToParse } from "../model/JSONToParse";
+import { UserAccountJSONToParse } from "../model/JSONToParse";
+
+@Component
+struct NameChangeStruct{
+  @Prop userData: object
+  @State newUserData: UserData = UserAccountJSONToParse(this.userData)
+  build() {
+    NavDestination() {
+      Row() {
+        Column() {
+          TextInput({ text: this.newUserData.username })
+            .onChange((value: string) => {
+              this.newUserData.username = value
+            })
+            .textAlign(TextAlign.JUSTIFY)
+            .width('80%')
+            .height('5%')
+            .margin({
+              top: 20
+            })
+
+          Button('保存')
+            .onClick(() => {
+              //上传逻辑
+
+              //回到上一级
+              RouterModule.pop(RouterNameConstants.TABPAGE)
+            })
+            .backgroundColor($r('app.color.mine_namechange_save_button'))
+            .margin({
+              top: 40
+            })
+            .width(100)
+
+        }
+      }
+      .backgroundColor("#ebf5f5f5")
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Top)
+      .size({
+        height: '100%',
+        width: '100%'
+      })
+    }
+    .title('昵称')
+  }
+}
+
 
 @Builder
 export function NameChange(value: object) {
-  NavDestination() {
-    Row() {
-      Column() {
-        TextInput({ text: UserNameJSONToParse(value) })
-          .onChange((value: string) => {
-            let userAame = value
-          })
-          .textAlign(TextAlign.JUSTIFY)
-          .width('80%')
-          .height('5%')
-          .margin({
-            top: 20
-          })
-
-        Button('保存')
-          .onClick(() => {
-            //上传逻辑
-
-            //回到上一级
-            RouterModule.pop(RouterNameConstants.TABPAGE)
-          })
-          .backgroundColor($r('app.color.mine_namechange_save_button'))
-          .margin({
-            top: 40
-          })
-          .width(100)
-
-      }
-    }
-    .backgroundColor("#ebf5f5f5")
-    .justifyContent(FlexAlign.Center)
-    .alignItems(VerticalAlign.Top)
-    .size({
-      height: '100%',
-      width: '100%'
-    })
-  }
-  .title('昵称')
+  NameChangeStruct({ userData: value})
 }
 
 const builderName = BuilderNameConstants.MINE_NAMECHANGE;

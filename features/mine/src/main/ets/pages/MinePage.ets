@@ -1,13 +1,21 @@
-import { UserAccount } from "datastore";
-import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 import { MineHeaderView } from "../views/MineHeaderView";
 import { PayManangeView } from "../views/PayManageView";
 import { ProductView, RecommendComponent } from "uicomponents";
 import { UserInfoView } from "../views/UserInfoView";
+import { getUserInfo, UserInfo } from "../model/UserInfoServer";
+import { UserData } from "datastore/src/main/ets/model/UserDataModel";
 
 @Component
 export struct MinePageStruct {
-  @State userAccount: UserAccount = new UserAccount()
+  @State userData: UserData = new UserData()
+  @Prop token: string
+
+  async aboutToAppear(): Promise<void> {
+    let getUserInfoData: UserInfo = await getUserInfo(this.token)
+    if (getUserInfoData) {
+      this.userData = getUserInfoData.data
+    }
+  }
 
   build() {
     Navigation() {
@@ -18,7 +26,7 @@ export struct MinePageStruct {
               MineHeaderView()
                 .margin({ top: 10 })
 
-              UserInfoView({ userAccount: $userAccount })
+              UserInfoView({ userData: this.userData })
                 .margin({ top: 20 })
             }
             .linearGradient({

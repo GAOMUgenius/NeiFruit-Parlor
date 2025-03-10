@@ -1,3 +1,4 @@
+import { CategoryTabs } from "../view/CategoryTab"
 
 
 @Component
@@ -5,11 +6,20 @@ export struct HomePageStruct {
 
   build() {
     Navigation() {
-      Row() {
-        Text('这里是首页')
+      Scroll(){
+        Column() {
+          Column(){
+            Text('首页信息栏')
+          }
+          .width('100%')
+          .height('30%')
+          .backgroundColor(Color.White)
+
+          CategoryTabs()
+        }
+        .width('100%')
+        .height('100%')
       }
-      .width('100%')
-      .height('100%')
     }
   }
 }

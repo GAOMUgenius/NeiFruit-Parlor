@@ -6,12 +6,6 @@ export struct CustomTabBar {
 
   onChange(index: TabBarType): void {
     this.currentIndex = index;
-    // if (this.currentIndex === TabBarType.MINE) {
-    //   WindowUtil.updateStatusBarColor(getContext(this), true);
-    // } else {
-    //   WindowUtil.updateStatusBarColor(getContext(this),
-    //     AppStorage.get('currentColorMode') === ConfigurationConstant.ColorMode.COLOR_MODE_DARK);
-    // }
   }
 
   build() {

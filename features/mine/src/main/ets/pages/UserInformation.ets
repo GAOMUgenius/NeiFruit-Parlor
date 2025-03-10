@@ -1,4 +1,3 @@
-import { UserAccount } from 'datastore'
 import { BuilderNameConstants, RouterModule } from 'routermodule';
 import { Logger } from 'utils';
 import { CustomUserInfomation } from '../compenents/CustomUserInformation';
@@ -12,7 +11,7 @@ export function UserInformation(value: object) {
       Row(){
         Column() {
           Row(){
-            Image($r(UserAccountJSONToParse(value).imgResource))
+            Image($r(UserAccountJSONToParse(value).user_picture))
               .size({
                 width: 100,
                 height: 100

@@ -1,16 +1,16 @@
-import { UserAccount } from "datastore"
+import { UserData } from "datastore/src/main/ets/model/UserDataModel"
 import { buildRouterModel, RouterNameConstants } from "routermodule"
 import { UserInfoData } from "../model/UserInfoModel"
 
 @Builder
-export function CustomUserInfomation(UserInfo: UserInfoData[], userAccount: UserAccount) {
+export function CustomUserInfomation(UserInfo: UserInfoData[], userData: UserData) {
     Column() {
       ForEach(UserInfo, (item: UserInfoData)  => {
         UserInfoItem({
           index: item.id,
           title: item.title,
           infoRouter: item.infoRouter,
-          userAccount: userAccount,
+          userData: userData,
           keys: item.key
         })
           .margin(
@@ -33,23 +33,25 @@ export function CustomUserInfomation(UserInfo: UserInfoData[], userAccount: User
 
 @Component
 struct UserInfoItem {
-  @Prop userAccount: UserAccount
+  @Prop userData: UserData
   @Prop index: number
   @Prop title: string
   @Prop infoRouter: string
-  @Prop keys: keyof UserAccount
+  @Prop keys: keyof UserData
 
   // 根据 key 获取对应的属性值
   private getValue(): string {
     switch (this.keys) {
-      case 'userName':
-        return this.userAccount.userName;
-      case 'userEmail':
-        return this.userAccount.userEmail;
-      case 'introduce':
-        return this.userAccount.introduce;
+      case 'username':
+        return this.userData.username;
+      case 'useremail':
+        return this.userData.useremail;
+      case 'user_introduction':
+        return this.userData.user_introduction;
       case 'background':
-        return this.userAccount.background;
+        return this.userData.background;
+      case 'password':
+        return '*********';
       default:
         return ''; // 默认处理
     }
@@ -84,7 +86,7 @@ struct UserInfoItem {
       .justifyContent(FlexAlign.SpaceBetween)
       .onClick(() => {
         if (this.infoRouter) {
-          buildRouterModel(RouterNameConstants.TABPAGE, this.infoRouter, new Object({value: this.getValue()}))
+          buildRouterModel(RouterNameConstants.TABPAGE, this.infoRouter, new Object({UserData: this.userData}))
         }
       })
 

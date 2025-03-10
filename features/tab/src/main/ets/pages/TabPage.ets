@@ -3,7 +3,6 @@ import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/components/MainPage"
-import { UserAccount } from "datastore"
 @Entry({ routeName: 'TabPage' })
 @Component
 struct TabPage {
@@ -24,9 +23,11 @@ struct TabPage {
           TabContent() {
             HomePageStruct()
           }
+
           TabContent() {
 
           }
+
           TabContent() {
             MinePageStruct()
           }
@@ -34,7 +35,9 @@ struct TabPage {
         .layoutWeight(1)
         .barHeight(0)
         .scrollable(false)
-        .onChange((index) => {this.currentIndex = index;})
+        .onChange((index) => {
+          this.currentIndex = index;
+        })
 
         CustomTabBar({ currentIndex: $currentIndex })
       }
@@ -50,19 +53,4 @@ struct TabPage {
     // 根据模块名称获取 WrappedBuilder 对象，通过 builder 界面创建页面，并导入 param 参数。
     RouterModule.getBuilder(builderName).builder(param);
   };
-
 }
-
-
-export { TabPage }
-
-// @Builder
-// export function TabPage(value: object) {
-//   TabPageStruct()
-// }
-
-// const builderName = BuilderNameConstants.TAB_TABPAGE;
-// if (!RouterModule.getBuilder(builderName)) {
-//   const builder: WrappedBuilder<[object]> = wrapBuilder(TabPage);
-//   RouterModule.registerBuilder(builderName, builder);
-// }
