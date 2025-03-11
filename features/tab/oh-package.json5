@@ -8,8 +8,9 @@
   "dependencies": {
     "utils": "file:../../commons/utils",
     "routermodule": "file:../../commons/RouterModule",
+    "datastore": "file:../../commons/datastore",
     "mine": "file:../../features/mine",
     "home": "file:../../features/home",
-    "datastore": "file:../../commons/datastore"
+    "shopcar": "file:../../features/shopcar",
   }
 }

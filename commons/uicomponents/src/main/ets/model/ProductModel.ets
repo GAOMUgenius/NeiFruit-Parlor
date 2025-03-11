@@ -1,5 +1,5 @@
 //包装数组符合IDataSource接口的数据源
-class ProductDataSource implements IDataSource {
+export class ProductDataSource implements IDataSource {
   private dataList: ProductData[];
 
   constructor(data: ProductData[]) {
@@ -24,6 +24,7 @@ class ProductDataSource implements IDataSource {
 }
 
 export interface ProductData {
+  id: string
   product_picture: ResourceStr,
   product_name: string,
   product_price: string,
@@ -34,22 +35,7 @@ export interface ProductData {
 
 export const ProductData_List: ProductData[] = [
   {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
+    id: '1',
     product_picture: $r('app.media.OIP'),
     product_name: "有机小米",
     product_price: "78.5",
@@ -58,6 +44,7 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
+    id: '1',
     product_picture: $r('app.media.OIP'),
     product_name: "有机小米",
     product_price: "78.5",
@@ -66,14 +53,7 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米有机小",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
+    id: '1',
     product_picture: $r('app.media.OIP'),
     product_name: "有机小米",
     product_price: "78.5",
@@ -82,6 +62,7 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
+    id: '1',
     product_picture: $r('app.media.OIP'),
     product_name: "有机小米",
     product_price: "78.5",
@@ -90,6 +71,7 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
+    id: '1',
     product_picture: $r('app.media.OIP'),
     product_name: "有机小米",
     product_price: "78.5",
@@ -98,53 +80,32 @@ export const ProductData_List: ProductData[] = [
     product_capacity_unit: "kg",
   },
   {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
+  id: '1',
+  product_picture: $r('app.media.OIP'),
+  product_name: "有机小米",
+  product_price: "78.5",
+  product_unit: "袋",
+  product_capacity: "1.8",
+  product_capacity_unit: "kg",
+},
   {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
+  id: '1',
+  product_picture: $r('app.media.OIP'),
+  product_name: "有机小米",
+  product_price: "78.5",
+  product_unit: "袋",
+  product_capacity: "1.8",
+  product_capacity_unit: "kg",
+},
   {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
+  id: '1',
+  product_picture: $r('app.media.OIP'),
+  product_name: "有机小米",
+  product_price: "78.5",
+  product_unit: "袋",
+  product_capacity: "1.8",
+  product_capacity_unit: "kg",
+}
 ]
 
 export const productDataSource = new ProductDataSource(ProductData_List)

@@ -3,6 +3,8 @@ import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/components/MainPage"
+import { ShopCarPage } from 'shopcar/src/main/ets/components/ShopCarPage'
+
 @Entry({ routeName: 'TabPage' })
 @Component
 struct TabPage {
@@ -25,7 +27,7 @@ struct TabPage {
           }
 
           TabContent() {
-
+            ShopCarPage()
           }
 
           TabContent() {

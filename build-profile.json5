@@ -92,6 +92,10 @@
     {
       "name": "uicomponents",
       "srcPath": "./commons/uicomponents",
+    },
+    {
+      "name": "shopcar",
+      "srcPath": "./features/shopcar",
     }
   ]
 }

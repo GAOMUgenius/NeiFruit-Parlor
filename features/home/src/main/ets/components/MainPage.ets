@@ -3,23 +3,57 @@ import { CategoryTabs } from "../view/CategoryTab"
 
 @Component
 export struct HomePageStruct {
+  @State scrollOffset: number = 0
+  @State searchBarOpacity: number = 1
 
   build() {
     Navigation() {
-      Scroll(){
-        Column() {
-          Column(){
-            Text('首页信息栏')
+      Stack() {
+        Scroll(){
+          //页面主体内容
+          Column() {
+            Column(){
+              Swiper() {
+
+              }
+            }
+            .margin({ top: 60 })
+            .width('100%')
+            .height('30%')
+            .backgroundColor(Color.White)
+
+            CategoryTabs()
           }
           .width('100%')
-          .height('30%')
-          .backgroundColor(Color.White)
-
-          CategoryTabs()
         }
         .width('100%')
+
+        this.BuildFixedSearchBar()
       }
-      .width('100%')
     }
+  }
+
+  @Builder
+  BuildFixedSearchBar() {
+    Column() {
+      TextInput({ placeholder: '请输入搜索内容' })
+        .width('90%')
+        .height(40)
+        .backgroundColor(Color.White)
+        .padding(8)
+        .borderRadius(20)
+        .shadow({
+          radius: 4,
+          color: '#1A000000',
+          offsetX: 1,
+          offsetY: 1
+        })
+    }
+    .width('100%')
+    .padding(10)
+    .backgroundColor('#F5F5F5')
+    .position({ x: 0, y: 0 }) // 固定定位在顶部
+    .zIndex(999) // 确保在最顶层
+    .opacity(this.searchBarOpacity)
   }
 }

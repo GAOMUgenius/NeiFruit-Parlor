@@ -35,7 +35,7 @@ export struct ShopItemContent{
       }, (shop: ShopInterface) => shop.id.toString()) // 需要指定唯一键生成器
     }
     .layoutDirection(FlexDirection.Column)
-    .columnsTemplate('1fr 1fr')
+    .columnsTemplate('1fr')
     .columnsGap(8)
     .rowsGap(8)
     .width('100%')
@@ -64,19 +64,16 @@ struct ShopItem {
         .fontSize(18)
         .fontWeight(FontWeight.Bold)
 
-      Row() {
-        Text(`评分：${this.shop.rating}`)
-          .fontColor('#FFC107')
+      Text(`评分：${this.shop.rating}`)
+        .fontColor('#FFC107')
 
-        Text(`位置：${this.shop.location}`)
-          .margin({ left: 20 })
-      }
-      .margin({ top: 8 })
+      Text(`位置：${this.shop.location}`)
 
       Text(`电话：${this.shop.phone}`)
         .fontColor('#666666')
         .margin({ top: 6 })
     }
+    .width('100%')
     .padding(16)
     .backgroundColor('#FFFFFF')
     .margin({ top: 12 })
