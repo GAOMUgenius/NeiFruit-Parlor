@@ -1,4 +1,4 @@
-import { ProductData, ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
+import { ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
 import { shopCarInfo, ShopChangeInterface } from "../model/ShopCarModel";
 import { ShopCarListComponent } from "./ShopCarListComponent";
 
@@ -10,7 +10,7 @@ export class ShopChangeImpl implements ShopChangeInterface {
     this.context = context;
   }
 
-  onItemContentChange(index: number, updatedData: ProductData): void {
+  onItemContentChange(): void {
     this.context.settlementNumber = this.context.calculateTotal()
   }
 }
@@ -86,8 +86,7 @@ export struct ShopCarPage {
     .padding({ left: 5 })
   }
 
-  // 添加计算总价的方法
-
+  // 计算总价的方法
   public calculateTotal(): string {
     let total = 0;
     for (let i = 0; i < this.shopCarListData.totalCount(); i++) {
@@ -142,7 +141,6 @@ export struct ShopCarPage {
             console.info('进入结算流程')
           })
       }
-      .width('50%')
       .height(35)
       .alignItems(VerticalAlign.Center)
     }

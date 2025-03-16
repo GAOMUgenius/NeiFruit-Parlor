@@ -11,7 +11,7 @@ export const shopCarInfo: ProductData[] = [
     "1.8",
     "kg",
     false,
-    0
+    1
   ),
   new ProductData(
     '2',
@@ -22,7 +22,7 @@ export const shopCarInfo: ProductData[] = [
     "1.8",
     "kg",
     false,
-    0
+    1
   ),
   new ProductData(
     '3',
@@ -33,10 +33,10 @@ export const shopCarInfo: ProductData[] = [
     "1.8",
     "kg",
     false,
-    0
+    1
   )
 ]
 
 export interface ShopChangeInterface {
-  onItemContentChange(index: number, updatedData: ProductData): void
+  onItemContentChange(): void
 }
