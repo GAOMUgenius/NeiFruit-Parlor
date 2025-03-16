@@ -6,6 +6,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "libuicomponents.so": "file:./src/main/cpp/types/libuicomponents"
+    "libuicomponents.so": "file:./src/main/cpp/types/libuicomponents",
+    "datastore": "file:..//./datastore"
   }
 }

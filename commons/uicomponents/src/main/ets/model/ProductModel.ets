@@ -1,111 +1,91 @@
-//包装数组符合IDataSource接口的数据源
-export class ProductDataSource implements IDataSource {
-  private dataList: ProductData[];
 
-  constructor(data: ProductData[]) {
-    this.dataList = data;
+
+
+@Observed
+export class ProductData {
+  // constructor(data?: Partial<ProductData>) {
+  //   if (data) {
+  //     Object.assign(this, data)
+  //   }
+  // }
+  product_id: string = '0'
+  @Track product_picture: ResourceStr = ''
+  product_name: string = ''
+  product_price: string = ''
+  product_unit: string = ''
+  product_capacity: string = ''
+  product_capacity_unit: string= ''
+  @Track product_ischoose: boolean = false
+  @Track product_number: number = 1
+
+  constructor(
+    product_id: string,
+    product_picture: ResourceStr,
+    product_name: string,
+    product_price: string,
+    product_unit: string,
+    product_capacity: string,
+    product_capacity_unit: string,
+    product_ischoose: boolean = false,
+    product_number: number = 1
+  ) {
+    this.product_id = product_id;
+    this.product_picture = product_picture;
+    this.product_name = product_name;
+    this.product_price = product_price;
+    this.product_unit = product_unit;
+    this.product_capacity = product_capacity
+    this.product_capacity_unit = product_capacity_unit;
+    this.product_ischoose = product_ischoose;
+    this.product_number = product_number
   }
-
-  public totalCount(): number {
-    return this.dataList.length;
-  }
-
-  public getData(index: number): ProductData {
-    return this.dataList[index];
-  }
-
-  public registerDataChangeListener(listener: DataChangeListener): void {
-    // 监听数据变化（按需实现，如保存listener）
-  }
-
-  public unregisterDataChangeListener(listener: DataChangeListener): void {
-    // 移除监听器（按需实现）
-  }
-}
-
-export interface ProductData {
-  id: string
-  product_picture: ResourceStr,
-  product_name: string,
-  product_price: string,
-  product_unit: string,
-  product_capacity: string,
-  product_capacity_unit: string
 }
 
 export const ProductData_List: ProductData[] = [
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-  id: '1',
-  product_picture: $r('app.media.OIP'),
-  product_name: "有机小米",
-  product_price: "78.5",
-  product_unit: "袋",
-  product_capacity: "1.8",
-  product_capacity_unit: "kg",
-},
-  {
-  id: '1',
-  product_picture: $r('app.media.OIP'),
-  product_name: "有机小米",
-  product_price: "78.5",
-  product_unit: "袋",
-  product_capacity: "1.8",
-  product_capacity_unit: "kg",
-},
-  {
-  id: '1',
-  product_picture: $r('app.media.OIP'),
-  product_name: "有机小米",
-  product_price: "78.5",
-  product_unit: "袋",
-  product_capacity: "1.8",
-  product_capacity_unit: "kg",
-}
+  new ProductData(
+     '1',
+     $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+     "1.8",
+     "kg",
+     false,
+     0
+  ),
+  new ProductData(
+    '2',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  ),
+  new ProductData(
+    '3',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  ),
+  new ProductData(
+    '4',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  ),
 ]
 
-export const productDataSource = new ProductDataSource(ProductData_List)
+// export const productDataSource = new ProductDataSource()

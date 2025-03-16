@@ -1,42 +1,42 @@
 import { ProductData, ProductDataSource } from 'uicomponents'
+import { ShopCarPage } from '../components/ShopCarPage';
 
-const shopCarInfo: ProductData[] = [
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  },
-  {
-    id: '1',
-    product_picture: $r('app.media.OIP'),
-    product_name: "有机小米",
-    product_price: "78.5",
-    product_unit: "袋",
-    product_capacity: "1.8",
-    product_capacity_unit: "kg",
-  }
+export const shopCarInfo: ProductData[] = [
+  new ProductData(
+    '1',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  ),
+  new ProductData(
+    '2',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  ),
+  new ProductData(
+    '3',
+    $r('app.media.OIP'),
+    "有机小米",
+    "78.5",
+    "袋",
+    "1.8",
+    "kg",
+    false,
+    0
+  )
 ]
 
-export const shopCarListDataSource = new ProductDataSource(shopCarInfo)
+export interface ShopChangeInterface {
+  onItemContentChange(index: number, updatedData: ProductData): void
+}

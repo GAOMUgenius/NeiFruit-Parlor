@@ -1,11 +1,16 @@
-import { ProductData, productDataSource, ProductData_List } from '../model/ProductModel'
+import { ProductDataSource } from '../model/ProductDataSource'
+import { ProductData, ProductData_List } from '../model/ProductModel'
 
 @Component
 export struct ProductView {
+  @State shopCarListData: ProductDataSource  = new ProductDataSource()
+  aboutToAppear(): void {
+    this.shopCarListData.pushDataList(ProductData_List)
+  }
 
   build() {
     WaterFlow({ footer: (): void => this.itemFoot() }){
-      LazyForEach(productDataSource, (item: ProductData) => {
+      LazyForEach(this.shopCarListData, (item: ProductData) => {
         FlowItem() {
           ProductItem({
             product_picture: item.product_picture,
@@ -18,7 +23,6 @@ export struct ProductView {
         }
       })
     }
-    .layoutWeight(1)
     .layoutDirection(FlexDirection.Column)
     .columnsTemplate('1fr 1fr')
     .columnsGap(8)
