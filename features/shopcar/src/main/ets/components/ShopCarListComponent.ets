@@ -1,5 +1,6 @@
 
 import { ProductData, ProductDataSource } from "uicomponents"
+// import { CartService } from "uicomponents/src/main/ets/model/ProuductServer"
 import { ShopChangeInterface } from "../model/ShopCarModel"
 import { ShopCarListItem } from "./ShopCarListItem"
 
@@ -7,25 +8,29 @@ import { ShopCarListItem } from "./ShopCarListItem"
 export struct ShopCarListComponent {
   @Link shopCarListData: ProductDataSource
   @Link callback: ShopChangeInterface
+  @Link productSelectionMap: Map<string, boolean>
+  // @Link cartItems: ProductData[]
 
 
-  aboutToAppear() {
-  }
 
-  onChange( updatedData: ProductData ):void {
+  async onNumberChange( updatedData: ProductData ): Promise<void> {
     const index = this.shopCarListData.findIndex(item =>
     item.product_id === updatedData.product_id
-    )
+    );
+
+    // const newCart = [...this.cartItems];
     if (index !== -1) {
       if (updatedData.product_number === 0) {
-        // 执行删除操作
         this.shopCarListData.deleteData(index);
-        this.callback.onItemContentChange();
+        // newCart.splice(index, 1);
       } else {
-        // 正常更新数据
-        this.shopCarListData.changeData(index, updatedData);
-        this.callback.onItemContentChange();
+        this.shopCarListData.updateItem(updatedData);
+        // newCart[index] = updatedData;
       }
+
+      // 更新
+      // this.cartItems = newCart
+      this.callback.onItemContentChange();
     }
   }
   
@@ -34,10 +39,13 @@ export struct ShopCarListComponent {
       LazyForEach(this.shopCarListData, (item: ProductData) => {
         ShopCarListItem({
           data: item,
-          onChange: ( data: ProductData) => this.onChange(data)
+          onNumberChange: ( data: ProductData) => this.onNumberChange(data),
+          onSelectionChange: ( id: string, isSelection: boolean ) => this.callback.onSelectionChange(id, isSelection),
+          productSelectionMap: this.productSelectionMap
         })
-      })
+      }, (item: ProductData) => item.product_id)
     }
+    .animation({ duration: 300, curve: Curve.EaseOut })
     .height('auto')
     .borderRadius(20)
     .width('90%')

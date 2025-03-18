@@ -1,27 +1,39 @@
+import { PreferenceConstant, PreferenceManager } from 'datastore'
 import { ProductDataSource } from '../model/ProductDataSource'
 import { ProductData, ProductData_List } from '../model/ProductModel'
+// import { CartService } from '../model/ProuductServer'
+import { promptAction } from '@kit.ArkUI'
+
 
 @Component
 export struct ProductView {
-  @State shopCarListData: ProductDataSource  = new ProductDataSource()
+  @State productListData: ProductDataSource  = new ProductDataSource()
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, boolean> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
+
   aboutToAppear(): void {
-    this.shopCarListData.pushDataList(ProductData_List)
+    this.productListData.pushDataList(ProductData_List)
   }
+
 
   build() {
     WaterFlow({ footer: (): void => this.itemFoot() }){
-      LazyForEach(this.shopCarListData, (item: ProductData) => {
+      LazyForEach(this.productListData, (item: ProductData) => {
         FlowItem() {
           ProductItem({
+            product_id: item.product_id,
             product_picture: item.product_picture,
             product_name: item.product_name,
             product_price: item.product_price,
             product_unit: item.product_unit,
             product_capacity: item.product_capacity,
-            product_capacity_unit: item.product_capacity_unit
+            product_capacity_unit: item.product_capacity_unit,
+            localDataSource: this.localDataSource,
+            productSelectionMap: this.productSelectionMap
+            // cartItems: this.cartItems
           })
         }
-      })
+      }, (item: ProductData) => item.product_id)
     }
     .layoutDirection(FlexDirection.Column)
     .columnsTemplate('1fr 1fr')
@@ -41,18 +53,64 @@ export struct ProductView {
         .textAlign(TextAlign.Center)
     }
   }
-
 }
 
 
 @Component
 struct ProductItem {
+  @Prop product_id: string
   @Prop product_picture: ResourceStr
   @Prop product_name: string
   @Prop product_price: string
   @Prop product_unit: string
   @Prop product_capacity: string
-  @Prop  product_capacity_unit: string
+  @Prop product_capacity_unit: string
+  @State dialogMessage: string = '成功添加购物车！';
+  @Link localDataSource: ProductDataSource| undefined
+  @Link productSelectionMap: Map<string, boolean> | undefined
+  // @Link cartItems: ProductData[] | undefined
+
+  async addToCart() {
+    // 构造完整商品对象
+    const product: ProductData = new ProductData(
+      this.product_id,
+      this.product_picture,
+      this.product_name,
+      this.product_price,
+      this.product_unit,
+      this.product_capacity,
+      this.product_capacity_unit,
+       1
+    )
+    try{
+      if (this.localDataSource) {
+        if (this.productSelectionMap) {
+          this.productSelectionMap.set(product.product_id, false);
+        } else {
+          this.productSelectionMap = new Map();
+          this.productSelectionMap.set(product.product_id, false);
+        }
+        // 查找是否已有该id的商品
+        const existingProductIndex = this.localDataSource.findIndex(item => item.product_id === product.product_id);
+        if (existingProductIndex !== -1) {
+          // 若存在，数量加1
+          const existingProduct = this.localDataSource.getData(existingProductIndex);
+          existingProduct.product_number++;
+          this.localDataSource.changeData(existingProductIndex, existingProduct);
+        } else {
+          // 若不存在，添加新商品
+          this.localDataSource.dataList.push(product);
+          this.localDataSource.reloadData();
+        }
+        promptAction.showToast({
+                message: this.dialogMessage
+              });
+      }
+    } catch (error) {
+      console.error('添加失败:', error);
+    }
+  }
+
   build() {
     Column() {
       Image(this.product_picture)
@@ -123,10 +181,12 @@ struct ProductItem {
         .justifyContent(FlexAlign.Center)
         .backgroundColor('#ff22c1ff')
         .borderRadius(10)
+        .onClick(() => this.addToCart())
       }
       .margin({ bottom: 8 })
       .width('45%')
       .justifyContent(FlexAlign.SpaceBetween)
+
     }
     .borderRadius(15)
     .backgroundColor(Color.White)

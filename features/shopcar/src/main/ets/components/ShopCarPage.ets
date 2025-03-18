@@ -1,16 +1,22 @@
-import { ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
-import { shopCarInfo, ShopChangeInterface } from "../model/ShopCarModel";
+import { PreferenceConstant, PreferenceManager } from "datastore";
+import { ProductData, ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
+// import { CartService } from "uicomponents/src/main/ets/model/ProuductServer";
+import { ShopChangeInterface } from "../model/ShopCarModel";
 import { ShopCarListComponent } from "./ShopCarListComponent";
 
 
-export class ShopChangeImpl implements ShopChangeInterface {
+class ShopChangeImpl implements ShopChangeInterface {
   private context: ShopCarPage; // 替换为组件类型
 
   constructor(context: ShopCarPage) {
     this.context = context;
   }
 
-  onItemContentChange(): void {
+  async onItemContentChange(): Promise<void> {
+    this.context.settlementNumber = this.context.calculateTotal()
+  }
+  onSelectionChange(id: string, selection: boolean): void {
+    this.context.productSelectionMap.set(id, selection)
     this.context.settlementNumber = this.context.calculateTotal()
   }
 }
@@ -18,19 +24,18 @@ export class ShopChangeImpl implements ShopChangeInterface {
 @Component
 export struct ShopCarPage {
   @State userLocation: string = '西柚学院'
-  @State shopCarListData: ProductDataSource  = new ProductDataSource()
-  @State settlementNumber: string = this.calculateTotal()
+  @State settlementNumber: string = '0.00'
   @State callback: ShopChangeInterface = new ShopChangeImpl(this)
+  @State isAllSelected: boolean = false;
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, boolean> = new Map();
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
 
-  aboutToAppear(): void {
-    this.shopCarListData.pushDataList(shopCarInfo)
-  }
 
   build() {
     Stack() {
       Scroll() {
         Column() {
-          ShopCarListComponent({ shopCarListData: $shopCarListData, callback: $callback })
+          ShopCarListComponent({ shopCarListData: $localDataSource, callback: $callback, productSelectionMap: $productSelectionMap })
 
           RecommendComponent()
             .margin({
@@ -89,20 +94,44 @@ export struct ShopCarPage {
   // 计算总价的方法
   public calculateTotal(): string {
     let total = 0;
-    for (let i = 0; i < this.shopCarListData.totalCount(); i++) {
-      const item = this.shopCarListData.getData(i);
-      if (item.product_ischoose) {
+    const selectedItems = Array.from(this.productSelectionMap.values()).filter(Boolean);
+
+    // 计算全选状态
+    this.isAllSelected = selectedItems.length > 0 &&
+      selectedItems.length === this.productSelectionMap.size;
+
+    // 计算总价
+    this.localDataSource.dataList.forEach(item => {
+      if (this.productSelectionMap.get(item.product_id)) {
         total += parseFloat(item.product_price) * item.product_number;
       }
-    }
+    });
     return total.toFixed(2);
   }
+
+  private toggleAllSelection(checked: boolean): void {
+    // 创建新 Map 实例（确保引用变化）
+    const newMap = new Map<string, boolean>(this.productSelectionMap);
+    for (const key of newMap.keys()) {
+      newMap.set(key, checked);
+    }
+    this.productSelectionMap = newMap; // 触发 @Link 更新
+    this.isAllSelected = checked; // 同步全选状态
+    this.calculateTotal()
+  }
+
 
   @Builder
   settlementComponent() {
     Row() {
       Row() {
         Checkbox()
+          .select(this.isAllSelected)
+          .onClick(() => {
+            this.isAllSelected = !this.isAllSelected
+            this.toggleAllSelection(this.isAllSelected);
+          })
+
 
         Text('全选')
           .fontSize(15)

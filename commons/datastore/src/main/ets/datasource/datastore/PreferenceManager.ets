@@ -5,11 +5,11 @@ import { preferences } from '@kit.ArkData';
 const PREFERENCES_NAME: string = 'NeiFruitStore';
 
 export class PreferenceManager {
-  private preferences?: preferences.Preferences;
-  private context = getContext(this) as common.UIAbilityContext;
-  private static instance: PreferenceManager;
+  public preferences?: preferences.Preferences;
+  public context = getContext(this) as common.UIAbilityContext;
+  public static instance: PreferenceManager;
 
-  private constructor() {
+  public constructor() {
     this.initPreference(PREFERENCES_NAME);
   }
 
@@ -80,4 +80,19 @@ export class PreferenceManager {
   saveUserData() {
     this.preferences?.flush();
   }
+
+  // 通用存储方法（不依赖具体类型）
+  // async setGenericValue<T>(key: string, value: T ): Promise<void> {
+  //   if (this.preferences) {
+  //     await this.preferences.put(key, JSON.stringify(value))
+  //     this.saveUserData()
+  //   }
+  // }
+  //
+  // // 通用读取方法
+  // async getGenericValue<T>(key: string): Promise<T | null> {
+  //   if (!this.preferences) return null
+  //   const value = await this.preferences.get(key, '')
+  //   return value ? JSON.parse(value.toString()) as T : null
+  // }
 }

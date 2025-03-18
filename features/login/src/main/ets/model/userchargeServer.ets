@@ -1,6 +1,6 @@
 // 导入 HTTP 模块
 import http from '@ohos.net.http';
-import { PreferenceManager } from 'datastore';
+import { PreferenceConstant, PreferenceManager } from 'datastore';
 import { APIContants } from 'network/src/main/ets/contants/APIContants';
 import { ResourceConstants } from '../constants/ResourceConstants';
 
@@ -185,17 +185,17 @@ export class UserService {
     try {
       // 检查自动登录开关
       const isAutoLogin = await this.preferenceManager.getValue<boolean>(
-        ResourceConstants.IS_AUTOLOGIN_OPEN_KEY
+        PreferenceConstant.IS_AUTOLOGIN_OPEN_KEY
       );
 
       if (!isAutoLogin) return false;
 
       // 获取保存的账号信息
       const email = await this.preferenceManager.getValue<string>(
-        ResourceConstants.LAST_LOGIN_EMAIL_KEY
+        PreferenceConstant.LAST_LOGIN_EMAIL_KEY
       );
       const password = await this.preferenceManager.getValue<string>(
-        ResourceConstants.LAST_LOGIN_PASSWORD_KEY
+        PreferenceConstant.LAST_LOGIN_PASSWORD_KEY
       );
 
       if (!email || !password) {
@@ -215,7 +215,7 @@ export class UserService {
       console.error('自动登录失败:', error);
       // 自动登录失败时关闭自动登录功能
       await this.preferenceManager.setValue(
-        ResourceConstants.IS_AUTOLOGIN_OPEN_KEY,
+        PreferenceConstant.IS_AUTOLOGIN_OPEN_KEY,
         false
       );
       return false;
@@ -233,7 +233,7 @@ export class UserService {
       } else {
         // 如果取消记住我，清除历史凭证
         await this.preferenceManager.setValue(
-          ResourceConstants.IS_AUTOLOGIN_OPEN_KEY,
+          PreferenceConstant.IS_AUTOLOGIN_OPEN_KEY,
           false
         );
       }
@@ -251,15 +251,15 @@ export class UserService {
   private async saveLoginCredentials(email: string, password: string) {
     await Promise.all([
       this.preferenceManager.setValue(
-        ResourceConstants.IS_AUTOLOGIN_OPEN_KEY,
+        PreferenceConstant.IS_AUTOLOGIN_OPEN_KEY,
         true
       ),
       this.preferenceManager.setValue(
-        ResourceConstants.LAST_LOGIN_EMAIL_KEY,
+        PreferenceConstant.LAST_LOGIN_EMAIL_KEY,
         email
       ),
       this.preferenceManager.setValue(
-        ResourceConstants.LAST_LOGIN_PASSWORD_KEY,
+        PreferenceConstant.LAST_LOGIN_PASSWORD_KEY,
         password
       ),
     ]);
@@ -268,20 +268,20 @@ export class UserService {
   //token操作方法
   private async saveToken(token: string): Promise<void> {
     await this.preferenceManager.setValue(
-      ResourceConstants.USER_TOKEN_KEY,
+      PreferenceConstant.USER_TOKEN_KEY,
       token
     );
   }
 
   async getToken(): Promise<string | null> {
     return this.preferenceManager.getValue<string>(
-      ResourceConstants.USER_TOKEN_KEY
+      PreferenceConstant.USER_TOKEN_KEY
     );
   }
 
   async clearToken(): Promise<void> {
     await this.preferenceManager.deleteValue(
-      ResourceConstants.USER_TOKEN_KEY
+      PreferenceConstant.USER_TOKEN_KEY
     );
   }
 
@@ -290,14 +290,14 @@ export class UserService {
     // 清除自动登录相关数据
     await Promise.all([
       this.preferenceManager.setValue(
-        ResourceConstants.IS_AUTOLOGIN_OPEN_KEY,
+        PreferenceConstant.IS_AUTOLOGIN_OPEN_KEY,
         false
       ),
       this.preferenceManager.deleteValue(
-        ResourceConstants.LAST_LOGIN_EMAIL_KEY
+        PreferenceConstant.LAST_LOGIN_EMAIL_KEY
       ),
       this.preferenceManager.deleteValue(
-        ResourceConstants.LAST_LOGIN_PASSWORD_KEY
+        PreferenceConstant.LAST_LOGIN_PASSWORD_KEY
       ),
     ]);
     // TODO: 清除token和其他用户数据

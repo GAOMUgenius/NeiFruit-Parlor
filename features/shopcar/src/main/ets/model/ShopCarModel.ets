@@ -1,5 +1,4 @@
-import { ProductData, ProductDataSource } from 'uicomponents'
-import { ShopCarPage } from '../components/ShopCarPage';
+import { ProductData } from 'uicomponents'
 
 export const shopCarInfo: ProductData[] = [
   new ProductData(
@@ -10,7 +9,6 @@ export const shopCarInfo: ProductData[] = [
     "袋",
     "1.8",
     "kg",
-    false,
     1
   ),
   new ProductData(
@@ -21,7 +19,6 @@ export const shopCarInfo: ProductData[] = [
     "袋",
     "1.8",
     "kg",
-    false,
     1
   ),
   new ProductData(
@@ -32,11 +29,11 @@ export const shopCarInfo: ProductData[] = [
     "袋",
     "1.8",
     "kg",
-    false,
     1
   )
 ]
 
 export interface ShopChangeInterface {
   onItemContentChange(): void
+  onSelectionChange(id: string, selection: boolean): void
 }

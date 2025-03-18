@@ -3,7 +3,10 @@ import { ProductData } from 'uicomponents'
 @Component
 export struct ShopCarListItem {
   @Prop data : ProductData
-  onChange: ( data: ProductData ) => void = () => {
+  @Link@Watch('isSelection') productSelectionMap: Map<string, boolean>
+  onNumberChange: (data: ProductData) => void = () => {
+  }
+  onSelectionChange: ( id: string, isSelection: boolean ) => void = () => {
   }
   dialogController: CustomDialogController = new CustomDialogController({
     builder: CustomDialogExample({
@@ -13,7 +16,7 @@ export struct ShopCarListItem {
       confirm: () => {
         // 确认时提交修改
         this.data.product_number = 0
-        this.onChange(this.data)
+        this.onNumberChange(this.data)
         this.dialogController.close()
       }
     }),
@@ -21,14 +24,24 @@ export struct ShopCarListItem {
   })
 
 
+  // 计算当前选中状态（实时从 Map 获取）
+   isSelection(): boolean {
+    return this.productSelectionMap.get(this.data.product_id) || false;
+  }
+
+  // Checkbox 的 onChange 事件
+  onCheckboxChange(checked: boolean) {
+    this.onSelectionChange(this.data.product_id, checked);
+  }
+
   build() {
     Column() {
       Row() {
         Checkbox()
+          .select(this.isSelection())
           .margin({ right: 10 })
-          .onChange(() => {
-            this.data.product_ischoose = !this.data.product_ischoose
-            this.onChange(this.data)
+          .onChange((checked) => {
+            this.onCheckboxChange(checked);
           })
 
         Image(this.data.product_picture)
@@ -38,7 +51,7 @@ export struct ShopCarListItem {
           })
           .margin({ right: 30 })
 
-        this.ProductInfo(this.data.product_name, this.data.product_price, this.data.product_unit, this.data.product_capacity, this.data.product_capacity_unit, this.data.product_number, this.data.product_ischoose)
+        this.ProductInfo(this.data.product_name, this.data.product_price, this.data.product_unit, this.data.product_capacity, this.data.product_capacity_unit)
 
       }
       .width('100%')
@@ -56,7 +69,7 @@ export struct ShopCarListItem {
   }
 
   @Builder
-  ProductInfo(product_name: string, product_price: string, product_unit: string, product_capacity: string, product_capacity_unit: string, product_number: number, product_ischoose: boolean) {
+  ProductInfo(product_name: string, product_price: string, product_unit: string, product_capacity: string, product_capacity_unit: string) {
     Column(){
       Row() {
         Text(product_name) // 添加空格分隔
@@ -112,7 +125,7 @@ export struct ShopCarListItem {
                   this.dialogController.open()
                 } else {
                   this.data.product_number -= 1
-                  this.onChange(this.data)
+                  this.onNumberChange(this.data)
                 }
               }
             })
@@ -135,7 +148,7 @@ export struct ShopCarListItem {
             .margin({ right: 10 })
             .onClick(() =>{
               this.data.product_number += 1
-              this.onChange(this.data)
+              this.onNumberChange(this.data)
               console.info('product_number is ' + this.data.product_number)
             })
 
@@ -163,11 +176,11 @@ struct CustomDialogExample {
   build() {
     Column() {
       Text('温馨提示')
-        .fontSize(20)
+        .fontSize(18)
         .fontWeight(FontWeight.Bold)
-        .margin({ top: 20 })
-      Text('确定删除该商品')
-        .fontSize(16)
+        .margin({ top: 5 })
+      Text('确定删除该商品?')
+        .fontSize(14)
         .margin({ top: 20, bottom: 20 })
       Row() {
         Button('取消')
@@ -176,12 +189,20 @@ struct CustomDialogExample {
             this.cancel()
           })
           .margin({ right: 20 })
+          .width(120)
+          .fontSize(15)
+          .backgroundColor(Color.White)
+          .fontColor(Color.Black)
         Button('确定')
           .onClick(() => {
             this.controller?.close()
             this.confirm()
           })
+          .width(120)
+          .fontSize(15)
+          .backgroundColor("#ff22c1ff")
       }
+      .margin({ bottom: 20 })
     }
   }
 }
