@@ -1,4 +1,4 @@
-
+import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "routermodule"
 import { ProductData, ProductDataSource } from "uicomponents"
 // import { CartService } from "uicomponents/src/main/ets/model/ProuductServer"
 import { ShopChangeInterface } from "../model/ShopCarModel"
@@ -43,6 +43,9 @@ export struct ShopCarListComponent {
           onSelectionChange: ( id: string, isSelection: boolean ) => this.callback.onSelectionChange(id, isSelection),
           productSelectionMap: this.productSelectionMap
         })
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTINFOPAGE)
+          })
       }, (item: ProductData) => item.product_id)
     }
     .animation({ duration: 300, curve: Curve.EaseOut })

@@ -7,6 +7,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "libuicomponents.so": "file:./src/main/cpp/types/libuicomponents",
-    "datastore": "file:..//./datastore"
+    "datastore": "file:..//./datastore",
+    "routermodule": "file:..//./RouterModule",
+    "network": "file:..//./network"
   }
 }

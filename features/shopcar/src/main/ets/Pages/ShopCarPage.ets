@@ -2,7 +2,7 @@ import { PreferenceConstant, PreferenceManager } from "datastore";
 import { ProductData, ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
 // import { CartService } from "uicomponents/src/main/ets/model/ProuductServer";
 import { ShopChangeInterface } from "../model/ShopCarModel";
-import { ShopCarListComponent } from "./ShopCarListComponent";
+import { ShopCarListComponent } from "../components/ShopCarListComponent";
 
 
 class ShopChangeImpl implements ShopChangeInterface {

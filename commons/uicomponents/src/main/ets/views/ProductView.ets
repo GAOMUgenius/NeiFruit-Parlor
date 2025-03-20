@@ -3,6 +3,7 @@ import { ProductDataSource } from '../model/ProductDataSource'
 import { ProductData, ProductData_List } from '../model/ProductModel'
 // import { CartService } from '../model/ProuductServer'
 import { promptAction } from '@kit.ArkUI'
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from 'routermodule'
 
 
 @Component
@@ -10,6 +11,7 @@ export struct ProductView {
   @State productListData: ProductDataSource  = new ProductDataSource()
   @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
   @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, boolean> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
+  @State token: string | undefined = AppStorage.get(PreferenceConstant.USER_TOKEN_KEY)
 
   aboutToAppear(): void {
     this.productListData.pushDataList(ProductData_List)
@@ -32,6 +34,9 @@ export struct ProductView {
             productSelectionMap: this.productSelectionMap
             // cartItems: this.cartItems
           })
+            .onClick(() => {
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTINFOPAGE)
+            })
         }
       }, (item: ProductData) => item.product_id)
     }

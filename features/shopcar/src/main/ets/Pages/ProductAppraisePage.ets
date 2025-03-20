@@ -1,0 +1,6 @@
+@Component
+struct ProductAppraisePageStruect {
+
+  build() {
+  }
+}
