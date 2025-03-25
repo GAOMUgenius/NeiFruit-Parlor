@@ -1,9 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
-import { ProductView, RecommendComponent } from 'uicomponents'
+import { AppraiseData, AppraiseListComponent, getAppraise, ProductView, RecommendComponent } from 'uicomponents'
 import { productInfoParameter, ProductInfoParameter, SellingPointInfoList } from '../model/ProductInfoModel'
-import { ProductAppraiseListComponent } from '../components/ProductAppraiseComponent'
-import { ProductAppraise } from '../model/ProductAppraiseModel'
-import { getAppraise } from '../model/ProductAppraiseServer'
+
 import { PreferenceConstant, PreferenceManager } from 'datastore'
 
 @Component
@@ -29,7 +27,7 @@ struct ProductInfoPageSturct {
     ),
   ]
   @State isSellingPointShow: boolean = false
-  @State productAppraise: ProductAppraise[] = [new ProductAppraise()]
+  @State productAppraise: AppraiseData[] = [new AppraiseData()]
 
   async aboutToAppear(): Promise<void> {
     // 检查 product_id 是否有效
@@ -41,146 +39,149 @@ struct ProductInfoPageSturct {
     const token = await preferenceManager.getValue<string>(PreferenceConstant.USER_TOKEN_KEY)
     if (token) {
       const getId: number = Number(this.product_id)
-      const getAppraiseInfo: ProductAppraise[] = await getAppraise(getId as number, 2, 1, token)
-      const processedAppraise = getAppraiseInfo.map(item => new ProductAppraise(
-        item.id,
-        item.user_name,
-        item.user_picture,
-        item.user_rating,
-        item.user_content,
-        [item.user_picture] // 包装成单元素数组
-        // 如果接口返回的是逗号分隔字符串，可以用 split：
-        // user_picture: item.user_picture.split(',')
-      ))
-      this.productAppraise = processedAppraise
+      const getAppraiseInfo: AppraiseData[] = await getAppraise(getId as number, 2, 1, token)
+      this.productAppraise = getAppraiseInfo
     }
   }
 
   build() {
     NavDestination() {
-      Scroll() {
-        Column() {
-          Swiper() {
-            // 图片轮播部分
-            ForEach(this.productInfo.productinfo_picture, (item: ResourceStr, index: number) => {
-              Image(item)
-                .width('100%')
-                .height(400)
-                .objectFit(ImageFit.Cover)
-                .borderRadius(8)
-            }, (item: ResourceStr) => JSON.stringify(item))
-          }
-          .autoPlay(false) // 是否自动播放
-          .indicator(true) // 显示指示点
-          .loop(true) // 循环播放
-          .duration(1000) // 切换动画时长
-          .width('100%')
-          .aspectRatio(1) // 推荐16:9比例（1.77）
-          .margin({ top: 12, bottom: 12 })
-          .height(150)
-          .margin({ bottom: 10 })
-
+      Stack() {
+        Scroll() {
           Column() {
-            Row() {
-              Text('￥')
-                .fontSize(20)
-                .fontColor('#fffd2626')
-              Text(this.productInfo.productinfo_price)
-                .fontSize(25)
-                .fontColor('#fffd2626')
-              Text('/' + this.productInfo.productinfo_unit)
-                .fontSize(18)
-                .fontColor(Color.Gray)
+            Swiper() {
+              // 图片轮播部分
+              ForEach(this.productInfo.productinfo_picture, (item: ResourceStr, index: number) => {
+                Image(item)
+                  .width('100%')
+                  .height(400)
+                  .objectFit(ImageFit.Cover)
+                  .borderRadius(8)
+              }, (item: ResourceStr) => JSON.stringify(item))
             }
-            .margin({ bottom: 10, top: 10, left: 15 })
+            .autoPlay(false) // 是否自动播放
+            .indicator(true) // 显示指示点
+            .loop(true) // 循环播放
+            .duration(1000) // 切换动画时长
+            .width('100%')
+            .aspectRatio(1) // 推荐16:9比例（1.77）
+            .margin({ top: 12, bottom: 12 })
+            .height(150)
+            .margin({ bottom: 10 })
 
-            Text(this.productInfo.productinfo_name + this.productInfo.productinfo_capacity + this.productInfo.productinfo_capacity_unit)
-              .fontSize(23)
-              .fontWeight(FontWeight.Bold)
-              .maxLines(2)
-              .width('95%')
-              .margin({ bottom: 10, left: 15 })
-
-            Row() {
-              Scroll() {
-                sellingPointView({sellingPointList: this.sellingPointList, isSellingPointShow: $isSellingPointShow, productInfo: this.productInfo })
+            Column() {
+              Row() {
+                Text('￥')
+                  .fontSize(20)
+                  .fontColor('#fffd2626')
+                Text(this.productInfo.product_price)
+                  .fontSize(25)
+                  .fontColor('#fffd2626')
+                Text('/' + this.productInfo.product_unit)
+                  .fontSize(18)
+                  .fontColor(Color.Gray)
               }
-              .scrollBarColor(Color.Transparent)
-              .layoutWeight(1)
-              .scrollable(ScrollDirection.Horizontal)
+              .margin({ bottom: 10, top: 10, left: 15 })
 
-              Image($r('app.media.right'))
-                .size({
-                  width: 5,
-                  height: 12
-                })
-                .margin({ right: 3 })
-            }
-            .borderRadius(5)
-            .margin({ left: 15, bottom: 10 })
-            .justifyContent(FlexAlign.SpaceBetween)
-            .backgroundColor("#ebeeeeee")
-            .width('90%')
-
-            Text(this.productInfo.productinfo_introduce)
-              .fontSize(13)
-              .width('90%')
-              .fontColor(Color.Gray)
-              .flexShrink(0)
-              .margin({ left: 15, bottom: 15 })
-
-          }
-          .borderRadius(10)
-          .justifyContent(FlexAlign.Start)
-          .alignItems(HorizontalAlign.Start)
-          .backgroundColor(Color.White)
-          .width('100%')
-          .margin({ bottom: 10 })
-
-          Column() {
-            Row() {
-              Text('评价')
-                .fontSize(15)
-                .fontWeight(FontWeight.Medium)
-                .margin({ left: 30 })
+              Text(this.productInfo.product_name + this.productInfo.product_capacity + this.productInfo.product_capacity_unit)
+                .fontSize(23)
+                .fontWeight(FontWeight.Bold)
+                .maxLines(2)
+                .width('95%')
+                .margin({ bottom: 10, left: 15 })
 
               Row() {
-                Text('查看全部')
-                  .fontSize(12)
-                  .fontWeight(FontWeight.Medium)
-                  .fontColor(Color.Gray)
-                  .margin({ right: 5 })
+                Scroll() {
+                  sellingPointView({sellingPointList: this.sellingPointList, isSellingPointShow: $isSellingPointShow, productInfo: this.productInfo })
+                }
+                .scrollBarColor(Color.Transparent)
+                .layoutWeight(1)
+                .scrollable(ScrollDirection.Horizontal)
+
                 Image($r('app.media.right'))
                   .size({
                     width: 5,
                     height: 12
                   })
+                  .margin({ right: 3 })
               }
-              .margin({ right: 30 })
+              .borderRadius(5)
+              .margin({ left: 15, bottom: 10 })
+              .justifyContent(FlexAlign.SpaceBetween)
+              .backgroundColor("#ebeeeeee")
+              .width('90%')
+
+              Text(this.productInfo.productinfo_introduce)
+                .fontSize(13)
+                .width('90%')
+                .fontColor(Color.Gray)
+                .flexShrink(0)
+                .margin({ left: 15, bottom: 15 })
 
             }
-            .margin({ top: 10 })
+            .borderRadius(10)
+            .justifyContent(FlexAlign.Start)
+            .alignItems(HorizontalAlign.Start)
+            .backgroundColor(Color.White)
             .width('100%')
-            .justifyContent(FlexAlign.SpaceBetween)
+            .margin({ bottom: 10 })
 
-            ProductAppraiseListComponent({ productAppraise: this.productAppraise })
+            Column() {
+              Row() {
+                Text('评价')
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ left: 30 })
 
+                Row() {
+                  Text('查看全部')
+                    .fontSize(12)
+                    .fontWeight(FontWeight.Medium)
+                    .fontColor(Color.Gray)
+                    .margin({ right: 5 })
+                  Image($r('app.media.right'))
+                    .size({
+                      width: 5,
+                      height: 12
+                    })
+                }
+                .margin({ right: 30 })
+
+              }
+              .margin({ top: 10 })
+              .width('100%')
+              .justifyContent(FlexAlign.SpaceBetween)
+
+              AppraiseListComponent({ productAppraise: this.productAppraise })
+
+            }
+            .borderRadius(15)
+            .width('100%')
+            .backgroundColor(Color.White)
+            .onClick(() => {
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE, new Object(this.productAppraise))
+            })
+
+            RecommendComponent()
+
+            ProductView()
           }
-          .borderRadius(15)
           .width('100%')
-          .backgroundColor(Color.White)
-          .onClick(() => {
-            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE, new Object(this.productAppraise))
-          })
-
-          RecommendComponent()
-
-          ProductView()
         }
+        .backgroundColor("#ebf5f5f5")
         .width('100%')
+        .margin({ bottom: 40 })
+
+        Button('加入购物车')
+          .type(ButtonType.Capsule)
+          .borderRadius(8)
+          .backgroundColor('#ff22c1ff')
+          .width('80%')
+          .height(40)
+          .zIndex(999)
       }
-      .backgroundColor("#ebf5f5f5")
-      .width('100%')
+      .alignContent(Alignment.Bottom)
+      .height('100%')
     }
   }
 }
@@ -219,7 +220,7 @@ function productDetail(productInfo: ProductInfoParameter) {
       Text(productInfo.productinfo_origin)
         .fontSize(15)
         .margin({ top: 5, bottom: 5})
-      Text(productInfo.productinfo_capacity + productInfo.productinfo_capacity_unit)
+      Text(productInfo.product_capacity + productInfo.product_capacity_unit)
         .fontSize(15)
         .margin({ top: 5, bottom: 5})
       Text(productInfo.productinfo_storage)

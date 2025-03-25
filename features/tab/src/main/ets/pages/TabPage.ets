@@ -2,7 +2,7 @@ import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routerm
 import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
-import { HomePageStruct } from "home/src/main/ets/components/MainPage"
+import { HomePageStruct } from "home/src/main/ets/Pages/MainPage"
 import { ShopCarPage } from 'shopcar/src/main/ets/Pages/ShopCarPage'
 import { CommunityPage } from 'community/src/main/ets/components/MainPage'
 

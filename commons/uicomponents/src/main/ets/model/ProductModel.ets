@@ -4,13 +4,13 @@ import { ProductDataSource } from "./ProductDataSource"
 
 @Observed
 export class ProductData {
-  @Track id: number = 0
-  @Track product_picture: ResourceStr = ''
-  product_name: string = ''
-  product_price: string = ''
-  product_unit: string = ''
-  product_capacity: string = ''
-  product_capacity_unit: string= ''
+  @Track id: number
+  @Track product_picture: ResourceStr
+  @Track product_name: string
+  @Track product_price: string
+  @Track product_unit: string
+  @Track product_capacity: string
+  @Track product_capacity_unit: string
 
   constructor(
     id: number,

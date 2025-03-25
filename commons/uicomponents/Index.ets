@@ -3,3 +3,7 @@ export { RecommendComponent } from './src/main/ets/components/RecommendComponent
 export { ProductData } from './src/main/ets/model/ProductModel'
 export { ProductDataSource } from './src/main/ets/model/ProductDataSource'
 export { StarRating } from './src/main/ets/components/StarRatingComponent'
+export { AppraiseData } from './src/main/ets/model/AppraiseModel'
+export { AppraiseDataSource } from './src/main/ets/model/AppraiseDataSource'
+export { AppraiseListComponent } from './src/main/ets/components/AppraiseComponent'
+export { getAppraise } from './src/main/ets/model/AppraiseServer'

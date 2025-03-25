@@ -1,14 +1,11 @@
 import { it } from "@ohos/hypium";
 import { BuilderNameConstants, RouterModule } from "routermodule";
-import { StarRating } from "uicomponents";
-import { ProductAppraiseDataSource } from "../model/ProductAppraiseDataSource";
-import { ProductAppraise } from "../model/ProductAppraiseModel";
-import { getAppraise } from "../model/ProductAppraiseServer";
+import { AppraiseData, AppraiseDataSource, getAppraise, StarRating } from "uicomponents";
 
 @Component
 struct ProductAppraisePageStruct {
-  @Prop productAppraise: ProductAppraise[]
-  @State productAppraiseData: ProductAppraiseDataSource = new ProductAppraiseDataSource()
+  @Prop productAppraise: AppraiseData[]
+  @State productAppraiseData: AppraiseDataSource = new AppraiseDataSource()
   @State isLoading: boolean = false
   @State hasMore: boolean = true
 
@@ -23,7 +20,7 @@ struct ProductAppraisePageStruct {
       Stack() {
         Scroll() {
           List() {
-            LazyForEach(this.productAppraiseData, (item: ProductAppraise) => {
+            LazyForEach(this.productAppraiseData, (item: AppraiseData) => {
               ListItem() {
                 ProductAppraiseListItem({
                   productAppraise: item,
@@ -82,7 +79,7 @@ struct ProductAppraisePageStruct {
 
 @Component
 struct ProductAppraiseListItem {
-  @Prop productAppraise: ProductAppraise
+  @Prop productAppraise: AppraiseData
   @Link isLoading: boolean
   private starItems: number[] = [0, 1, 2, 3, 4];
   build() {
@@ -115,7 +112,7 @@ struct ProductAppraiseListItem {
         .flexShrink(0)
         .margin({ top: 20, bottom: 20 })
 
-      if(this.productAppraise.user_content_picture.length !== 0) {
+      if(this.productAppraise.user_content_picture?.length !== 0) {
         Row() {
           ForEach(this.productAppraise.user_content_picture, (item: ResourceStr) => {
             Image(item)
@@ -140,7 +137,7 @@ struct ProductAppraiseListItem {
   //根据图片数量计算图片大小
 
   private getImageSize(): string {
-    if(this.productAppraise.user_content_picture.length != 3) {
+    if(this.productAppraise.user_content_picture?.length != 3) {
       return '50%'
     } else {
       return '33.3%'

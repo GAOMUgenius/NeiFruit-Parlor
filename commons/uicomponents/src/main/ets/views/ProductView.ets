@@ -19,7 +19,7 @@ export struct ProductView {
 
     const token: string | null = await preferenceManager.getValue<string>(PreferenceConstant.USER_TOKEN_KEY)
     if (token) {
-      // this.productData_List = await fetchRecommendedProducts(token)
+      this.productData_List = await fetchRecommendedProducts(token)
     }
     this.productListData.pushDataList(this.productData_List)
   }

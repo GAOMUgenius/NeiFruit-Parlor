@@ -1,3 +1,4 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 import { StarRating } from "uicomponents";
 import { CategoryType,
   ShopInterface,
@@ -32,6 +33,9 @@ export struct ShopItemContent{
       LazyForEach(this.dataSource, (shop: ShopInterface) => {
         FlowItem() {
           ShopItem({ shop: shop })
+            .onClick(() => {
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.HOME_SHOPINFOPAGE)
+            })
         }
       }, (shop: ShopInterface) => shop.id.toString()) // 需要指定唯一键生成器
     }

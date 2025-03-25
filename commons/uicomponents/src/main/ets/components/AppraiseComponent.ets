@@ -1,22 +1,23 @@
-import { ProductAppraise } from "../model/ProductAppraiseModel"
+import { AppraiseData } from "../model/AppraiseModel"
+
 
 
 @Component
-struct ProductAppraiseComponent {
-  @Prop productAppraise: ProductAppraise
+struct AppraiseComponent {
+  @Prop appraise: AppraiseData
 
   build() {
     Row() {
       Column() {
         Row() {
-          Image(this.productAppraise.user_picture)
+          Image(this.appraise.user_picture)
             .size({
               width: 20,
               height: 20
             })
             .borderRadius(10)
             .margin({ left: 15 })
-          Text(this.productAppraise.user_name)
+          Text(this.appraise.user_name)
             .fontSize(12)
             .fontWeight(FontWeight.Normal)
             .margin({ left: 5 })
@@ -29,7 +30,7 @@ struct ProductAppraiseComponent {
           Blank()
             .width(30)
 
-          Text(this.productAppraise.user_content)
+          Text(this.appraise.user_content)
             .fontWeight(FontWeight.Regular)
             .maxLines(2)
             .fontSize(12)
@@ -46,12 +47,14 @@ struct ProductAppraiseComponent {
       .layoutWeight(1)
       .margin({ top: 10 })
 
-      Image(this.productAppraise.user_content_picture[0])
-        .size( {
-          height: 70,
-          width: 70
-        })
-        .objectFit(ImageFit.Cover)
+      if (this.appraise.user_content_picture) {
+        Image(this.appraise.user_content_picture[0])
+          .size({
+            height: 70,
+            width: 70
+          })
+          .objectFit(ImageFit.Cover)
+      }
 
     }
     .height(100)
@@ -59,25 +62,24 @@ struct ProductAppraiseComponent {
 }
 
 @Component
-export struct ProductAppraiseListComponent {
-  @Prop productAppraise: ProductAppraise[]
+export struct AppraiseListComponent {
+  @Prop productAppraise: AppraiseData[]
+
+  aboutToAppear(): void {
+    if (!Array.isArray(this.productAppraise)) {
+      throw new Error('数据源必须为数组');
+    }
+  }
 
   build() {
     List() {
-      ForEach(this.productAppraise, (item: ProductAppraise) => {
+      ForEach(this.productAppraise, (item: AppraiseData) => {
         ListItem() {
-          ProductAppraiseComponent({
-            productAppraise: item
+          AppraiseComponent({
+            appraise: item
           })
         }
-      },(item: ProductAppraise) => {
-        // 检查 item.id 是否存在
-      if (item.id!== undefined && item.id!== null) {
-        return item.id.toString();
-      }
-      // 如果 id 不存在，返回一个唯一的标识符，例如对象的索引
-      return this.productAppraise.indexOf(item).toString();
-    })
+      })
     }
     .divider({ strokeWidth: 0.5, color: '#ffdedede', startMargin: 10, endMargin: 10 })
     .height('auto')

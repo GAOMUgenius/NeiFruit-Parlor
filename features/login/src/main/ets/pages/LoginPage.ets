@@ -1,6 +1,6 @@
 import { RouterModule, BuilderNameConstants, RouterNameConstants, buildRouterModel } from "routermodule";
 import { ComponentContent, promptAction, router } from "@kit.ArkUI";
-import { PreferenceManager, UserData } from "datastore";
+import { PreferenceConstant, PreferenceManager, UserData } from "datastore";
 import  'tab/src/main/ets/pages/TabPage'
 import { UserService } from "../model/userchargeServer";
 
@@ -151,6 +151,8 @@ struct LoginPageStruct {
             .enabled(!this.loging) // 防止重复点击
             .onClick(async () => {
               // this.login()
+              let preferenceManager = PreferenceManager.getInstance()
+              preferenceManager.deleteValue(PreferenceConstant.USER_TOKEN_KEY)
               router.replaceNamedRoute({
                       name: `TabPage`,
                       params: { data1: 'message' }

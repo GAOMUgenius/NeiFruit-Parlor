@@ -32,6 +32,7 @@ export struct ShopCarListComponent {
           })
       }, (item: ProductData) => item.id.toString())
     }
+    .divider({ strokeWidth: 0.2, color: '#ffd2d2d2' })
     .animation({ duration: 300, curve: Curve.EaseOut })
     .height('auto')
     .borderRadius(20)

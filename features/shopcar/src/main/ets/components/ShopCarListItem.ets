@@ -60,11 +60,6 @@ export struct ShopCarListItem {
       .margin({ top: 20, bottom: 20 })
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.SpaceAround)
-
-      Line()
-        .height(0.2)
-        .backgroundColor('#ffd2d2d2')
-        .width('100%')
     }
     .height(110)
     .width('100%')

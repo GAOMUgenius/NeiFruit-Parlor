@@ -1,14 +1,19 @@
 import { http } from "@kit.NetworkKit";
 import { APIContants } from "network";
-import { ProductAppraise } from "./ProductAppraiseModel";
+import { AppraiseData } from "./AppraiseModel";
+
 
 interface ProductAppraiseRes {
   status: number,
   message: string,
-  data: ProductAppraise[]
+  data: ProductAppraiseData
 }
 
-export async function getAppraise(id: number, pagesize: number, pages: number, token: string): Promise<ProductAppraise[]> {
+interface ProductAppraiseData {
+  appraise: AppraiseData[]
+}
+
+export async function getAppraise(id: number, pagesize: number, pages: number, token: string): Promise<AppraiseData[]> {
   // 创建 HTTP 客户端
   const httpClient = http.createHttp();
   let ip = APIContants.IP
@@ -38,7 +43,7 @@ export async function getAppraise(id: number, pagesize: number, pages: number, t
       const result = response.result as ProductAppraiseRes;
 
       if (result.status === 1000) {
-        return result.data
+        return result.data.appraise
       } else {
         throw new Error(result.message || '获取评论失败');
       }
