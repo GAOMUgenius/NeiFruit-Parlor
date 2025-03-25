@@ -9,6 +9,7 @@
     "uicomponents": "file:../../commons/uicomponents",
     "utils": "file:../../commons/utils",
     "datastore": "file:../../commons/datastore",
-    "routermodule": "file:../../commons/RouterModule"
+    "routermodule": "file:../../commons/RouterModule",
+    "network": "file:../../commons/network"
   }
 }

@@ -96,6 +96,10 @@
     {
       "name": "shopcar",
       "srcPath": "./features/shopcar",
+    },
+    {
+      "name": "community",
+      "srcPath": "./features/community",
     }
   ]
 }

@@ -1,7 +1,8 @@
-import { ProductAppraise } from "../model/ProductInfoModel"
+import { ProductAppraise } from "../model/ProductAppraiseModel"
+
 
 @Component
-export struct ProductAppraiseComponent {
+struct ProductAppraiseComponent {
   @Prop productAppraise: ProductAppraise
 
   build() {
@@ -54,5 +55,33 @@ export struct ProductAppraiseComponent {
 
     }
     .height(100)
+  }
+}
+
+@Component
+export struct ProductAppraiseListComponent {
+  @Prop productAppraise: ProductAppraise[]
+
+  build() {
+    List() {
+      ForEach(this.productAppraise, (item: ProductAppraise) => {
+        ListItem() {
+          ProductAppraiseComponent({
+            productAppraise: item
+          })
+        }
+      },(item: ProductAppraise) => {
+        // 检查 item.id 是否存在
+      if (item.id!== undefined && item.id!== null) {
+        return item.id.toString();
+      }
+      // 如果 id 不存在，返回一个唯一的标识符，例如对象的索引
+      return this.productAppraise.indexOf(item).toString();
+    })
+    }
+    .divider({ strokeWidth: 0.5, color: '#ffdedede', startMargin: 10, endMargin: 10 })
+    .height('auto')
+    .width('100%')
+    .margin({ top: 15 })
   }
 }

@@ -1,13 +1,14 @@
-import { it } from '@ohos/hypium'
-import { BuilderNameConstants, RouterModule } from 'routermodule'
+import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
 import { ProductView, RecommendComponent } from 'uicomponents'
-import {
-  ProductAppraise,
-  productInfoParameter, ProductInfoParameter, SellingPointInfoList } from '../model/ProductInfoModel'
-import { ProductAppraiseComponent } from '../components/ProductAppraiseComponent'
+import { productInfoParameter, ProductInfoParameter, SellingPointInfoList } from '../model/ProductInfoModel'
+import { ProductAppraiseListComponent } from '../components/ProductAppraiseComponent'
+import { ProductAppraise } from '../model/ProductAppraiseModel'
+import { getAppraise } from '../model/ProductAppraiseServer'
+import { PreferenceConstant, PreferenceManager } from 'datastore'
 
 @Component
 struct ProductInfoPageSturct {
+  @Prop product_id: number
   @State productInfo: ProductInfoParameter = productInfoParameter
   @State sellingPointList: SellingPointInfoList[] = [
     new SellingPointInfoList(
@@ -28,7 +29,33 @@ struct ProductInfoPageSturct {
     ),
   ]
   @State isSellingPointShow: boolean = false
-  @State productAppraise: ProductAppraise[] = [new ProductAppraise(), new ProductAppraise()]
+  @State productAppraise: ProductAppraise[] = [new ProductAppraise()]
+
+  async aboutToAppear(): Promise<void> {
+    // 检查 product_id 是否有效
+    if (isNaN(this.product_id)) {
+      console.error("Invalid product_id:", this.product_id);
+      return;
+    }
+    let preferenceManager = PreferenceManager.getInstance()
+    const token = await preferenceManager.getValue<string>(PreferenceConstant.USER_TOKEN_KEY)
+    if (token) {
+      const getId: number = Number(this.product_id)
+      const getAppraiseInfo: ProductAppraise[] = await getAppraise(getId as number, 2, 1, token)
+      const processedAppraise = getAppraiseInfo.map(item => new ProductAppraise(
+        item.id,
+        item.user_name,
+        item.user_picture,
+        item.user_rating,
+        item.user_content,
+        [item.user_picture] // 包装成单元素数组
+        // 如果接口返回的是逗号分隔字符串，可以用 split：
+        // user_picture: item.user_picture.split(',')
+      ))
+      this.productAppraise = processedAppraise
+    }
+  }
+
   build() {
     NavDestination() {
       Scroll() {
@@ -136,24 +163,15 @@ struct ProductInfoPageSturct {
             .width('100%')
             .justifyContent(FlexAlign.SpaceBetween)
 
-            List() {
-              ForEach(this.productAppraise, (item: ProductAppraise) => {
-                ListItem() {
-                  ProductAppraiseComponent({
-                    productAppraise: item
-                  })
-                }
-              })
-            }
-            .divider({ strokeWidth: 0.5, color: '#ffdedede', startMargin: 10, endMargin: 10 })
-            .height('auto')
-            .width('100%')
-            .margin({ top: 15 })
+            ProductAppraiseListComponent({ productAppraise: this.productAppraise })
 
           }
           .borderRadius(15)
           .width('100%')
           .backgroundColor(Color.White)
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE, new Object(this.productAppraise))
+          })
 
           RecommendComponent()
 
@@ -372,9 +390,13 @@ struct  sellingPointView {
   }
 }
 
+interface GeneratedTypeLiteralInterface_1 {
+  productId?: number;
+}
+
 @Builder
 export function ProductInfoPage(value: object) {
-  ProductInfoPageSturct()
+  ProductInfoPageSturct({ product_id: Number((value as GeneratedTypeLiteralInterface_1).productId || '') })
 }
 
 const builderName = BuilderNameConstants.SHOPCAR_PRODUCTINFOPAGE;

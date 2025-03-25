@@ -47,6 +47,42 @@ struct LoginPageStruct {
     }
   }
 
+  async login() {
+    if (this.loging) return;
+
+    this.loging = true;
+    const userService = new UserService();
+
+    try {
+      // 执行实际登录操作
+      const success = await userService.manualLogin(
+        this.userData.useremail,
+        this.userData.password,
+        this.rememberMe
+      );
+
+      if (success) {
+        // 登录成功跳转
+        router.replaceNamedRoute({
+          name: `TabPage`,
+          params: { data1: 'message' }
+        }, router.RouterMode.Standard, (err) => {
+          if (err) {
+            console.error(`跳转失败: ${err.message}`);
+            promptAction.showToast({ message: '页面跳转异常' });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('登录失败:', error);
+      promptAction.showToast({
+        message: error.message || '登录失败，请检查账号密码'
+      });
+    } finally {
+      this.loging = false;
+    }
+  }
+
 
   build() {
     NavDestination() {
@@ -114,39 +150,7 @@ struct LoginPageStruct {
             .width('80%')
             .enabled(!this.loging) // 防止重复点击
             .onClick(async () => {
-              // if (this.loging) return;
-              //
-              // this.loging = true;
-              // const userService = new UserService();
-              //
-              // try {
-              //   // 执行实际登录操作
-              //   const success = await userService.manualLogin(
-              //     this.userData.useremail,
-              //     this.userData.password,
-              //     this.rememberMe
-              //   );
-              //
-              //   if (success) {
-              //     // 登录成功跳转
-              //     router.replaceNamedRoute({
-              //       name: `TabPage`,
-              //       params: { data1: 'message' }
-              //     }, router.RouterMode.Standard, (err) => {
-              //       if (err) {
-              //         console.error(`跳转失败: ${err.message}`);
-              //         promptAction.showToast({ message: '页面跳转异常' });
-              //       }
-              //     });
-              //   }
-              // } catch (error) {
-              //   console.error('登录失败:', error);
-              //   promptAction.showToast({
-              //     message: error.message || '登录失败，请检查账号密码'
-              //   });
-              // } finally {
-              //   this.loging = false;
-              // }
+              // this.login()
               router.replaceNamedRoute({
                       name: `TabPage`,
                       params: { data1: 'message' }

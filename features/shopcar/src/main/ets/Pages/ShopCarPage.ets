@@ -1,8 +1,8 @@
 import { PreferenceConstant, PreferenceManager } from "datastore";
 import { ProductData, ProductDataSource, ProductView, RecommendComponent } from "uicomponents";
-// import { CartService } from "uicomponents/src/main/ets/model/ProuductServer";
 import { ShopChangeInterface } from "../model/ShopCarModel";
 import { ShopCarListComponent } from "../components/ShopCarListComponent";
+import { ProductSelection } from "uicomponents/src/main/ets/model/ProductModel";
 
 
 class ShopChangeImpl implements ShopChangeInterface {
@@ -16,8 +16,23 @@ class ShopChangeImpl implements ShopChangeInterface {
     this.context.settlementNumber = this.context.calculateTotal()
   }
   onSelectionChange(id: string, selection: boolean): void {
-    this.context.productSelectionMap.set(id, selection)
-    this.context.settlementNumber = this.context.calculateTotal()
+    // 获取当前商品的现有选择状态
+    const existingSelection = this.context.productSelectionMap.get(id);
+
+    // 如果条目存在，保留原有数量
+    if (existingSelection) {
+      // 创建新对象，仅修改 ischoose 属性
+      this.context.productSelectionMap.set(id, {
+        ischoose: selection,     // 更新选中状态
+        number: existingSelection.number  // 保留原有数量
+      });
+
+      // 更新结算总价
+      this.context.settlementNumber = this.context.calculateTotal();
+    } else {
+      // 可选：处理未找到条目的情况（根据业务需求添加逻辑）
+      console.warn(`未找到商品 ${id} 的选择记录`);
+    }
   }
 }
 
@@ -27,7 +42,7 @@ export struct ShopCarPage {
   @State settlementNumber: string = '0.00'
   @State callback: ShopChangeInterface = new ShopChangeImpl(this)
   @State isAllSelected: boolean = false;
-  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, boolean> = new Map();
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> = new Map();
   @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
 
 
@@ -57,6 +72,7 @@ export struct ShopCarPage {
       this.settlementComponent()
       this.AdressComponent()
     }
+    .alignContent(Alignment.Bottom)
     .height('100%')
   }
 
@@ -94,30 +110,46 @@ export struct ShopCarPage {
   // 计算总价的方法
   public calculateTotal(): string {
     let total = 0;
-    const selectedItems = Array.from(this.productSelectionMap.values()).filter(Boolean);
 
-    // 计算全选状态
-    this.isAllSelected = selectedItems.length > 0 &&
-      selectedItems.length === this.productSelectionMap.size;
+    // 计算全选状态（确保Map中存在条目）
+    const allEntries = Array.from(this.productSelectionMap.values());
+    const selectedItems = allEntries.filter(entry => entry.ischoose);
 
-    // 计算总价
-    this.localDataSource.dataList.forEach(item => {
-      if (this.productSelectionMap.get(item.product_id)) {
-        total += parseFloat(item.product_price) * item.product_number;
+    this.isAllSelected = allEntries.length > 0 &&
+      selectedItems.length === allEntries.length;
+
+    // 计算总价（直接遍历Map）
+    this.productSelectionMap.forEach((value, key) => {
+      if (value.ischoose) {
+        // 从数据源中查找对应商品价格
+        const product = this.localDataSource.dataList.find(
+          item => item.id.toString() === key
+        );
+
+        if (product) {
+          total += parseFloat(product.product_price) * value.number;
+        }
       }
     });
+
     return total.toFixed(2);
   }
 
   private toggleAllSelection(checked: boolean): void {
     // 创建新 Map 实例（确保引用变化）
-    const newMap = new Map<string, boolean>(this.productSelectionMap);
-    for (const key of newMap.keys()) {
-      newMap.set(key, checked);
-    }
+    const newMap = new Map<string, ProductSelection>();
+
+    // 遍历原Map保留数量，仅修改选中状态
+    this.productSelectionMap.forEach((value, key) => {
+      newMap.set(key, {
+        number: value.number, // 保留原有属性
+        ischoose: checked // 覆盖选中状态
+      });
+    });
+
     this.productSelectionMap = newMap; // 触发 @Link 更新
-    this.isAllSelected = checked; // 同步全选状态
-    this.calculateTotal()
+    this.isAllSelected = checked;      // 同步全选状态
+    this.calculateTotal();
   }
 
 
@@ -174,7 +206,7 @@ export struct ShopCarPage {
       .alignItems(VerticalAlign.Center)
     }
     .justifyContent(FlexAlign.SpaceBetween)
-    .position({ x: 0, y: 645 }) // 60为组件自身高度
+    // .position({ x: 0, y: 645 })
     .zIndex(999)
     .width('100%')
     .height(50)

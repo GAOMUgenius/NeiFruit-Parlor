@@ -1,0 +1,1 @@
+export const HomePageSwiperResource: ResourceStr[] = [$r('app.media.swiperResource1')]

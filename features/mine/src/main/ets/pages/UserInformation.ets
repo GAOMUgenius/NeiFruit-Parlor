@@ -6,7 +6,6 @@ import { UserInfo } from '../model/UserInfoModel';
 
 @Builder
 export function UserInformation(value: object) {
-  // UserInformationStruct()
     NavDestination() {
       Row(){
         Column() {

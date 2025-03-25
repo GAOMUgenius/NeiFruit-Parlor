@@ -1,22 +1,24 @@
 import { ProductData } from 'uicomponents'
+import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
 
 @Component
 export struct ShopCarListItem {
   @Prop data : ProductData
-  @Link@Watch('isSelection') productSelectionMap: Map<string, boolean>
-  onNumberChange: (data: ProductData) => void = () => {
+  @Link@Watch('isSelection') productSelectionMap: Map<string, ProductSelection>
+  onDeleteData: (id: string) => void = () => {
   }
   onSelectionChange: ( id: string, isSelection: boolean ) => void = () => {
   }
   dialogController: CustomDialogController = new CustomDialogController({
     builder: CustomDialogExample({
       cancel: () => {
+
         this.dialogController.close()
       },
       confirm: () => {
         // 确认时提交修改
-        this.data.product_number = 0
-        this.onNumberChange(this.data)
+        this.productSelectionMap.delete(this.data.id.toString())
+        this.onDeleteData(this.data.id.toString())
         this.dialogController.close()
       }
     }),
@@ -26,12 +28,12 @@ export struct ShopCarListItem {
 
   // 计算当前选中状态（实时从 Map 获取）
    isSelection(): boolean {
-    return this.productSelectionMap.get(this.data.product_id) || false;
+    return this.productSelectionMap.get(this.data.id.toString())?.ischoose || false;
   }
 
   // Checkbox 的 onChange 事件
   onCheckboxChange(checked: boolean) {
-    this.onSelectionChange(this.data.product_id, checked);
+    this.onSelectionChange(this.data.id.toString(), checked);
   }
 
   build() {
@@ -120,17 +122,19 @@ export struct ShopCarListItem {
             .textAlign(TextAlign.Center)
             .margin({ right: 10 })
             .onClick(() => {
-              if (this.data.product_number > 0) {
-                if (this.data.product_number === 1) {
-                  this.dialogController.open()
+              const currentNumber = this.productSelectionMap.get(this.data.id.toString())?.number || 0;
+              if (currentNumber > 0) {
+                const newNumber = currentNumber - 1;
+                if (newNumber === 0) {
+                  this.dialogController.open();
                 } else {
-                  this.data.product_number -= 1
-                  this.onNumberChange(this.data)
+                  // 更新Map中的数量
+                  this.updateNumberInMap(newNumber);
                 }
               }
             })
 
-          Text(this.data.product_number.toString())
+          Text((this.productSelectionMap.get(this.data.id.toString())?.number || 0).toString())
             .width(20)
             .textAlign(TextAlign.Center)
             .margin({ right: 10 })
@@ -147,9 +151,11 @@ export struct ShopCarListItem {
             .textAlign(TextAlign.Center)
             .margin({ right: 10 })
             .onClick(() =>{
-              this.data.product_number += 1
-              this.onNumberChange(this.data)
-              console.info('product_number is ' + this.data.product_number)
+              const currentNumber = this.productSelectionMap.get(this.data.id.toString())?.number || 0;
+              const newNumber = currentNumber + 1;
+
+              // 更新Map中的数量
+              this.updateNumberInMap(newNumber);
             })
 
         }
@@ -162,6 +168,32 @@ export struct ShopCarListItem {
     .height(80)
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(HorizontalAlign.Start)
+  }
+
+  private updateNumberInMap(newNumber: number) {
+    // 创建新Map保证状态更新
+    const newMap = new Map(this.productSelectionMap);
+    const existing = newMap.get(this.data.id.toString());
+
+    if (existing) {
+      // 保留选中状态，仅修改数量
+      newMap.set(this.data.id.toString(), {
+        ischoose: existing.ischoose,
+        number: newNumber
+      });
+    } else {
+      // 初始化条目（如果不存在）
+      newMap.set(this.data.id.toString(), {
+        ischoose: false,
+        number: newNumber
+      });
+    }
+
+    // 更新Link变量触发渲染
+    this.productSelectionMap = newMap;
+
+    // 通知父组件（保持接口兼容性）
+
   }
 }
 

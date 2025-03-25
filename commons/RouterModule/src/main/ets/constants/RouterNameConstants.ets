@@ -12,4 +12,5 @@ export class BuilderNameConstants {
   static readonly MINE_NAMECHANGE: string = 'mine_namechange';
   static readonly MINE_EMAILCHANGE: string = 'mine_emailchange';
   static readonly SHOPCAR_PRODUCTINFOPAGE: string = 'shopcar_productinfopage';
+  static readonly SHOPCAR_PRODUCTAPPRAISEPAGE: string = 'shopcar_productappraisepage';
 }

@@ -80,18 +80,3 @@ export class SellingPointInfoList {
   }
 }
 
-export class ProductAppraise {
-  user_name: string
-  user_picture: ResourceStr
-  user_rating: string
-  user_content: string
-  user_content_picture: ResourceStr[]
-
-  constructor(user_name: string = '嘻嘻学啥呢', user_picture: ResourceStr = $r('app.media.user_picture1'), user_rating: string = '5', user_content: string = '非常好吃，感觉人生得到了圆满', user_content_picture: ResourceStr[] = [$r('app.media.productinfo_picture_2'), $r('app.media.productinfo_picture_4')]) {
-    this.user_name = user_name
-    this.user_picture = user_picture
-    this.user_rating = user_rating
-    this.user_content = user_content
-    this.user_content_picture = user_content_picture
-  }
-}

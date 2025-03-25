@@ -39,7 +39,7 @@ export async function getUserInfo(token: string): Promise<UserInfo> {
       if (result.status === 1000) {
         return result
       } else {
-        throw new Error(result.message || '用户注册失败');
+        throw new Error(result.message || '获取用户信息失败');
       }
     } else {
       throw new Error(`请求失败，状态码：${response.responseCode}: ${response.result}`);

@@ -5,8 +5,8 @@ import { UserAccountJSONToParse } from "../model/JSONToParse";
 
 @Component
 export struct  EmailChangeStruct {
-  @Prop userData: object
-  @State newUserData: UserData = UserAccountJSONToParse(this.userData)
+  @Prop newUserData: UserData
+  // @State newUserData: UserData = UserAccountJSONToParse(this.userData)
   build() {
     NavDestination() {
       Row() {
@@ -50,7 +50,7 @@ export struct  EmailChangeStruct {
 
 @Builder
 export function EmailChange(value: object) {
-  EmailChangeStruct({ userData: value })
+  EmailChangeStruct({ newUserData: JSON.parse(JSON.stringify(value)) })
 }
 
 const builderName = BuilderNameConstants.MINE_EMAILCHANGE;

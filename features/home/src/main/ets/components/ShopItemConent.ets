@@ -1,3 +1,4 @@
+import { StarRating } from "uicomponents";
 import { CategoryType,
   ShopInterface,
   ShopList_Catering, ShopList_Fresh, ShopList_Host,
@@ -59,22 +60,37 @@ struct ShopItem {
   @Prop shop: ShopInterface
 
   build() {
-    Column() {
-      Text(this.shop.name)
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
+    Row() {
+      Image($r('app.media.shopPicture'))
+        .size({
+          height: 100,
+          width: 100
+        })
+        .margin({ left: 10 })
 
-      Text(`评分：${this.shop.rating}`)
-        .fontColor('#FFC107')
+      Column() {
+        Row() {
+          Text(this.shop.name)
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
 
-      Text(`位置：${this.shop.location}`)
+          StarRating({ rating: this.shop.rating })
+        }
+        .width(200)
+        .justifyContent(FlexAlign.SpaceBetween)
 
-      Text(`电话：${this.shop.phone}`)
-        .fontColor('#666666')
-        .margin({ top: 6 })
+        Text(`位置：${this.shop.location}`)
+
+        Text(`电话：${this.shop.phone}`)
+          .fontColor('#666666')
+          .margin({ top: 6 })
+      }
+      .margin({ left: 10 })
+      .height(120)
+      .alignItems(HorizontalAlign.Start)
+      .justifyContent(FlexAlign.SpaceEvenly)
     }
     .width('100%')
-    .padding(16)
     .backgroundColor('#FFFFFF')
     .margin({ top: 12 })
     .borderRadius(8)

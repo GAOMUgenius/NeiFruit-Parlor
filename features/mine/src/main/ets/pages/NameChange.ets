@@ -4,8 +4,7 @@ import { UserAccountJSONToParse } from "../model/JSONToParse";
 
 @Component
 struct NameChangeStruct{
-  @Prop userData: object
-  @State newUserData: UserData = UserAccountJSONToParse(this.userData)
+  @Prop newUserData: UserData
   build() {
     NavDestination() {
       Row() {
@@ -51,7 +50,7 @@ struct NameChangeStruct{
 
 @Builder
 export function NameChange(value: object) {
-  NameChangeStruct({ userData: value})
+  NameChangeStruct({ newUserData: JSON.parse(JSON.stringify(value)) })
 }
 
 const builderName = BuilderNameConstants.MINE_NAMECHANGE;

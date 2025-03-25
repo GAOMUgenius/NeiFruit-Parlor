@@ -7,7 +7,22 @@ export class ProductDataSource extends BasicDataSource {
   @Track dataList: ProductData[] = [];
 
   public updateItem(newData: ProductData): void {
+    const data =  new ProductData(
+      newData.id,
+      newData.product_picture,
+      newData.product_name,
+      newData.product_price,
+      newData.product_unit,
+      newData.product_capacity,
+      newData.product_capacity_unit)
+    // const index = this.findIndex(newData.product_id)
+    // 通过ID查找索引
+    const index = this.findIndex((item) => item.id === newData.id);
 
+    if (index !== -1) {
+      // 使用已封装的changeData方法进行替换
+      this.changeData(index, data);
+    }
   }
 
   // 添加索引查找方法
@@ -55,14 +70,15 @@ export class ProductDataSource extends BasicDataSource {
     if (!isChanged) return;
 
     this.dataList = list.map(item => new ProductData(
-      item.product_id,
+      item.id,
       item.product_picture,
       item.product_name,
       item.product_price,
       item.product_unit,
       item.product_capacity,
-      item.product_capacity_unit,
-      item.product_number)); // 必须创建新对象
+      item.product_capacity_unit
+      )); // 必须创建新对象
+
     this.notifyDataReload(); // 确保触发刷新
   }
 
@@ -78,8 +94,14 @@ export class ProductDataSource extends BasicDataSource {
 
 
   private isEqual(a: ProductData, b: ProductData): boolean {
-    return a.product_id === b.product_id &&
-      a.product_number === b.product_number; // 只对比关键字段
+    return a.id === b.id
+
   }
 
+  public deleteById(productId: string): void {
+    const index = this.findIndex(item => item.id.toString() === productId);
+    if (index !== -1) {
+      this.deleteData(index);
+    }
+  }
 }

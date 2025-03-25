@@ -1,3 +1,4 @@
+import { HomePageSwiperResource } from "../model/HomePageSwiperResource"
 import { CategoryTabs } from "../view/CategoryTab"
 
 
@@ -14,7 +15,14 @@ export struct HomePageStruct {
           Column() {
             Column(){
               Swiper() {
-
+                ForEach(HomePageSwiperResource, (item: ResourceStr) => {
+                  Image(item)
+                    .size({
+                      width: '100%',
+                      height: '100%'
+                    })
+                    .objectFit(ImageFit.Cover)
+                }, (item: ResourceStr) => item.toString())
               }
             }
             .margin({ top: 60 })

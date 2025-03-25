@@ -4,14 +4,20 @@ import { ProductView, RecommendComponent } from "uicomponents";
 import { UserInfoView } from "../views/UserInfoView";
 import { getUserInfo, UserInfo } from "../model/UserInfoServer";
 import { UserData } from "datastore/src/main/ets/model/UserDataModel";
+import { PreferenceConstant, PreferenceManager } from "datastore";
 
 @Component
 export struct MinePageStruct {
   @State userData: UserData = new UserData()
-  @Prop token: string
 
   async aboutToAppear(): Promise<void> {
-    let getUserInfoData: UserInfo = await getUserInfo(this.token)
+    let preferenceManager = PreferenceManager.getInstance()
+    let token = await preferenceManager.getValue<string>(PreferenceConstant.USER_TOKEN_KEY)
+    let getUserInfoData: UserInfo | undefined = undefined
+
+    if (token) {
+      getUserInfoData = await getUserInfo(token)
+    }
     if (getUserInfoData) {
       this.userData = getUserInfoData.data
     }

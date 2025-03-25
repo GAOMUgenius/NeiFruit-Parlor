@@ -4,6 +4,7 @@ import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/components/MainPage"
 import { ShopCarPage } from 'shopcar/src/main/ets/Pages/ShopCarPage'
+import { CommunityPage } from 'community/src/main/ets/components/MainPage'
 
 @Entry({ routeName: 'TabPage' })
 @Component
@@ -24,6 +25,10 @@ struct TabPage {
         Tabs({ index: this.currentIndex }) {
           TabContent() {
             HomePageStruct()
+          }
+
+          TabContent() {
+            CommunityPage()
           }
 
           TabContent() {

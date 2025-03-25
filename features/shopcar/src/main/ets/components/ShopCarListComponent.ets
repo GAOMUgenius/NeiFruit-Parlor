@@ -1,5 +1,6 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "routermodule"
 import { ProductData, ProductDataSource } from "uicomponents"
+import { ProductSelection } from "uicomponents/src/main/ets/model/ProductModel"
 // import { CartService } from "uicomponents/src/main/ets/model/ProuductServer"
 import { ShopChangeInterface } from "../model/ShopCarModel"
 import { ShopCarListItem } from "./ShopCarListItem"
@@ -8,30 +9,13 @@ import { ShopCarListItem } from "./ShopCarListItem"
 export struct ShopCarListComponent {
   @Link shopCarListData: ProductDataSource
   @Link callback: ShopChangeInterface
-  @Link productSelectionMap: Map<string, boolean>
+  @Link productSelectionMap: Map<string, ProductSelection>
   // @Link cartItems: ProductData[]
 
 
 
-  async onNumberChange( updatedData: ProductData ): Promise<void> {
-    const index = this.shopCarListData.findIndex(item =>
-    item.product_id === updatedData.product_id
-    );
-
-    // const newCart = [...this.cartItems];
-    if (index !== -1) {
-      if (updatedData.product_number === 0) {
-        this.shopCarListData.deleteData(index);
-        // newCart.splice(index, 1);
-      } else {
-        this.shopCarListData.updateItem(updatedData);
-        // newCart[index] = updatedData;
-      }
-
-      // 更新
-      // this.cartItems = newCart
-      this.callback.onItemContentChange();
-    }
+  async onDeleteData( id: string ): Promise<void> {
+    this.shopCarListData.deleteById(id)
   }
   
   build() {
@@ -39,14 +23,14 @@ export struct ShopCarListComponent {
       LazyForEach(this.shopCarListData, (item: ProductData) => {
         ShopCarListItem({
           data: item,
-          onNumberChange: ( data: ProductData) => this.onNumberChange(data),
+          onDeleteData: ( id: string) => this.onDeleteData(id),
           onSelectionChange: ( id: string, isSelection: boolean ) => this.callback.onSelectionChange(id, isSelection),
           productSelectionMap: this.productSelectionMap
         })
           .onClick(() => {
-            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTINFOPAGE)
+            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTINFOPAGE, new Object({ productId: item.id }))
           })
-      }, (item: ProductData) => item.product_id)
+      }, (item: ProductData) => item.id.toString())
     }
     .animation({ duration: 300, curve: Curve.EaseOut })
     .height('auto')
