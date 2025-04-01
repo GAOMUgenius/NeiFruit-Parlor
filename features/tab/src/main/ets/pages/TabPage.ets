@@ -5,12 +5,17 @@ import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/Pages/MainPage"
 import { ShopCarPage } from 'shopcar/src/main/ets/Pages/ShopCarPage'
 import { CommunityPage } from 'community/src/main/ets/components/MainPage'
+import { PreferenceConstant } from 'datastore'
+import { ProductDataSource } from 'uicomponents'
+import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
 
 @Entry({ routeName: 'TabPage' })
 @Component
 struct TabPage {
   @State currentIndex: TabBarType = TabBarType.MAINPAGE
   @State tabPathStack: NavPathStack = new NavPathStack()
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> = new Map();
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
 
   aboutToAppear(): void {
     if (!this.tabPathStack) {

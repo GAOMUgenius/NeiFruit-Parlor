@@ -1,5 +1,5 @@
 import { BuilderNameConstants, RouterModule } from 'routermodule'
-import { ProductData, StarRating } from 'uicomponents'
+import { AppraiseListComponent, ProductData, ProductView, RecommendComponent, StarRating } from 'uicomponents'
 import { ShopProductComponent } from '../components/ShopProductComponent'
 import { ShopInfoData } from '../model/ShopInfoModel'
 
@@ -94,14 +94,41 @@ struct ShopInfoPageStruct {
             .margin({ top: 10 })
 
             Column() {
-              Text('用户评价')
-                .fontSize(15)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#ff180258')
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin({ left: 10, top: 10, bottom: 5 })
+              Row() {
+                Text('评价')
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ left: 10 })
+
+                Row() {
+                  Text('查看全部')
+                    .fontSize(12)
+                    .fontWeight(FontWeight.Medium)
+                    .fontColor(Color.Gray)
+                    .margin({ right: 5 })
+                  Image($r('app.media.right'))
+                    .size({
+                      width: 8,
+                      height: 12
+                    })
+                }
+                .margin({ right: 10 })
+
+              }
+              .margin({ top: 10 })
+              .width('100%')
+              .justifyContent(FlexAlign.SpaceBetween)
+
+              AppraiseListComponent({ productAppraise: this.shopInfo.shop_appraise })
             }
+            .width('90%')
+            .backgroundColor(Color.White)
+            .borderRadius(15)
+            .margin({ top: 10 })
+
+            RecommendComponent()
+
+            ProductView()
           }
           .width('100%')
         }

@@ -27,35 +27,33 @@ struct AppraiseComponent {
         .width('100%')
 
         Row() {
-          Blank()
-            .width(30)
-
           Text(this.appraise.user_content)
             .fontWeight(FontWeight.Regular)
             .maxLines(2)
             .fontSize(12)
-            .margin({ top: 10 })
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .flexShrink(1)
             .textAlign(TextAlign.Start)
-            .margin({ top: 20 })
-            .width('100%')
+            .margin({ left: 20, top: 10 })
+            .height(70)
+            .textAlign(TextAlign.Start)
+            .width(this.appraise.user_content_picture? 230 : 280)
+
+          if (this.appraise.user_content_picture) {
+            Image(this.appraise.user_content_picture[0])
+              .size({
+                height: 70,
+                width: 70
+              })
+              .objectFit(ImageFit.Cover)
+          }
         }
+
       }
       .justifyContent(FlexAlign.Start)
       .height('100%')
-      .layoutWeight(1)
+      .width('100%')
       .margin({ top: 10 })
-
-      if (this.appraise.user_content_picture) {
-        Image(this.appraise.user_content_picture[0])
-          .size({
-            height: 70,
-            width: 70
-          })
-          .objectFit(ImageFit.Cover)
-      }
-
     }
     .height(100)
   }

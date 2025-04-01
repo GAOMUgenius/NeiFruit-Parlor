@@ -1,8 +1,13 @@
-import { ProductData } from "uicomponents"
+import { PreferenceConstant } from "datastore"
+import { ProductData, ProductDataSource } from "uicomponents"
+import { ProductSelection } from "uicomponents/src/main/ets/model/ProductModel"
+import { addToCart } from "uicomponents/src/main/ets/model/ProuductServer"
 
 @Component
 export struct ShopProductComponent {
   @Prop shopProduct: ProductData
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
 
   build() {
     Row() {
@@ -60,6 +65,8 @@ export struct ShopProductComponent {
         .height(30)
         .backgroundColor('#ff22c1ff')
         .fontColor(Color.White)
+        .onClick(() => addToCart(this.shopProduct, this.localDataSource, this.productSelectionMap))
+
 
     }
   }

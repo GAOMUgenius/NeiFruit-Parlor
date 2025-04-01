@@ -1,13 +1,19 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
-import { AppraiseData, AppraiseListComponent, getAppraise, ProductView, RecommendComponent } from 'uicomponents'
+import { AppraiseData, AppraiseListComponent, getAppraise,
+  ProductDataSource,
+  ProductView, RecommendComponent } from 'uicomponents'
 import { productInfoParameter, ProductInfoParameter, SellingPointInfoList } from '../model/ProductInfoModel'
 
 import { PreferenceConstant, PreferenceManager } from 'datastore'
+import { ProductData, ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
+import { addToCart } from 'uicomponents/src/main/ets/model/ProuductServer'
 
 @Component
 struct ProductInfoPageSturct {
   @Prop product_id: number
   @State productInfo: ProductInfoParameter = productInfoParameter
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
   @State sellingPointList: SellingPointInfoList[] = [
     new SellingPointInfoList(
       this.productInfo.productinfo_storage,
@@ -28,6 +34,7 @@ struct ProductInfoPageSturct {
   ]
   @State isSellingPointShow: boolean = false
   @State productAppraise: AppraiseData[] = [new AppraiseData()]
+  @State product: ProductData = new ProductData(this.productInfo.id, this.productInfo.product_picture, this.productInfo.product_name, this.productInfo.product_price, this.productInfo.product_unit, this.productInfo.product_capacity, this.productInfo.product_capacity_unit)
 
   async aboutToAppear(): Promise<void> {
     // 检查 product_id 是否有效
@@ -141,7 +148,7 @@ struct ProductInfoPageSturct {
                     .margin({ right: 5 })
                   Image($r('app.media.right'))
                     .size({
-                      width: 5,
+                      width: 8,
                       height: 12
                     })
                 }
@@ -159,7 +166,7 @@ struct ProductInfoPageSturct {
             .width('100%')
             .backgroundColor(Color.White)
             .onClick(() => {
-              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE, new Object(this.productAppraise))
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE, new Object(this.product))
             })
 
             RecommendComponent()
@@ -179,6 +186,7 @@ struct ProductInfoPageSturct {
           .width('80%')
           .height(40)
           .zIndex(999)
+          .onClick(() => addToCart(this.product, this.localDataSource, this.productSelectionMap))
       }
       .alignContent(Alignment.Bottom)
       .height('100%')

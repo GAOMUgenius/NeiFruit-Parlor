@@ -12,6 +12,7 @@
     "mine": "file:../../features/mine",
     "home": "file:../../features/home",
     "shopcar": "file:../../features/shopcar",
-    "community": "file:../../features/community"
+    "community": "file:../../features/community",
+    "uicomponents": "file:../../commons/uicomponents"
   }
 }

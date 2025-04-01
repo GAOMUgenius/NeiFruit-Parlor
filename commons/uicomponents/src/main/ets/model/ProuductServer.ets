@@ -1,7 +1,9 @@
 // 定义商品数据模型
 import { APIContants } from 'network';
 import http from '@ohos.net.http';
-import { ProductData } from './ProductModel';
+import { ProductData, ProductSelection } from './ProductModel';
+import { ProductDataSource } from './ProductDataSource';
+import { promptAction } from '@kit.ArkUI';
 
 // 定义接口响应结构
 interface GetProductResponse {
@@ -60,5 +62,52 @@ export async function fetchRecommendedProducts(token: string): Promise<ProductDa
     throw new Error(`网络请求失败：${error.message}`);
   } finally {
     httpClient.destroy();
+  }
+}
+
+export async function addToCart(product: ProductData, localDataSource: ProductDataSource| undefined, productSelectionMap: Map<string, ProductSelection> | undefined) {
+  // 构造完整商品对象
+  const newProduct: ProductData = new ProductData(
+    product.id,
+    product.product_picture,
+    product.product_name,
+    product.product_price,
+    product.product_unit,
+    product.product_capacity,
+    product.product_capacity_unit,
+  )
+  try {
+    if (localDataSource) {
+      // 操作 productSelectionMap
+      if (!productSelectionMap) {
+        productSelectionMap = new Map();
+      }
+
+      // 获取或初始化商品数量
+      const existingEntry = productSelectionMap.get(product.id.toString());
+      if (existingEntry) {
+        // 数量加1
+        existingEntry.number++;
+        productSelectionMap.set(product.id.toString(), existingEntry);
+      } else {
+        // 初始化数量为1
+        productSelectionMap.set(product.id.toString(), { number: 1, ischoose: false });
+      }
+
+      // 操作 localDataSource（仅添加新商品）
+      const existingProductIndex = localDataSource.findIndex(
+        item => item.id === product.id
+      );
+      if (existingProductIndex === -1) {
+        localDataSource.dataList.push(newProduct);
+        localDataSource.reloadData();
+      }
+
+      promptAction.showToast({
+        message: '添加购物车成功'
+      });
+    }
+  } catch (error) {
+    console.error('添加失败:', error);
   }
 }

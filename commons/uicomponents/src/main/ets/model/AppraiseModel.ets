@@ -12,6 +12,6 @@ export class AppraiseData {
     this.user_picture = user_picture
     this.user_rating = user_rating
     this.user_content = user_content
-    // this.user_content_picture = user_content_picture
+    this.user_content_picture = user_content_picture
   }
 }

@@ -1,13 +1,19 @@
 import { it } from "@ohos/hypium";
+import { PreferenceConstant } from "datastore";
 import { BuilderNameConstants, RouterModule } from "routermodule";
-import { AppraiseData, AppraiseDataSource, getAppraise, StarRating } from "uicomponents";
+import { AppraiseData, AppraiseDataSource, getAppraise, ProductDataSource, StarRating } from "uicomponents";
+import { ProductData, ProductSelection } from "uicomponents/src/main/ets/model/ProductModel";
+import { addToCart } from "uicomponents/src/main/ets/model/ProuductServer";
 
 @Component
 struct ProductAppraisePageStruct {
-  @Prop productAppraise: AppraiseData[]
+  @Prop product: ProductData
+  @State productAppraise: AppraiseData[] = [new AppraiseData()]
   @State productAppraiseData: AppraiseDataSource = new AppraiseDataSource()
   @State isLoading: boolean = false
   @State hasMore: boolean = true
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
 
 
 
@@ -34,46 +40,21 @@ struct ProductAppraisePageStruct {
         }
         .width('100%')
         .height('auto')
-        .margin({ bottom: 50 })
+        .margin({ bottom: 40 })
 
         Button('加入购物车')
-          .width('90%')
-          .height(50)
-
+          .type(ButtonType.Capsule)
+          .borderRadius(8)
+          .backgroundColor('#ff22c1ff')
+          .width('80%')
+          .height(40)
+          .zIndex(999)
+          .onClick(() => addToCart(this.product, this.localDataSource, this.productSelectionMap))
       }
       .alignContent(Alignment.Bottom)
       .width('100%')
     }
     .title('商品评价')
-  }
-
-  // 加载更多数据方法
-  private async loadMoreData() {
-    if (this.isLoading || !this.hasMore) return
-    try {
-      this.isLoading = true
-      // 获取当前商品ID（添加安全判断）
-      const productId = this.productAppraise[0]?.id
-      if (!productId) {
-        console.error('无效的商品ID')
-        this.hasMore = false
-        return
-      }
-      const page = 5
-      const loadingList = await getAppraise(productId, 2, page,'')
-      // 处理空数据情况
-      if (!loadingList || loadingList.length === 0) {
-        this.hasMore = false
-        return
-      }
-
-      this.productAppraise.push(...loadingList)
-      this.productAppraiseData.pushDataList(loadingList)
-    } catch (error) {
-      console.error('加载失败:', error)
-    } finally {
-      this.isLoading = false
-    }
   }
 }
 
@@ -81,7 +62,6 @@ struct ProductAppraisePageStruct {
 struct ProductAppraiseListItem {
   @Prop productAppraise: AppraiseData
   @Link isLoading: boolean
-  private starItems: number[] = [0, 1, 2, 3, 4];
   build() {
     Column() {
       Row() {
@@ -144,19 +124,12 @@ struct ProductAppraiseListItem {
     }
   }
 
-
-  // 根据索引判断星星颜色
-  private getStarImage(index: number): Resource {
-    // 限制数字范围在0-5之间
-    const validNum = Math.min(5, Math.max(0, Number(this.productAppraise.user_rating)))
-    return index < validNum ? $r('app.media.star_yellow') : $r('app.media.star_gray')
-  }
 }
 
 
 @Builder
 export function ProductAppraisePage(value: object) {
-  ProductAppraisePageStruct({ productAppraise: JSON.parse(JSON.stringify(value)) })
+  ProductAppraisePageStruct({ product: JSON.parse(JSON.stringify(value)) })
 }
 
 const builderName = BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE;
