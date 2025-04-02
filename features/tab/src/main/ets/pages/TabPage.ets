@@ -1,13 +1,14 @@
-import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routermodule"
+import { RouterModule, RouterNameConstants } from "routermodule"
 import { CustomTabBar } from "../components/CustomTabBar"
 import { TabBarType } from "../model/TabBarModel"
 import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/Pages/MainPage"
-import { ShopCarPage } from 'shopcar/src/main/ets/Pages/ShopCarPage'
-import { CommunityPage } from 'community/src/main/ets/components/MainPage'
+import { ShopCarPage } from 'shopcar/src/main/ets/pages/ShopCarPage'
+
 import { PreferenceConstant } from 'datastore'
 import { ProductDataSource } from 'uicomponents'
 import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
+import { CommunityPage } from 'community'
 
 @Entry({ routeName: 'TabPage' })
 @Component

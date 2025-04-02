@@ -14,4 +14,5 @@ export class BuilderNameConstants {
   static readonly SHOPCAR_PRODUCTINFOPAGE: string = 'shopcar_productinfopage';
   static readonly SHOPCAR_PRODUCTAPPRAISEPAGE: string = 'shopcar_productappraisepage';
   static readonly HOME_SHOPINFOPAGE: string = 'home_shopinfopage';
+  static readonly HOME_SHOPAPPRAISEPAGE: string = 'home_shopappraisepage';
 }

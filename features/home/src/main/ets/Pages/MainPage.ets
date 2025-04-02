@@ -44,7 +44,7 @@ export struct HomePageStruct {
   @Builder
   BuildFixedSearchBar() {
     Column() {
-      TextInput({ placeholder: '请输入搜索内容' })
+      Search({ placeholder: '请输入搜索内容' })
         .width('90%')
         .height(40)
         .backgroundColor(Color.White)
@@ -56,6 +56,7 @@ export struct HomePageStruct {
           offsetX: 1,
           offsetY: 1
         })
+        .searchButton('搜索', { fontColor: ''})
     }
     .width('100%')
     .padding(10)

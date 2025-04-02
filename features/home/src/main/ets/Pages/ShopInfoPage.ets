@@ -1,4 +1,4 @@
-import { BuilderNameConstants, RouterModule } from 'routermodule'
+import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
 import { AppraiseListComponent, ProductData, ProductView, RecommendComponent, StarRating } from 'uicomponents'
 import { ShopProductComponent } from '../components/ShopProductComponent'
 import { ShopInfoData } from '../model/ShopInfoModel'
@@ -6,7 +6,6 @@ import { ShopInfoData } from '../model/ShopInfoModel'
 @Component
 struct ShopInfoPageStruct {
   @State shopInfo: ShopInfoData = new ShopInfoData()
-
   build() {
       NavDestination() {
         Scroll() {
@@ -125,6 +124,10 @@ struct ShopInfoPageStruct {
             .backgroundColor(Color.White)
             .borderRadius(15)
             .margin({ top: 10 })
+            .onClick(() => {
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.HOME_SHOPAPPRAISEPAGE)
+            })
+
 
             RecommendComponent()
 
