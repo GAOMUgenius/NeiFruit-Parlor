@@ -13,29 +13,29 @@ export enum CategoryType{
   CATERING,
   SCENIC
 }
-export interface CateforyInterface {
-  id: CategoryType,
-  title: string
-}
-
-export const category_list: CateforyInterface[] = [
-  {
-    id: CategoryType.HOST,
-    title:'热门'
-  },
-  {
-    id: CategoryType.FRESH,
-    title: '生鲜'
-  },
-  {
-    id: CategoryType.CATERING,
-    title: '餐饮'
-  },
-  {
-    id: CategoryType.SCENIC,
-    title: '景点'
-  }
-]
+// export interface CateforyInterface {
+//   id: CategoryType,
+//   title: string
+// }
+//
+// export const category_list: CateforyInterface[] = [
+//   {
+//     id: CategoryType.HOST,
+//     title:'热门'
+//   },
+//   {
+//     id: CategoryType.FRESH,
+//     title: '生鲜'
+//   },
+//   {
+//     id: CategoryType.CATERING,
+//     title: '餐饮'
+//   },
+//   {
+//     id: CategoryType.SCENIC,
+//     title: '景点'
+//   }
+// ]
 export const ShopList_Fresh: ShopInterface[] = [
   {
     id: "1",

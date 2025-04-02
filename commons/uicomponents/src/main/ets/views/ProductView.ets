@@ -82,53 +82,6 @@ struct ProductItem {
   @Link localDataSource: ProductDataSource| undefined
   @Link productSelectionMap: Map<string, ProductSelection> | undefined
 
-  // async addToCart() {
-  //   // 构造完整商品对象
-  //   const product: ProductData = new ProductData(
-  //     this.product_id,
-  //     this.product_picture,
-  //     this.product_name,
-  //     this.product_price,
-  //     this.product_unit,
-  //     this.product_capacity,
-  //     this.product_capacity_unit,
-  //   )
-  //   try {
-  //     if (this.localDataSource) {
-  //       // 操作 productSelectionMap
-  //       if (!this.productSelectionMap) {
-  //         this.productSelectionMap = new Map();
-  //       }
-  //
-  //       // 获取或初始化商品数量
-  //       const existingEntry = this.productSelectionMap.get(product.id.toString());
-  //       if (existingEntry) {
-  //         // 数量加1
-  //         existingEntry.number++;
-  //         this.productSelectionMap.set(product.id.toString(), existingEntry);
-  //       } else {
-  //         // 初始化数量为1
-  //         this.productSelectionMap.set(product.id.toString(), { number: 1, ischoose: false });
-  //       }
-  //
-  //       // 操作 localDataSource（仅添加新商品）
-  //       const existingProductIndex = this.localDataSource.findIndex(
-  //         item => item.id === product.id
-  //       );
-  //       if (existingProductIndex === -1) {
-  //         this.localDataSource.dataList.push(product);
-  //         this.localDataSource.reloadData();
-  //       }
-  //
-  //       promptAction.showToast({
-  //         message: this.dialogMessage
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('添加失败:', error);
-  //   }
-  // }
-
   build() {
     Column() {
       Image(this.product_picture)
