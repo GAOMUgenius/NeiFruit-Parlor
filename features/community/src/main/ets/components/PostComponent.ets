@@ -6,17 +6,17 @@ export struct PostComponent {
   @State contentPicture: ResourceStr[] = []
 
   aboutToAppear(): void {
-    if (this.postData.post_content_picutre.length > 3) {
-    this.contentPicture = this.postData.post_content_picutre.slice(0, 3);
+    if (this.postData.post_content_picture.length > 3) {
+    this.contentPicture = this.postData.post_content_picture.slice(0, 3);
   } else {
-    this.contentPicture = this.postData.post_content_picutre;
+    this.contentPicture = this.postData.post_content_picture;
   }
   }
 
   build() {
     Column() {
       Row() {
-        Image(this.postData.user_picture)
+        Image($r(this.postData.user_picture))
           .size({
             width: 18,
             height: 18
@@ -36,15 +36,17 @@ export struct PostComponent {
         .width('100%')
         .padding({ left: 10, right: 10 })
         .margin({ top: 10 })
-        .fontSize(20)
+        .fontSize(18)
         .fontWeight(FontWeight.Bold)
         .maxLines(2)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .flexShrink(1)
+        .lineHeight(28)
 
       Text(this.postData.post_content)
         .fontWeight(FontWeight.Medium)
         .fontSize(15)
+        .lineHeight(25)
         .width('100%')
         .padding({ left: 10, right: 10 })
         .margin({ top: 10, bottom: 10 })
@@ -52,10 +54,11 @@ export struct PostComponent {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .flexShrink(1)
 
-      if(this.postData.post_content_picutre) {
+
+      if(this.postData.post_content_picture) {
         Row() {
-          ForEach(this.contentPicture, (item: ResourceStr) => {
-            Image(item)
+          ForEach(this.contentPicture, (item: string) => {
+            Image($r(item))
               .width('33%')
               .aspectRatio(1)
               .objectFit(ImageFit.Cover)
@@ -91,7 +94,7 @@ export struct PostComponent {
             .fontColor(Color.Gray)
             .margin({ right: 10 })
 
-          Image($r('app.media.community_likes_icon'))
+          Image($r('app.media.community_likes_off_icon'))
             .size({
               width: 20,
               height: 20

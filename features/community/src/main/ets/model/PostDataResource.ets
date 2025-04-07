@@ -18,7 +18,7 @@ export class PostDataSource extends BasicDataSource {
       newData.post_likes_number,
       newData.post_title,
       newData.post_content,
-      newData.post_content_picutre
+      newData.post_content_picture
       );
 
     // 通过ID查找索引
@@ -83,7 +83,7 @@ export class PostDataSource extends BasicDataSource {
       item.post_likes_number,
       item.post_title,
       item.post_content,
-      item.post_content_picutre
+      item.post_content_picture
     )); // 必须创建新对象
     this.notifyDataReload(); // 确保触发刷新
   }

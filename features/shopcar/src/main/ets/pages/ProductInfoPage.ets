@@ -384,6 +384,7 @@ struct  sellingPointView {
       this.isSellingPointShow = !this.isSellingPointShow
     })
     .bindSheet(this.isSellingPointShow, sellingPointInfoView(this.sellingPointList, this.productInfo), {
+      height: 300,
       detents: [SheetSize.MEDIUM, SheetSize.LARGE],
       backgroundColor: Color.White,
       blurStyle: BlurStyle.Thick,

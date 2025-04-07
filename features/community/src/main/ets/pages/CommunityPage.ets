@@ -1,3 +1,4 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule"
 import { PostComponent } from "../components/PostComponent"
 import { PostDataSource } from "../model/PostDataResource"
 import { postDataEg, PostModel } from "../model/PostModel"
@@ -20,6 +21,9 @@ export struct CommunityPage {
                  PostComponent({ postData: item })
                }
                .margin({ top: 5 })
+               .onClick(() => {
+                 buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.COMMUNITY_POSTPAGE, new Object(item))
+               })
              })
           }
           .alignListItem(ListItemAlign.Center)
