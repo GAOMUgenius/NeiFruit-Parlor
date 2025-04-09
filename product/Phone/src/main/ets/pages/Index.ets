@@ -3,9 +3,14 @@ import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstan
 import { replaceRouterModel } from 'routermodule/src/main/ets/model/RouterModel';
 import { Logger, PromptActionClass } from 'utils';
 import { AppConstants } from '../constants/AppConstants'
-import { common } from '@kit.AbilityKit';
+import common from '@ohos.app.ability.common';
 import { ComponentContent, router } from '@kit.ArkUI';
 import { bundleManager } from '@kit.MDMKit';
+import { AMapLocationManagerImpl } from '@amap/amap_lbs_location';
+import { AMapPrivacyAgreeStatus, AMapPrivacyInfoStatus, AMapPrivacyShowStatus } from '@amap/amap_lbs_common';
+import { Permissions } from '@ohos.abilityAccessCtrl';
+import abilityAccessCtrl, { PermissionRequestResult } from '@ohos.abilityAccessCtrl';
+import { BusinessError } from '@ohos.base';
 
 
 @Entry
@@ -17,6 +22,7 @@ struct Index {
   @State indexPathStack: NavPathStack = new NavPathStack()
   // 获取 UIAbility 上下文用于退出应用
   private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+
 
   async aboutToAppear() {
     const preferenceManager = PreferenceManager.getInstance();
@@ -57,19 +63,6 @@ struct Index {
             .onClick(() => {
               this.showSplash = false; // 销毁闪屏页
               replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE);
-              // const bundleName = (getContext(this) as common.UIAbilityContext).applicationInfo.name;
-              // router.pushUrl({
-              //   url: `@bundle:${bundleName}/login/ets/pages/LoginPage`,
-              //   params: {
-              //     data1: 'message'
-              //   }
-              // }, router.RouterMode.Standard, (err) => {
-              //   if (err) {
-              //     console.error(`replaceNamedRoute failed, code is ${err.code}, message is ${err.message}`);
-              //     return;
-              //   }
-              //   console.info('replaceNamedRoute success');
-              // })
             })
         }
 

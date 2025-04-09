@@ -9,6 +9,8 @@
     "uicomponents": "file:../../commons/uicomponents",
     "routermodule": "file:../../commons/RouterModule",
     "datastore": "file:../../commons/datastore",
-    "utils": "file:../../commons/utils"
+    "utils": "file:../../commons/utils",
+    "@amap/amap_lbs_common": ">=1.1.0",
+    "@amap/amap_lbs_location": ">=1.1.0"
   }
 }

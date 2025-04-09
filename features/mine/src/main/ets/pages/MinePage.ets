@@ -6,9 +6,10 @@ import { getUserInfo, UserInfo } from "../model/UserInfoServer";
 import { UserData } from "datastore/src/main/ets/model/UserDataModel";
 import { PreferenceConstant, PreferenceManager } from "datastore";
 
+
 @Component
 export struct MinePageStruct {
-  @State userData: UserData = new UserData()
+  @State userData: UserData | undefined = AppStorage.get(PreferenceConstant.USER_DATA)
 
   async aboutToAppear(): Promise<void> {
     let preferenceManager = PreferenceManager.getInstance()

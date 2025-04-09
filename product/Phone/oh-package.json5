@@ -9,6 +9,8 @@
     "routermodule": "file:../../commons/RouterModule",
     "utils": "file:../../commons/utils",
     "login": "file:../../features/login",
-    "datastore": "file:../../commons/datastore"
+    "datastore": "file:../../commons/datastore",
+    "@amap/amap_lbs_common": ">=1.1.0",
+    "@amap/amap_lbs_location": ">=1.1.0"
   }
 }

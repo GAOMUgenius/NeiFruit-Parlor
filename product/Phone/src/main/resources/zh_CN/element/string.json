@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "Harmony_location_permission_reason",
+      "value": "位置获取"
     }
   ]
 }

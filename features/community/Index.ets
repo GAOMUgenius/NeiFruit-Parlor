@@ -7,6 +7,9 @@ export function harInit(builderName: string): void {
     case BuilderNameConstants.COMMUNITY_POSTPAGE:
       import ("./src/main/ets/pages/PostPage");
       break;
+    case BuilderNameConstants.COMMUNITY_POSTPUBLISHPAGE:
+      import ("./src/main/ets/pages/PostPublishPage");
+      break;
     default:
       break;
   }

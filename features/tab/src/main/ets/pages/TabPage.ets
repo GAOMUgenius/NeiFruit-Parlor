@@ -5,10 +5,12 @@ import { MinePageStruct } from "mine"
 import { HomePageStruct } from "home/src/main/ets/Pages/MainPage"
 import { ShopCarPage } from 'shopcar/src/main/ets/pages/ShopCarPage'
 
-import { PreferenceConstant } from 'datastore'
+import { PreferenceConstant, UserData } from 'datastore'
 import { ProductDataSource } from 'uicomponents'
 import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
 import { CommunityPage } from 'community'
+import { bundleManager } from "@kit.AbilityKit"
+import { fetchWeatherData, getIpLocation, IpLocationResult, splitRectangle, WeatherResponse } from "utils"
 
 @Entry({ routeName: 'TabPage' })
 @Component
@@ -17,12 +19,49 @@ struct TabPage {
   @State tabPathStack: NavPathStack = new NavPathStack()
   @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> = new Map();
   @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
+  @StorageLink(PreferenceConstant.USER_DATA) userData: UserData  = new UserData()
+  @State nowWeatherData: WeatherResponse | null = null // 新增天气数据状态
+  @State locationError: boolean = false
+  @State isLoading: boolean = false
 
-  aboutToAppear(): void {
+  async aboutToAppear(): Promise<void> {
     if (!this.tabPathStack) {
       this.tabPathStack = new NavPathStack();
     }
+
     RouterModule.createRouter(RouterNameConstants.TABPAGE, this.tabPathStack);
+
+    await this.fetchData()
+  }
+
+  // 提取数据获取逻辑到独立方法
+  private async fetchData(): Promise<void> {
+    try {
+      this.isLoading = true
+      this.locationError = false
+
+      // 1. 获取位置信息
+      if (!this.userData?.community_location) {
+        const ipLocation = await getIpLocation()
+        this.userData.community_location = splitRectangle(ipLocation.rectangle)
+        this.userData.community = ipLocation.city
+      }
+
+      // 2. 获取天气数据
+      if (this.userData?.community_location) {
+        this.nowWeatherData = await fetchWeatherData(this.userData.community_location)
+      }
+    } catch (error) {
+      console.error('数据获取失败:', error)
+      this.locationError = true
+    } finally {
+      this.isLoading = false
+    }
+  }
+
+  // 处理重试操作
+  private handleRetry = () => {
+    this.fetchData()
   }
 
   build() {
@@ -30,7 +69,11 @@ struct TabPage {
       Flex({ direction: FlexDirection.Column }) {
         Tabs({ index: this.currentIndex }) {
           TabContent() {
-            HomePageStruct()
+            HomePageStruct({
+              nowWeatherData: this.nowWeatherData,
+              locationError: this.locationError,
+              // onRetry: this.handleRetry
+            })
           }
 
           TabContent() {

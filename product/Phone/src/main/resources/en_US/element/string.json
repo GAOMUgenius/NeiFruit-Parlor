@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "Harmony_location_permission_reason",
+      "value": "Harmony_location_permission_reason"
     }
   ]
 }

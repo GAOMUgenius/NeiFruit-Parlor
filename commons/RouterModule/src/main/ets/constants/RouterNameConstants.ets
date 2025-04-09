@@ -16,4 +16,5 @@ export class BuilderNameConstants {
   static readonly HOME_SHOPINFOPAGE: string = 'home_shopinfopage';
   static readonly HOME_SHOPAPPRAISEPAGE: string = 'home_shopappraisepage';
   static readonly COMMUNITY_POSTPAGE: string = 'community_postpage';
+  static readonly COMMUNITY_POSTPUBLISHPAGE: string = 'community_postpublishpage';
 }

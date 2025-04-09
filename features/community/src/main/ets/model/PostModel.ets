@@ -49,3 +49,14 @@ export const postDataEg: PostModel = new PostModel(
     '我是在小破站上看那些 UP 主玩那些很小众的独立恐怖游戏，看一会就困意来袭关掉手机就能睡着，不知道这个方法你们能不能行，还有一个方法就是睡之前健健身比如平板支撑，仰卧起坐……让身体保持住劳累这样容易睡觉，祝各位盒友不要失眠早点睡，熬夜伤身体！',
   ['app.media.post_content_picture1', 'app.media.post_content_picture1',]
 )
+
+export class  PostPublishModel {
+  post_title?: string;
+  post_content?: string;
+  post_content_picture?: string[];
+  // constructor(post_title: string, post_content: string, post_content_picture: string[]) {
+  //   this.post_title = post_title
+  //   this.post_content = post_content
+  //   this.post_content_picture = post_content_picture
+  // }
+}

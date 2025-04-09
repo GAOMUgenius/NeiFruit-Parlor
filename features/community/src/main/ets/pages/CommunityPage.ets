@@ -13,7 +13,7 @@ export struct CommunityPage {
 
   build() {
     NavDestination() {
-      Stack() {
+      Stack({ alignContent: Alignment.Bottom }) {
         Scroll() {
           List() {
              LazyForEach(this.postListData, (item: PostModel) => {
@@ -46,6 +46,16 @@ export struct CommunityPage {
         .alignItems(VerticalAlign.Center)
         .height(30)
         .width('100%')
+
+        Image($r('app.media.community_post_add'))
+          .size({
+            height: 50,
+            width: 50
+          })
+          .margin({ bottom: 20 })
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.COMMUNITY_POSTPUBLISHPAGE)
+          })
       }
       .width('100%')
       .height('100%')
