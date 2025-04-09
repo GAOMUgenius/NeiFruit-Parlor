@@ -45,6 +45,7 @@ struct TabPage {
         const ipLocation = await getIpLocation()
         this.userData.community_location = splitRectangle(ipLocation.rectangle)
         this.userData.community = ipLocation.city
+        AppStorage.set(PreferenceConstant.USER_DATA, this.userData);
       }
 
       // 2. 获取天气数据
@@ -72,7 +73,7 @@ struct TabPage {
             HomePageStruct({
               nowWeatherData: this.nowWeatherData,
               locationError: this.locationError,
-              // onRetry: this.handleRetry
+              onRetry: this.handleRetry
             })
           }
 

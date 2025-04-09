@@ -14,7 +14,9 @@ export struct HomePageStruct {
   @State userData: UserData | undefined = AppStorage.get(PreferenceConstant.USER_DATA)
   @Prop nowWeatherData: WeatherResponse | null
   @Prop locationError: boolean
-  // @Prop onRetry?: () => void
+  onRetry?: () => void
+
+
 
 
   @Builder
@@ -28,7 +30,7 @@ export struct HomePageStruct {
 
   retryFetch() {
     // 可以通过事件通知父组件重新获取
-    // this.onRetry?.()
+    this.onRetry?.()
   }
 
   build() {
@@ -110,7 +112,9 @@ struct LoadingComponent {
 // components/ErrorComponent.ets
 @Component
 struct ErrorComponent {
-  @Prop retryAction: () => void
+  retryAction: () => void = () => {
+  }
+
 
   build() {
     Column() {

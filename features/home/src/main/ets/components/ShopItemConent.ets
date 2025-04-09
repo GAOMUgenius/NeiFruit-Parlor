@@ -1,42 +1,52 @@
+import { PreferenceConstant, UserData } from "datastore";
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 import { StarRating } from "uicomponents";
+import { AMapService, POIItem } from "../model/CategoriesListServer";
 import { CategoryType,
-  ShopInterface,
-  ShopList_Catering, ShopList_Fresh, ShopList_Host,
-  ShopList_Scenic } from "../model/CategoriesModel"
+  ShopInterface } from "../model/CategoriesModel"
 import { ShopDataSource } from "../model/ShopDataModel";
 
 @Component
 export struct ShopItemContent{
   @Prop categoryType: CategoryType
-  // 创建分类与店铺列表的映射关系
-  private getShopListByType(type: CategoryType): ShopInterface[] {
-    switch(type) {
-      case CategoryType.HOST:
-        return ShopList_Host
-      case CategoryType.FRESH:
-        return ShopList_Fresh
-      case CategoryType.CATERING:
-        return ShopList_Catering
-      case CategoryType.SCENIC:
-        return ShopList_Scenic
-      default:
-        return []
-    }
+  @State dataSource: ShopDataSource = new ShopDataSource(this.categoryType);
+  @State datalist: ShopInterface[] = []
+
+  async aboutToAppear(): Promise<void> {
+    const userData: UserData = AppStorage.get(PreferenceConstant.USER_DATA)!;
+    const apiData: POIItem[] = await AMapService.getPOIs(this.categoryType,userData.community_location)
+    this.datalist = apiData.map(this.convertToShopInterface);
+    this.dataSource.pushDataList(this.datalist)
+    this.datalist = this.dataSource._data
   }
 
-  private  dataSource = new ShopDataSource(this.getShopListByType(this.categoryType));
+  public convertToShopInterface(poi: POIItem): ShopInterface {
+    const picture = poi.photos?.length
+      ? poi.photos.map(photo => photo.url)
+      : ['app.media.community_icon_add_picture'];
+    return {
+      id: poi.id,
+      name: poi.name,
+      location: poi.address,
+      phone: poi.tel,
+      rating: parseFloat(poi.rating || '5.0'),
+      picture: picture
+    } as ShopInterface;
+  }
+
+
+
   build() {
     WaterFlow({
       footer: (): void => this.itemFoot()
     }) {
-      LazyForEach(this.dataSource, (shop: ShopInterface) => {
-        FlowItem() {
+      ForEach(this.datalist, (shop: ShopInterface) => {
+        // FlowItem() {
           ShopItem({ shop: shop })
             .onClick(() => {
-              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.HOME_SHOPINFOPAGE)
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.HOME_SHOPINFOPAGE, new Object(shop))
             })
-        }
+        // }
       }, (shop: ShopInterface) => shop.id.toString()) // 需要指定唯一键生成器
     }
     .layoutDirection(FlexDirection.Column)
@@ -46,15 +56,14 @@ export struct ShopItemContent{
     .width('100%')
 
   }
+
   @Builder
   itemFoot() {
     Column() {
       Text('已经到底了')
         .fontColor(Color.Gray)
         .fontSize(10)
-        .width('100%')
         .height(20)
-        .textAlign(TextAlign.Center)
     }
   }
 }
@@ -65,7 +74,7 @@ struct ShopItem {
 
   build() {
     Row() {
-      Image($r('app.media.shopPicture'))
+      Image(this.shop.picture[0])
         .size({
           height: 100,
           width: 100
@@ -73,24 +82,26 @@ struct ShopItem {
         .margin({ left: 10 })
 
       Column() {
-        Row() {
-          Text(this.shop.name)
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
+        Text(this.shop.name)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .width(200)
 
-          StarRating({ rating: this.shop.rating })
-        }
-        .width(200)
-        .justifyContent(FlexAlign.SpaceBetween)
+        StarRating({ rating: this.shop.rating })
 
         Text(`位置：${this.shop.location}`)
+          .width(200)
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
 
         Text(`电话：${this.shop.phone}`)
+          .width(200)
           .fontColor('#666666')
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 6 })
       }
       .margin({ left: 10 })
-      .height(120)
       .alignItems(HorizontalAlign.Start)
       .justifyContent(FlexAlign.SpaceEvenly)
     }

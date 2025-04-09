@@ -1,11 +1,22 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
 import { AppraiseListComponent, ProductData, ProductView, RecommendComponent, StarRating } from 'uicomponents'
 import { ShopProductComponent } from '../components/ShopProductComponent'
+import { ShopInterface } from '../model/CategoriesModel'
 import { ShopInfoData } from '../model/ShopInfoModel'
 
 @Component
 struct ShopInfoPageStruct {
+  @Prop shopData: ShopInterface
   @State shopInfo: ShopInfoData = new ShopInfoData()
+  aboutToAppear(): void {
+    if(this.shopData) {
+      this.shopInfo.shop_name = this.shopData.name
+      this.shopInfo.shop_picture = this.shopData.picture
+      this.shopInfo.shop_rating = this.shopData.rating
+      this.shopInfo.shop_phone = this.shopData.phone
+      this.shopInfo.shop_loacation = this.shopData.location
+    }
+  }
   build() {
       NavDestination() {
         Scroll() {
@@ -24,6 +35,14 @@ struct ShopInfoPageStruct {
             Column() {
               Text(this.shopInfo.shop_name)
                 .fontSize(20)
+                .fontWeight(FontWeight.Medium)
+                .width('100%')
+                .textAlign(TextAlign.Start)
+                .padding({ left: 5 })
+                .margin({ top: 5 })
+
+              Text('位置:' + this.shopInfo.shop_loacation)
+                .fontSize(15)
                 .fontWeight(FontWeight.Medium)
                 .width('100%')
                 .textAlign(TextAlign.Start)
@@ -144,7 +163,7 @@ struct ShopInfoPageStruct {
 
 @Builder
 export function ShopInfoPage(value: object) {
-  ShopInfoPageStruct()
+  ShopInfoPageStruct({ shopData: JSON.parse(JSON.stringify(value)) })
 }
 
 const builderName = BuilderNameConstants.HOME_SHOPINFOPAGE;
