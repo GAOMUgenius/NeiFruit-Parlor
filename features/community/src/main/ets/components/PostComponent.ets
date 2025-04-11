@@ -4,6 +4,7 @@ import { PostModel } from '../model/PostModel'
 export struct PostComponent {
   @Prop postData: PostModel
   @State contentPicture: ResourceStr[] = []
+  @State isLikesOn: boolean = false
 
   aboutToAppear(): void {
     if (this.postData.post_content_picture.length > 3) {
@@ -94,12 +95,16 @@ export struct PostComponent {
             .fontColor(Color.Gray)
             .margin({ right: 10 })
 
-          Image($r('app.media.community_likes_off_icon'))
+          Image(this.isLikesOn ? $r('app.media.community_likes_on_icon') : $r('app.media.community_likes_off_icon'))
             .size({
               width: 20,
               height: 20
             })
             .margin({ right: 5 })
+            .onClick(() => {
+              this.isLikesOn ? this.postData.post_likes_number-- : this.postData.post_likes_number++
+              this.isLikesOn = !this.isLikesOn
+            })
 
           Text(this.postData.post_likes_number.toString())
             .textAlign(TextAlign.Start)

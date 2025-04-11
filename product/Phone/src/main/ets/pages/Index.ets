@@ -23,6 +23,15 @@ struct Index {
   // 获取 UIAbility 上下文用于退出应用
   private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
 
+  // 引导页数据
+  private indexPicture: ResourceStr[] = [$r("app.media.index_Picture_1"), $r("app.media.index_Picture_2"), $r("app.media.index_Picture_3")]
+  private DISPLAY_COUNT: number = 1
+  private MIN_SCALE: number = 0.75
+  @State opacityList: number[] = []
+  @State scaleList: number[] = []
+  @State translateList: number[] = []
+  @State zIndexList: number[] = []
+
 
   async aboutToAppear() {
     const preferenceManager = PreferenceManager.getInstance();
@@ -45,6 +54,13 @@ struct Index {
     }
     RouterModule.createRouter(RouterNameConstants.PHONE_INDEX, this.indexPathStack);
     Logger.info( `路由 ${RouterNameConstants.PHONE_INDEX} 是否创建成功: ${RouterModule.getRouter(RouterNameConstants.PHONE_INDEX)!= null}`);
+    // 引导页数据
+    for (let i = 0; i < this.indexPicture.length; i++) {
+      this.opacityList.push(1.0)
+      this.scaleList.push(1.0)
+      this.translateList.push(0.0)
+      this.zIndexList.push(0)
+    }
   };
 
   @Builder
@@ -53,48 +69,99 @@ struct Index {
     RouterModule.getBuilder(builderName).builder(param);
   };
 
+  @Builder
+  indexPage(item: ResourceStr, index: number) {
+    if (index != 2) {
+      Column() {
+        Image(item)
+          // 自定义动画变化透明度、缩放页面、抵消系统默认位移、渲染层级等
+          .opacity(this.opacityList[index])
+          .scale({ x: this.scaleList[index], y: this.scaleList[index] })
+          .translate({ x: this.translateList[index] })
+          .zIndex(this.zIndexList[index])
+          .height('100%')
+          .width('100%')
+      }
+      .height('100%')
+      .width('100%')
+    } else {
+      Stack() {
+        Image(item)
+          // 自定义动画变化透明度、缩放页面、抵消系统默认位移、渲染层级等
+          .opacity(this.opacityList[index])
+          .scale({ x: this.scaleList[index], y: this.scaleList[index] })
+          .translate({ x: this.translateList[index] })
+          .zIndex(this.zIndexList[index])
+          .height('100%')
+          .width('100%')
+        Button('立即加入 →')
+          .backgroundColor('#1d63ff')
+          .margin({ bottom: 20 })
+          .width('70%')
+          .onClick(() => {
+            this.showSplash = false; // 销毁闪屏页
+            buildRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE);
+          })
+      }
+      .alignContent(Alignment.Bottom)
+      .height('100%')
+      .width('100%')
+    }
+  }
+
 
 
   build() {
-    Column() {
-      if (this.showSplash) {
-        Row() {
-          Button('点击跳转')
-            .onClick(() => {
-              this.showSplash = false; // 销毁闪屏页
-              replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE);
-            })
+    Navigation(this.indexPathStack) {
+      Column() {
+        Swiper() {
+          ForEach(this.indexPicture, (item: ResourceStr, index: number) => {
+            this.indexPage(item, index)
+          })
         }
-
-      } else {
-        Navigation(this.indexPathStack) {
-          // 主路由容器（空内容，由路由控制）
-          Column() {
-            // 此处可以为空，实际内容由路由控制
-            Row() {
-              Button('退出应用')
-                .type(ButtonType.Capsule)
-                .backgroundColor('#ff4500')
-                .onClick(() => {
-                  this.context.terminateSelf(); // 执行退出
-                })
-
-              Button('取消')
-                .type(ButtonType.Capsule)
-                .backgroundColor('#228b22')
-                .margin({ left: 20 })
-                .onClick(() => {
-                  replaceRouterModel(RouterNameConstants.PHONE_INDEX, BuilderNameConstants.LOGIN_LOGINPAGE)
-                })
+        .height('100%')
+        .indicator(false)
+        .displayCount(this.DISPLAY_COUNT, true)
+        .loop(false)
+        .customContentTransition({
+          // 页面移除视窗时超时1000ms下渲染树
+          timeout: 1000,
+          // 对视窗内所有页面逐帧回调transition，在回调中修改opacity、scale、translate、zIndex等属性值，实现自定义动画
+          transition: (proxy: SwiperContentTransitionProxy) => {
+            if (proxy.position <= proxy.index % this.DISPLAY_COUNT || proxy.position >= this.DISPLAY_COUNT + proxy.index % this.DISPLAY_COUNT) {
+              // 同组页面往左滑或往右完全滑出视窗外时，重置属性值
+              this.opacityList[proxy.index] = 1.0
+              this.scaleList[proxy.index] = 1.0
+              this.translateList[proxy.index] = 0.0
+              this.zIndexList[proxy.index] = 0
+            } else {
+              // 同组页面往右滑且未滑出视窗外时，对同组中左右两个页面，逐帧根据position修改属性值，实现两个页面往Swiper中间靠拢并透明缩放的自定义切换动画
+              if (proxy.index % this.DISPLAY_COUNT === 0) {
+                this.opacityList[proxy.index] = 1 - proxy.position / this.DISPLAY_COUNT
+                this.scaleList[proxy.index] = this.MIN_SCALE + (1 - this.MIN_SCALE) * (1 - proxy.position / this.DISPLAY_COUNT)
+                this.translateList[proxy.index] = - proxy.position * proxy.mainAxisLength + (1 - this.scaleList[proxy.index]) * proxy.mainAxisLength / 2.0
+              } else {
+                this.opacityList[proxy.index] = 1 - (proxy.position - 1) / this.DISPLAY_COUNT
+                this.scaleList[proxy.index] = this.MIN_SCALE + (1 - this.MIN_SCALE) * (1 - (proxy.position - 1) / this.DISPLAY_COUNT)
+                this.translateList[proxy.index] = - (proxy.position - 1) * proxy.mainAxisLength - (1 - this.scaleList[proxy.index]) * proxy.mainAxisLength / 2.0
+              }
+              this.zIndexList[proxy.index] = -1
             }
-            .justifyContent(FlexAlign.Center)
-            .width('100%')
-            .height('10%')
-            .padding(20)
           }
-        }
-        .navDestination(this.routerMap)
+        })
+        .onContentDidScroll((selectedIndex: number, index: number, position: number, mainAxisLength: number) => {
+          // 监听Swiper页面滑动事件，在该回调中可以实现自定义导航点切换动画等
+          console.info("onContentDidScroll selectedIndex: " + selectedIndex + ", index: " + index + ", position: " + position + ", mainAxisLength: " + mainAxisLength)
+        })
       }
+      .alignItems(HorizontalAlign.Center)
+      .justifyContent(FlexAlign.Center)
+      .height('100%')
+      .width('100%')
     }
+    .width('100%')
+    .height('100%')
+    .navDestination(this.routerMap)
+    .hideTitleBar(true)
   }
 }
