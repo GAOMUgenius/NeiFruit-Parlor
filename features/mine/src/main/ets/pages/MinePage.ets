@@ -5,6 +5,7 @@ import { UserInfoView } from "../views/UserInfoView";
 import { getUserInfo, UserInfo } from "../model/UserInfoServer";
 import { UserData } from "datastore/src/main/ets/model/UserDataModel";
 import { PreferenceConstant, PreferenceManager } from "datastore";
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 
 
 @Component
@@ -46,6 +47,9 @@ export struct MinePageStruct {
 
             PayManangeView()
               .margin({ top: 20 })
+              .onClick(() => {
+                buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_PAUMANAGEPAGE)
+              })
 
             RecommendComponent()
               .margin({ top: 10 })

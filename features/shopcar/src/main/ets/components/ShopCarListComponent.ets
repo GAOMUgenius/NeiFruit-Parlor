@@ -1,7 +1,6 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "routermodule"
 import { ProductData, ProductDataSource } from "uicomponents"
 import { ProductSelection } from "uicomponents/src/main/ets/model/ProductModel"
-// import { CartService } from "uicomponents/src/main/ets/model/ProuductServer"
 import { ShopChangeInterface } from "../model/ShopCarModel"
 import { ShopCarListItem } from "./ShopCarListItem"
 

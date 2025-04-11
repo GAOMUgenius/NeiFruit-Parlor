@@ -4,7 +4,7 @@ import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routerm
 import { replaceRouterModel } from "routermodule/src/main/ets/model/RouterModel";
 
 @Component
-export struct  EmailChangeStruct {
+export struct  IntroduceChangeStruct {
   @State newUserData: UserData = new UserData()
   @StorageLink(PreferenceConstant.USER_DATA) userData: UserData | undefined = AppStorage.get(PreferenceConstant.USER_DATA)
 
@@ -12,13 +12,12 @@ export struct  EmailChangeStruct {
     NavDestination() {
       Row() {
         Column() {
-          TextInput({ text: this.newUserData.useremail })
+          TextArea({ text: this.newUserData.user_introduction })
             .onChange((value: string) => {
-              this.newUserData.useremail = value
+              this.newUserData.user_introduction = value
             })
             .textAlign(TextAlign.JUSTIFY)
             .width('80%')
-            .height('5%')
             .margin({
               top: 20
             })
@@ -26,7 +25,7 @@ export struct  EmailChangeStruct {
           Button('保存')
             .onClick(() => {
               //上传逻辑
-              this.userData!.useremail = this.newUserData.useremail
+              this.userData!.user_introduction = this.newUserData.user_introduction
               //回到上一级
               RouterModule.pop(RouterNameConstants.TABPAGE)
             })
@@ -50,12 +49,12 @@ export struct  EmailChangeStruct {
 }
 
 @Builder
-export function EmailChange(value: object) {
-  EmailChangeStruct()
+export function IntroduceChangeStructPage(value: object) {
+  IntroduceChangeStruct()
 }
 
-const builderName = BuilderNameConstants.MINE_EMAILCHANGE;
+const builderName = BuilderNameConstants.MINE_INTRODUCECHANGEPAGE;
 if (!RouterModule.getBuilder(builderName)) {
-  const builder: WrappedBuilder<[object]> = wrapBuilder(EmailChange);
+  const builder: WrappedBuilder<[object]> = wrapBuilder(IntroduceChangeStructPage);
   RouterModule.registerBuilder(builderName, builder);
 }

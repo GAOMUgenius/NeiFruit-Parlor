@@ -81,6 +81,7 @@ export struct ShopCarListItem {
           .fontSize(13)
           .flexShrink(0) // 禁止容量部分被截断
       }
+      .margin({ top: 10 })
       .width('100%')
       .alignItems(VerticalAlign.Bottom) // 顶部对齐
       .justifyContent(FlexAlign.Start) // 确保内容从行首开始排列
@@ -156,9 +157,11 @@ export struct ShopCarListItem {
         }
         .alignItems(VerticalAlign.Center)
       }
+      .margin({ bottom: 10 })
       .justifyContent(FlexAlign.SpaceBetween)
       .width('100%')
     }
+    .margin({ top: 10 })
     .width('55%')
     .height(80)
     .justifyContent(FlexAlign.SpaceBetween)

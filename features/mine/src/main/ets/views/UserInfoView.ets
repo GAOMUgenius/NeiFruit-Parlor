@@ -42,9 +42,7 @@ export struct UserInfoView {
         bottom: 10
       })
       .onClick(() => {
-        buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION, new Object({
-          UserData: this.userData
-        }))
+        buildRouterModel( RouterNameConstants.TABPAGE, BuilderNameConstants.MINE_USERINFORMATION)
 
       })
     }

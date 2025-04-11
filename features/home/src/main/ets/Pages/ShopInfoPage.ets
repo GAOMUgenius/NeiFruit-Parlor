@@ -1,5 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
-import { AppraiseListComponent, ProductData, ProductView, RecommendComponent, StarRating } from 'uicomponents'
+import { AppraiseListComponent, ProductData,
+  ProductData_List,
+  ProductView, RecommendComponent, StarRating } from 'uicomponents'
 import { ShopProductComponent } from '../components/ShopProductComponent'
 import { ShopInterface } from '../model/CategoriesModel'
 import { ShopInfoData } from '../model/ShopInfoModel'
@@ -16,6 +18,26 @@ struct ShopInfoPageStruct {
       this.shopInfo.shop_phone = this.shopData.phone
       this.shopInfo.shop_loacation = this.shopData.location
     }
+    // 1. 生成随机数量 (0-3)
+    const randomCount: number = Math.floor(Math.random() * 4);
+
+    // 2. 克隆原数组避免污染原始数据
+    const shuffled = [...ProductData_List];
+
+    // 3. 洗牌算法随机打乱数组 (Fisher-Yates shuffle)
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      // 传统交换方式
+      const temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+
+    // 4. 截取前N个元素 (0 <= N <= 3)
+    const selectedProducts: ProductData[] = shuffled.slice(0, randomCount);
+
+    // 5. 赋值给目标属性
+    this.shopInfo.shop_product = selectedProducts;
   }
   build() {
       NavDestination() {
@@ -86,30 +108,32 @@ struct ShopInfoPageStruct {
             .borderRadius(15)
             .margin({ top: 10 })
 
-            Column() {
-              Text('在售物品')
-                .fontSize(15)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#ff180258')
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin({ left: 10, top: 10, bottom: 5 })
+            if(this.shopInfo.shop_product.length !== 0) {
+              Column() {
+                Text('在售物品')
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor('#ff180258')
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .margin({ left: 10, top: 10, bottom: 5 })
 
-              List() {
-                ForEach(this.shopInfo.shop_product, (item: ProductData) => {
-                  ListItem() {
-                    ShopProductComponent({ shopProduct: item })
-                  }
-                })
+                List() {
+                  ForEach(this.shopInfo.shop_product, (item: ProductData) => {
+                    ListItem() {
+                      ShopProductComponent({ shopProduct: item })
+                    }
+                  })
+                }
+                .divider({ strokeWidth: 0.2, color: '#ffd2d2d2' })
+                .height('auto')
+                .width('100%')
               }
-              .divider({ strokeWidth: 0.2, color: '#ffd2d2d2' })
-              .height('auto')
-              .width('100%')
+              .width('90%')
+              .backgroundColor(Color.White)
+              .borderRadius(15)
+              .margin({ top: 10 })
             }
-            .width('90%')
-            .backgroundColor(Color.White)
-            .borderRadius(15)
-            .margin({ top: 10 })
 
             Column() {
               Row() {

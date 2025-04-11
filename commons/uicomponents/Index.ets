@@ -1,6 +1,7 @@
 export { ProductView } from './src/main/ets/views/ProductView'
 export { RecommendComponent } from './src/main/ets/components/RecommendComponent'
-export { ProductData } from './src/main/ets/model/ProductModel'
+export { ProductData, ProductSelection, ProductData_List } from './src/main/ets/model/ProductModel'
+export { OrderItem, OrderData, SelectedProduct, PayStatus } from './src/main/ets/model/OrderModel'
 export { ProductDataSource } from './src/main/ets/model/ProductDataSource'
 export { StarRating } from './src/main/ets/components/StarRatingComponent'
 export { AppraiseData } from './src/main/ets/model/AppraiseModel'

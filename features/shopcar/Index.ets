@@ -8,6 +8,9 @@ export function harInit(builderName: string): void {
     case BuilderNameConstants.SHOPCAR_PRODUCTAPPRAISEPAGE:
       import ("./src/main/ets/pages/ProductAppraisePage");
       break;
+    case BuilderNameConstants.SHOPCAR_SETTLEMENTPAGE:
+      import ("./src/main/ets/pages/SettlementPage");
+      break;
     default:
       break;
   }

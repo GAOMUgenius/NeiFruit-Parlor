@@ -6,24 +6,7 @@ export class ShopInfoData {
   shop_name: string = '引力舍'
   shop_rating: number = 3.5
   shop_loacation: string = '西长安街与书香路交汇处'
-  shop_product: ProductData[] = [new ProductData(
-    1,
-    $r('app.media.ProductDataPicture5'),
-    "泰国金枕头冷冻榴莲肉 ",
-    "45.9",
-    "盒",
-    "300",
-    "g/盒",
-  ),
-    new ProductData(
-      2,
-      $r('app.media.ProdcutDataPicture6'),
-      "智利西梅 ",
-      "16.9",
-      "盒",
-      "350",
-      "g/盒",
-    )]
+  shop_product: ProductData[] = []
   shop_appraise: ShopAppraise[] = [new ShopAppraise()]
   shop_phone: string = '133999999'
 }

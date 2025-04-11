@@ -31,6 +31,7 @@ export const UserInfo: UserInfoData[] = [
   {
     id: InfoType.INTRODUCE,
     title: "个人简介",
+    infoRouter: BuilderNameConstants.MINE_INTRODUCECHANGEPAGE,
     key: "user_introduction"
   },
   {

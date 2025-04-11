@@ -10,69 +10,80 @@ enum DataState {
 }
 
 export class ShopDataSource extends  BasicDataSource {
-  @Track _data: ShopInterface[] = [];
-  private _category: CategoryType;
+  @Track dataList: ShopInterface[] = [];
+  // private _category: CategoryType;
   private _state: DataState = DataState.LOADING;
 
 
 
-  constructor(category: CategoryType) {
-    super();
-    this._category = category;
+  // constructor(category: CategoryType) {
+  //   super();
+  //
+  // }
 
-    this.loadData()
+
+  // public convertToShopInterface(poi: POIItem): ShopInterface {
+  //   const picture = poi.photos?.length
+  //     ? poi.photos.map(photo => photo.url)
+  //     : ['app.media.community_icon_add_picture'];
+  //   return {
+  //     id: poi.id,
+  //     name: poi.name,
+  //     location: poi.address,
+  //     phone: poi.tel,
+  //     rating: parseFloat(poi.rating || '5.0'),
+  //     picture: picture
+  //   } as ShopInterface;
+  // }
+
+
+  // 添加索引查找方法
+  findIndex(predicate: (item: ShopInterface) => boolean): number {
+    return this.dataList.findIndex(predicate)
+  }
+
+  public totalCount(): number {
+    return this.dataList.length;
+  }
+
+  public getData(index: number): ShopInterface {
+    return this.dataList[index];
+  }
+  public addData(index: number, data: ShopInterface): void {
+    this.dataList.splice(index, 0, data);
+    this.notifyDataAdd(index);
+  }
+
+  public pushDataList(data: ShopInterface[]): void {
+    this.dataList = this.dataList.concat(data);
+    this.notifyDataAdd(this.dataList.length - data.length);
+  }
+
+  public pushDataItem(data: ShopInterface): void {
+    this.dataList.push(data);
+    this.notifyDataAdd(this.dataList.length - 1);
+  }
+
+  public deleteData(index: number): void {
+    this.dataList.splice(index, 1);
+    this.notifyDataDelete(index);
+  }
+
+  public changeData(index: number, data: ShopInterface): void {
+    this.dataList.splice(index, 1, data);
+    this.notifyDataChange(index);
   }
 
 
-  public convertToShopInterface(poi: POIItem): ShopInterface {
-    const picture = poi.photos?.length
-      ? poi.photos.map(photo => photo.url)
-      : ['app.media.community_icon_add_picture'];
-    return {
-      id: poi.id,
-      name: poi.name,
-      location: poi.address,
-      phone: poi.tel,
-      rating: parseFloat(poi.rating || '5.0'),
-      picture: picture
-    } as ShopInterface;
+  // 重新赋值整个数据数组，并通知监听器重新加载所有数据
+  public reloadData(data: ShopInterface[]) {
+    this.dataList = data; // 更新数据数组
+    this.notifyDataReload(); // 通知监听器重新加载所有数据
   }
 
-  totalCount(): number {
-    return this._data.length;
-  }
-
-  getData(index: number): ShopInterface {
-    return this._data[index];
-  }
-
-  public pushDataList(data: ShopInterface[]) {
-    this._data = data
-    this.reloadData()
-  }
-
-
-  public async loadData() {
-    try {
-      const userData: UserData = AppStorage.get(PreferenceConstant.USER_DATA)!;
-      const poiData = await AMapService.getPOIs(this._category, userData.community_location);
-      this._data = poiData.map(this.convertToShopInterface);
-      this.reloadData(); // 使用自定义通知方法
-    } catch (error) {
-      console.error('数据加载失败:', error);
-    }
-  }
-
-  public reloadData(): void {
-    this.notifyDataReload();
-  }
-
-
-  registerDataChangeListener(listener: DataChangeListener): void {
-    // 如果数据会动态变化，需要在此处实现监听
-  }
-
-  unregisterDataChangeListener(listener: DataChangeListener): void {
-    // 取消监听实现
+  public modifyAllData(changeItem: (item: ShopInterface) => ShopInterface): void {
+    this.dataList = this.dataList.map((item: ShopInterface) => {
+      return changeItem(item);
+    })
   }
 }

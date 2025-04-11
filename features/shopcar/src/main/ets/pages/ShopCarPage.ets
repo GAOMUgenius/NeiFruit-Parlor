@@ -3,6 +3,7 @@ import { ProductData, ProductDataSource, ProductView, RecommendComponent } from 
 import { ShopChangeInterface } from "../model/ShopCarModel";
 import { ShopCarListComponent } from "../components/ShopCarListComponent";
 import { ProductSelection } from "uicomponents/src/main/ets/model/ProductModel";
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule";
 
 
 class ShopChangeImpl implements ShopChangeInterface {
@@ -44,7 +45,10 @@ export struct ShopCarPage {
   @State callback: ShopChangeInterface = new ShopChangeImpl(this)
   @State isAllSelected: boolean = false;
   @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource | undefined = AppStorage.get(PreferenceConstant.CART_KEY)
-  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY)@Watch('MapChange') productSelectionMap: Map<string, ProductSelection> | undefined = AppStorage.get(PreferenceConstant.CART_ISCHOOSE_KEY)
+  MapChange() {
+      this.callback.onItemContentChange()
+  }
 
 
   build() {
@@ -205,6 +209,7 @@ export struct ShopCarPage {
           .onClick(() => {
             // 这里添加结算逻辑
             console.info('进入结算流程')
+              buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.SHOPCAR_SETTLEMENTPAGE, new Object(this.localDataSource?.dataList))
           })
       }
       .height(35)

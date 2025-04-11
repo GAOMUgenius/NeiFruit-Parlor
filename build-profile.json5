@@ -6,12 +6,12 @@
         "type": "HarmonyOS",
         "material": {
           "certpath": "C:\\Users\\GAOMUgenius\\.ohos\\config\\default_NeiFruitParlor_zXFnos9OdLthaOIAJYrjOxx4nKJmahPGQSiQG-vlJD8=.cer",
-          "storePassword": "0000001B6C2F18C8DBA93F0CA76EE5600BE5570B208DFD8449A86D076AB319A6043B556258452AB276ADD8",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001BC720553A96AEDEB81A65C2728E681D17DAFFA4BD36B831FE312C6AC92DA54D30E467D9C68EBB14",
+          "keyPassword": "0000001B4FB003DD331F395EBBAD8B2592F595C510B2083EDA378045BA266D6313551A08CB5F1BE2796970",
           "profile": "C:\\Users\\GAOMUgenius\\.ohos\\config\\default_NeiFruitParlor_zXFnos9OdLthaOIAJYrjOxx4nKJmahPGQSiQG-vlJD8=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\GAOMUgenius\\.ohos\\config\\default_NeiFruitParlor_zXFnos9OdLthaOIAJYrjOxx4nKJmahPGQSiQG-vlJD8=.p12"
+          "storeFile": "C:\\Users\\GAOMUgenius\\.ohos\\config\\default_NeiFruitParlor_zXFnos9OdLthaOIAJYrjOxx4nKJmahPGQSiQG-vlJD8=.p12",
+          "storePassword": "0000001B7F3D7B8164E402593238E43EFDAE1C72A9394544A7EFE3E1B1C1416C2D19BE7D7800C70772A485"
         }
       }
     ],

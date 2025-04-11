@@ -1,3 +1,4 @@
+import { PreferenceConstant } from "datastore"
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "routermodule"
 import { PostComponent } from "../components/PostComponent"
 import { PostDataSource } from "../model/PostDataResource"
@@ -5,10 +6,11 @@ import { postDataEg, PostModel } from "../model/PostModel"
 
 @Component
 export struct CommunityPage {
-  @State postListData: PostDataSource = new PostDataSource()
+  @StorageLink(PreferenceConstant.POST_LIST) postListData: PostDataSource = AppStorage.get(PreferenceConstant.POST_LIST)!
+
 
   aboutToAppear(): void {
-    this.postListData.pushDataList([postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,postDataEg,])
+    this.postListData.pushDataList([postDataEg])
   }
 
   build() {
@@ -24,7 +26,7 @@ export struct CommunityPage {
                .onClick(() => {
                  buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.COMMUNITY_POSTPAGE, new Object(item))
                })
-             })
+             }, (item: PostModel) => item.post_id.toString())
           }
           .alignListItem(ListItemAlign.Center)
           .height('100%')

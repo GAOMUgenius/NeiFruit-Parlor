@@ -86,7 +86,7 @@ struct UserInfoItem {
       .justifyContent(FlexAlign.SpaceBetween)
       .onClick(() => {
         if (this.infoRouter) {
-          buildRouterModel(RouterNameConstants.TABPAGE, this.infoRouter, new Object({UserData: this.userData}))
+          buildRouterModel(RouterNameConstants.TABPAGE, this.infoRouter)
         }
       })
 

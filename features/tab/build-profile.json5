@@ -12,6 +12,12 @@
           "community"
         ]
       }
+    },
+    "externalNativeOptions": {
+      "arguments": "",
+      "abiFilters": [
+        "arm64-v8a"
+      ]
     }
   },
   "buildOptionSet": [

@@ -23,7 +23,7 @@ export interface POIItem {
 
 interface photosData {
   title: string
-  url: string
+  url: ResourceStr
 }
 
 export class AMapService {

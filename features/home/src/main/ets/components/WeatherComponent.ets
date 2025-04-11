@@ -2,7 +2,7 @@ import { UserData } from "datastore"
 import { WeatherResponse } from "utils"
 import { ComposeListItem } from "@ohos.arkui.advanced.ComposeListItem"
 
-
+@Preview
 @Component
 export struct WeatherComponent {
   @Prop nowWeatherData: WeatherResponse

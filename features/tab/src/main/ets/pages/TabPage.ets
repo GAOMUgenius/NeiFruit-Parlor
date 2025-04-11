@@ -11,18 +11,27 @@ import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
 import { CommunityPage } from 'community'
 import { bundleManager } from "@kit.AbilityKit"
 import { fetchWeatherData, getIpLocation, IpLocationResult, splitRectangle, WeatherResponse } from "utils"
+import { OrderData } from "uicomponents/src/main/ets/model/OrderModel"
+import { PostDataSource } from "community/src/main/ets/model/PostDataResource"
 
 @Entry({ routeName: 'TabPage' })
 @Component
 struct TabPage {
   @State currentIndex: TabBarType = TabBarType.MAINPAGE
   @State tabPathStack: NavPathStack = new NavPathStack()
-  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> = new Map();
-  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
-  @StorageLink(PreferenceConstant.USER_DATA) userData: UserData  = new UserData()
   @State nowWeatherData: WeatherResponse | null = null // 新增天气数据状态
   @State locationError: boolean = false
   @State isLoading: boolean = false
+  @State dataReady: boolean = false
+  @StorageLink(PreferenceConstant.ORDER_LIST_KEY) orderList: OrderData[] = [];
+  @StorageLink(PreferenceConstant.CART_ISCHOOSE_KEY) productSelectionMap: Map<string, ProductSelection> = new Map();
+  @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
+  @StorageLink(PreferenceConstant.USER_DATA)@Watch('userDataRefresh') userData: UserData  = new UserData()
+  @StorageLink(PreferenceConstant.POST_LIST) postListData: PostDataSource = new PostDataSource()
+  userDataRefresh() {
+
+  }
+
 
   async aboutToAppear(): Promise<void> {
     if (!this.tabPathStack) {
@@ -32,6 +41,7 @@ struct TabPage {
     RouterModule.createRouter(RouterNameConstants.TABPAGE, this.tabPathStack);
 
     await this.fetchData()
+    this.dataReady = true;
   }
 
   // 提取数据获取逻辑到独立方法
@@ -67,39 +77,49 @@ struct TabPage {
 
   build() {
     Navigation(this.tabPathStack) {
-      Flex({ direction: FlexDirection.Column }) {
-        Tabs({ index: this.currentIndex }) {
-          TabContent() {
-            HomePageStruct({
-              nowWeatherData: this.nowWeatherData,
-              locationError: this.locationError,
-              onRetry: this.handleRetry
-            })
-          }
-
-          TabContent() {
-            CommunityPage()
-          }
-
-          TabContent() {
-            ShopCarPage()
-          }
-
-          TabContent() {
-            MinePageStruct()
-          }
+      if(!this.dataReady) {
+        // 加载状态 UI
+        Column() {
+          Progress({ value: 200 })
+          Text('正在加载初始数据...')
         }
-        .layoutWeight(1)
-        .barHeight(0)
-        .scrollable(false)
-        .onChange((index) => {
-          this.currentIndex = index;
-        })
+        .width('100%')
+        .height('100%')
+      } else {
+        Flex({ direction: FlexDirection.Column }) {
+          Tabs({ index: this.currentIndex }) {
+            TabContent() {
+              HomePageStruct({
+                nowWeatherData: this.nowWeatherData,
+                locationError: this.locationError,
+                onRetry: this.handleRetry
+              })
+            }
 
-        CustomTabBar({ currentIndex: $currentIndex })
+            TabContent() {
+              CommunityPage()
+            }
+
+            TabContent() {
+              ShopCarPage()
+            }
+
+            TabContent() {
+              MinePageStruct()
+            }
+          }
+          .layoutWeight(1)
+          .barHeight(0)
+          .scrollable(false)
+          .onChange((index) => {
+            this.currentIndex = index;
+          })
+
+          CustomTabBar({ currentIndex: $currentIndex })
+        }
+        .backgroundColor($r('app.color.mainpage_background'))
+        .width('100%')
       }
-      .backgroundColor($r('app.color.mainpage_background'))
-      .width('100%')
     }
     .navDestination(this.routerMap)
     .hideTitleBar(true)

@@ -2,7 +2,9 @@ import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstan
 import { AppraiseData, AppraiseListComponent, getAppraise,
   ProductDataSource,
   ProductView, RecommendComponent } from 'uicomponents'
-import { productInfoParameter, ProductInfoParameter, SellingPointInfoList } from '../model/ProductInfoModel'
+import { productInfoParameter, ProductInfoParameter,
+  productInfoParameterList,
+  SellingPointInfoList } from '../model/ProductInfoModel'
 
 import { PreferenceConstant, PreferenceManager } from 'datastore'
 import { ProductData, ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
@@ -36,8 +38,29 @@ struct ProductInfoPageSturct {
   @State productAppraise: AppraiseData[] = [new AppraiseData()]
   @State product: ProductData = new ProductData(this.productInfo.id, this.productInfo.product_picture, this.productInfo.product_name, this.productInfo.product_price, this.productInfo.product_unit, this.productInfo.product_capacity, this.productInfo.product_capacity_unit)
 
+
+
   async aboutToAppear(): Promise<void> {
-    // 检查 product_id 是否有效
+    const foundProduct = productInfoParameterList.find(item => item.id === this.product_id);
+    this.productInfo = foundProduct ? foundProduct : productInfoParameter;
+    // 更新 sellingPointList
+    this.sellingPointList = [
+      new SellingPointInfoList(this.productInfo.productinfo_storage, '储存条件'),
+      new SellingPointInfoList(this.productInfo.productinfo_reason, '推荐理由'),
+      new SellingPointInfoList(this.productInfo.productinfo_advantage, '商品优势'),
+      new SellingPointInfoList(this.productInfo.productinfo_brand, '商品品牌'),
+    ];
+    // 更新 product 对象
+    this.product = new ProductData(
+      this.productInfo.id,
+      this.productInfo.product_picture,
+      this.productInfo.product_name,
+      this.productInfo.product_price,
+      this.productInfo.product_unit,
+      this.productInfo.product_capacity,
+      this.productInfo.product_capacity_unit
+    );
+    // 获取评价数据
     if (isNaN(this.product_id)) {
       console.error("Invalid product_id:", this.product_id);
       return;

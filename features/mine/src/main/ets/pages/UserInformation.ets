@@ -1,16 +1,19 @@
+import { PreferenceConstant, UserData } from 'datastore';
 import { BuilderNameConstants, RouterModule } from 'routermodule';
 import { Logger } from 'utils';
 import { CustomUserInfomation } from '../compenents/CustomUserInformation';
-import { UserAccountJSONToParse } from '../model/JSONToParse';
 import { UserInfo } from '../model/UserInfoModel';
 
-@Builder
-export function UserInformation(value: object) {
+@Component
+struct UserInfoMationStruct {
+  @StorageLink(PreferenceConstant.USER_DATA) userData: UserData | undefined = AppStorage.get(PreferenceConstant.USER_DATA)
+
+  build() {
     NavDestination() {
       Row(){
         Column() {
           Row(){
-            Image($r(UserAccountJSONToParse(value).user_picture))
+            Image($r(this.userData?.user_picture))
               .size({
                 width: 100,
                 height: 100
@@ -28,7 +31,7 @@ export function UserInformation(value: object) {
           .width('90%')
 
 
-          CustomUserInfomation(UserInfo, UserAccountJSONToParse(value))
+          CustomUserInfomation(UserInfo, this.userData!)
 
         }
         .justifyContent(FlexAlign.Center)
@@ -41,6 +44,12 @@ export function UserInformation(value: object) {
       .height('100%')
     }
     .title('个人信息')
+  }
+}
+
+@Builder
+export function UserInformation(value: object) {
+  UserInfoMationStruct()
 }
 
 

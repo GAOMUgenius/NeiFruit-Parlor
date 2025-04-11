@@ -10,7 +10,7 @@ export struct PostComponent {
     this.contentPicture = this.postData.post_content_picture.slice(0, 3);
   } else {
     this.contentPicture = this.postData.post_content_picture;
-  }
+    }
   }
 
   build() {
@@ -57,8 +57,8 @@ export struct PostComponent {
 
       if(this.postData.post_content_picture) {
         Row() {
-          ForEach(this.contentPicture, (item: string) => {
-            Image($r(item))
+          ForEach(this.contentPicture, (item: ResourceStr) => {
+            Image(item)
               .width('33%')
               .aspectRatio(1)
               .objectFit(ImageFit.Cover)

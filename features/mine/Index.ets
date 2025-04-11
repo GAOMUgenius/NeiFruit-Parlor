@@ -13,6 +13,12 @@ export function harInit(builderName: string): void {
       case BuilderNameConstants.MINE_EMAILCHANGE:
         import ("./src/main/ets/pages/EmailChange");
         break
+    case BuilderNameConstants.MINE_PAUMANAGEPAGE:
+      import ("./src/main/ets/pages/PayManagePage");
+      break
+    case BuilderNameConstants.MINE_INTRODUCECHANGEPAGE:
+      import ("./src/main/ets/pages/ItroduceChangePage");
+      break
     default:
       break;
   }

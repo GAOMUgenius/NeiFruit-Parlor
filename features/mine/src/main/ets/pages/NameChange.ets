@@ -1,10 +1,11 @@
-import { UserData } from "datastore";
+import { PreferenceConstant, UserData } from "datastore";
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "routermodule";
-import { UserAccountJSONToParse } from "../model/JSONToParse";
+
 
 @Component
 struct NameChangeStruct{
-  @Prop newUserData: UserData
+  @State newUserData: UserData = new UserData()
+  @StorageLink(PreferenceConstant.USER_DATA) userData: UserData | undefined = AppStorage.get(PreferenceConstant.USER_DATA)
   build() {
     NavDestination() {
       Row() {
@@ -23,6 +24,9 @@ struct NameChangeStruct{
           Button('保存')
             .onClick(() => {
               //上传逻辑
+              if (this.userData) {
+                this.userData.username = this.newUserData.username
+              }
 
               //回到上一级
               RouterModule.pop(RouterNameConstants.TABPAGE)
@@ -50,7 +54,7 @@ struct NameChangeStruct{
 
 @Builder
 export function NameChange(value: object) {
-  NameChangeStruct({ newUserData: JSON.parse(JSON.stringify(value)) })
+  NameChangeStruct()
 }
 
 const builderName = BuilderNameConstants.MINE_NAMECHANGE;

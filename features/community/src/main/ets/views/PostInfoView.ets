@@ -16,13 +16,15 @@ import { PostModel } from '../model/PostModel'
    NavDestination() {
     Scroll() {
      Column() {
-      Swiper() {
-       ForEach(this.contentPicture, (item: string) => {
-        Image($r(item))
-         .objectFit(ImageFit.Auto)
-       })
+      if(this.contentPicture.length != 0) {
+       Swiper() {
+        ForEach(this.contentPicture, (item: string) => {
+         Image(item)
+          .objectFit(ImageFit.Auto)
+        })
+       }
+       .loop(false)
       }
-      .loop(false)
 
       Row() {
        Image($r(this.postInfo.user_picture))

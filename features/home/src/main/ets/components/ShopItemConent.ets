@@ -9,21 +9,22 @@ import { ShopDataSource } from "../model/ShopDataModel";
 @Component
 export struct ShopItemContent{
   @Prop categoryType: CategoryType
-  @State dataSource: ShopDataSource = new ShopDataSource(this.categoryType);
-  @State datalist: ShopInterface[] = []
+  @State dataSource: ShopDataSource = new ShopDataSource();
+  @State@Watch('dataListRefresh') datalist: ShopInterface[] = []
+  dataListRefresh() {
+    this.dataSource.pushDataList(this.datalist)
+  }
 
   async aboutToAppear(): Promise<void> {
     const userData: UserData = AppStorage.get(PreferenceConstant.USER_DATA)!;
     const apiData: POIItem[] = await AMapService.getPOIs(this.categoryType,userData.community_location)
     this.datalist = apiData.map(this.convertToShopInterface);
-    this.dataSource.pushDataList(this.datalist)
-    this.datalist = this.dataSource._data
   }
 
   public convertToShopInterface(poi: POIItem): ShopInterface {
     const picture = poi.photos?.length
       ? poi.photos.map(photo => photo.url)
-      : ['app.media.community_icon_add_picture'];
+      : [$r('app.media.community_icon_add_picture')];
     return {
       id: poi.id,
       name: poi.name,
@@ -40,15 +41,17 @@ export struct ShopItemContent{
     WaterFlow({
       footer: (): void => this.itemFoot()
     }) {
-      ForEach(this.datalist, (shop: ShopInterface) => {
-        // FlowItem() {
+      LazyForEach(this.dataSource, (shop: ShopInterface) => {
+        FlowItem() {
           ShopItem({ shop: shop })
             .onClick(() => {
               buildRouterModel(RouterNameConstants.TABPAGE, BuilderNameConstants.HOME_SHOPINFOPAGE, new Object(shop))
             })
-        // }
+        }
       }, (shop: ShopInterface) => shop.id.toString()) // 需要指定唯一键生成器
     }
+    .cachedCount(7)
+    .height('auto')
     .layoutDirection(FlexDirection.Column)
     .columnsTemplate('1fr')
     .columnsGap(8)
@@ -68,6 +71,7 @@ export struct ShopItemContent{
   }
 }
 
+@Reusable
 @Component
 struct ShopItem {
   @Prop shop: ShopInterface

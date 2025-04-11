@@ -3,6 +3,7 @@ export interface PayManageData {
   title: string
 }
 
+
 export const PayManageInfo: PayManageData[] = [
   {
     img: $r('app.media.pay_manage_pay'),

@@ -7,4 +7,6 @@ export class PreferenceConstant {
   static readonly CART_KEY = 'cart';
   static readonly CART_ISCHOOSE_KEY = 'cart_ischoose';
   static readonly USER_DATA = 'user_data';
+  static readonly  ORDER_LIST_KEY = 'order_list';
+  static readonly  POST_LIST = 'post_list';
 }
