@@ -1,4 +1,6 @@
 import http from '@ohos.net.http';
+import { ExpandMode } from '@kit.ArkUI';
+
 // import { i18n } from '@kit.LocalizationKit';
 // 定义API 返回的天气数据接口
 export class WeatherResponse {
@@ -67,6 +69,82 @@ export async function fetchWeatherData(id: string): Promise<WeatherResponse> {
     console.error('请求URL:', apiUrl);
     throw new Error(`网络请求失败：${e.message}`);
   }
+}
+
+export function changeIcon(icon: string): string {
+  switch (icon) {
+    // 白天晴
+    case '100': return 'sunny_light';
+  // 白天多云/阴
+    case '101':
+    case '104': return 'Overcast_sky';
+  // 少云/晴间多云
+    case '102':
+    case '103': return 'cloudy_light';
+  // 夜晚晴
+    case '150':
+    case '152': return 'sunny_night';
+  // 夜晚多云
+    case '151':
+    case '153': return 'cloudy_night';
+
+  // 雨 (白天)
+    case '300': return 'shower_light';      // 阵雨
+    case '301': return 'rainstorm';         // 强阵雨
+    case '305': return 'small_rain';        // 小雨
+    case '306': return 'moderate_rain';     // 中雨
+    case '307':
+    case '308':
+    case '310':
+    case '311':
+    case '312': return 'heavy_rain';        // 大雨及以上
+  // 夜晚降雨
+    case '350': return 'shower_night';      // 夜晚阵雨
+    case '351': return 'rainstorm';         // 夜晚强阵雨
+
+  // 雷暴相关
+    case '302':
+    case '303': return 'thundershower';     // 雷阵雨
+    case '304': return 'hailstone';         // 冰雹
+
+  // 雪
+    case '400': return 'Light_snow';        // 小雪
+    case '401': return 'Moderate_snow';     // 中雪
+    case '402':
+    case '410': return 'Heavy_snow';        // 大雪
+    case '403': return 'blizzard';          // 暴雪
+    case '404':
+    case '405': return 'sleet';             // 雨夹雪
+    case '406': return 'shower_light';      // 白天阵雨夹雪
+    case '407': return 'Light_snow';        // 白天阵雪
+    case '456': return 'sleet';             // 夜晚阵雨夹雪
+    case '457': return 'Light_snow';        // 夜晚阵雪
+    case '499': return 'snow';              // 通用雪
+
+  // 雾/霾/沙尘
+    case '500':
+    case '501':
+    case '509':
+    case '510':
+    case '514':
+    case '515': return 'The_fog';           // 雾相关
+    case '502':
+    case '511':
+    case '512':
+    case '513': return 'haze';              // 霾
+    case '503':
+    case '504':
+    case '507':
+    case '508': return 'Sand_blowing';      // 沙尘
+
+  // 极端天气
+    case '900':
+    case '901': return 'Overcast_sky';      // 热/冷
+
+    // 默认未知天气
+    default: return 'Overcast_sky';
+  }
+
 }
 
 //获取城市ID

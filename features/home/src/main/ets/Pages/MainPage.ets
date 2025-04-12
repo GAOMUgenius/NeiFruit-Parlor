@@ -47,9 +47,11 @@ export struct HomePageStruct {
                 this.getLoadingState()
               }
             }
-            .margin({ top: 80 })
+            .indicator(false)
+            // .margin({ top: 80 })
+            .margin({ top: 20 })
             .width('100%')
-            .height(200)
+            .height(230)
             .backgroundColor(Color.White)
 
             CategoryTabs()
@@ -58,7 +60,7 @@ export struct HomePageStruct {
         }
         .width('100%')
 
-        this.BuildFixedSearchBar()
+        // this.BuildFixedSearchBar()
       }
     }
   }
