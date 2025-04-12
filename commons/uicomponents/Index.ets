@@ -4,7 +4,7 @@ export { ProductData, ProductSelection, ProductData_List } from './src/main/ets/
 export { OrderItem, OrderData, SelectedProduct, PayStatus } from './src/main/ets/model/OrderModel'
 export { ProductDataSource } from './src/main/ets/model/ProductDataSource'
 export { StarRating } from './src/main/ets/components/StarRatingComponent'
-export { AppraiseData } from './src/main/ets/model/AppraiseModel'
+export { AppraiseData, appraisePostDataList,appraiseProductDataList } from './src/main/ets/model/AppraiseModel'
 export { AppraiseDataSource } from './src/main/ets/model/AppraiseDataSource'
 export { AppraiseListComponent } from './src/main/ets/components/AppraiseComponent'
 export { getAppraise } from './src/main/ets/model/AppraiseServer'

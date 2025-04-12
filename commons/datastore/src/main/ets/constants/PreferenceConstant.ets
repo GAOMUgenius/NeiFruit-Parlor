@@ -9,4 +9,5 @@ export class PreferenceConstant {
   static readonly USER_DATA = 'user_data';
   static readonly  ORDER_LIST_KEY = 'order_list';
   static readonly  POST_LIST = 'post_list';
+  static readonly  POST_APPRAISE_LIST = 'post_appraise_list';
 }

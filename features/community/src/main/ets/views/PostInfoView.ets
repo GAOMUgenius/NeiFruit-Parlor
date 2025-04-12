@@ -1,9 +1,11 @@
+import { appraisePostDataList } from 'uicomponents';
 import { PostModel } from '../model/PostModel'
 
 @Component
  export struct PostInfoView {
   @Prop postInfo: PostModel
   @State contentPicture: ResourceStr[] = []; // 延迟初始化
+
 
  aboutToAppear() {
   // 确保在 postInfo 可用后赋值
@@ -27,7 +29,7 @@ import { PostModel } from '../model/PostModel'
       }
 
       Row() {
-       Image($r(this.postInfo.user_picture))
+       Image(this.postInfo.user_picture)
         .size({
          width: 35,
          height: 35

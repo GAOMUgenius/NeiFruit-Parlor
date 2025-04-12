@@ -9,7 +9,7 @@ export struct UserInfoView {
   build() {
     Column() {
       Row() {
-        Image($r(this.userData.user_picture))
+        Image(this.userData.user_picture)
           .borderRadius(30)
           .width(60)
           .height(60)

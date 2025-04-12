@@ -1,5 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from 'routermodule'
-import { AppraiseData, AppraiseListComponent, getAppraise,
+import { AppraiseData, AppraiseListComponent,
+  appraiseProductDataList,
+  getAppraise,
   ProductDataSource,
   ProductView, RecommendComponent } from 'uicomponents'
 import { productInfoParameter, ProductInfoParameter,
@@ -67,11 +69,14 @@ struct ProductInfoPageSturct {
     }
     let preferenceManager = PreferenceManager.getInstance()
     const token = await preferenceManager.getValue<string>(PreferenceConstant.USER_TOKEN_KEY)
-    if (token) {
-      const getId: number = Number(this.product_id)
-      const getAppraiseInfo: AppraiseData[] = await getAppraise(getId as number, 2, 1, token)
-      this.productAppraise = getAppraiseInfo
-    }
+    // if (token) {
+    //   const getId: number = Number(this.product_id)
+    //   const getAppraiseInfo: AppraiseData[] = await getAppraise(getId as number, 2, 1, token)
+    //   this.productAppraise = getAppraiseInfo
+    // }
+
+    const filteredData = appraiseProductDataList.filter(item => item.post_id === this.product.id)
+    this.productAppraise = filteredData
   }
 
   build() {

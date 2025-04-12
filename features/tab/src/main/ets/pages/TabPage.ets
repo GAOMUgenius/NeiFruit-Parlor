@@ -6,7 +6,7 @@ import { HomePageStruct } from "home/src/main/ets/Pages/MainPage"
 import { ShopCarPage } from 'shopcar/src/main/ets/pages/ShopCarPage'
 
 import { PreferenceConstant, UserData } from 'datastore'
-import { ProductDataSource } from 'uicomponents'
+import { AppraiseDataSource, appraisePostDataList, ProductDataSource } from 'uicomponents'
 import { ProductSelection } from 'uicomponents/src/main/ets/model/ProductModel'
 import { CommunityPage } from 'community'
 import { bundleManager } from "@kit.AbilityKit"
@@ -28,6 +28,7 @@ struct TabPage {
   @StorageLink(PreferenceConstant.CART_KEY) localDataSource: ProductDataSource  = new ProductDataSource()
   @StorageLink(PreferenceConstant.USER_DATA)@Watch('userDataRefresh') userData: UserData  = new UserData()
   @StorageLink(PreferenceConstant.POST_LIST) postListData: PostDataSource = new PostDataSource()
+  @StorageLink(PreferenceConstant.POST_APPRAISE_LIST) postAppraiseData: AppraiseDataSource = new AppraiseDataSource()
   userDataRefresh() {
 
   }
@@ -42,6 +43,7 @@ struct TabPage {
 
     await this.fetchData()
     this.dataReady = true;
+    this.postAppraiseData.pushDataList(appraisePostDataList)
   }
 
   // 提取数据获取逻辑到独立方法

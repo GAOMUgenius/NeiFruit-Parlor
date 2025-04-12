@@ -1,7 +1,9 @@
 import { it } from "@ohos/hypium";
 import { PreferenceConstant } from "datastore";
 import { BuilderNameConstants, RouterModule } from "routermodule";
-import { AppraiseData, AppraiseDataSource, getAppraise, ProductDataSource, StarRating } from "uicomponents";
+import { AppraiseData, AppraiseDataSource,
+  appraiseProductDataList,
+  getAppraise, ProductDataSource, StarRating } from "uicomponents";
 import { ProductData, ProductSelection } from "uicomponents/src/main/ets/model/ProductModel";
 import { addToCart } from "uicomponents/src/main/ets/model/ProuductServer";
 
@@ -18,7 +20,9 @@ struct ProductAppraisePageStruct {
 
 
   aboutToAppear(): void {
-    this.productAppraiseData.pushDataList(this.productAppraise)
+    const filteredData = appraiseProductDataList.filter(item => item.post_id === this.product.id)
+    this.productAppraiseData.pushDataList(filteredData)
+    // this.productAppraiseData.pushDataList(this.productAppraise)
   }
 
   build() {

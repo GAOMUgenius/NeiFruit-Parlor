@@ -5,6 +5,8 @@ export struct PostComponent {
   @Prop postData: PostModel
   @State contentPicture: ResourceStr[] = []
   @State isLikesOn: boolean = false
+  onLikeChange?: ( postId: number, newLikes: number ) => void = () => {
+  }
 
   aboutToAppear(): void {
     if (this.postData.post_content_picture.length > 3) {
@@ -14,10 +16,24 @@ export struct PostComponent {
     }
   }
 
+  // 修改点赞处理逻辑
+  handleLikeClick() {
+    // 计算新点赞数
+    const newLikes = this.isLikesOn ?
+      this.postData.post_likes_number - 1 :
+      this.postData.post_likes_number + 1;
+
+    // 更新本地UI状态
+    this.isLikesOn = !this.isLikesOn;
+
+    // 通知父组件
+    this.onLikeChange?.(this.postData.post_id, newLikes);
+  }
+
   build() {
     Column() {
       Row() {
-        Image($r(this.postData.user_picture))
+        Image(this.postData.user_picture)
           .size({
             width: 18,
             height: 18
@@ -101,10 +117,7 @@ export struct PostComponent {
               height: 20
             })
             .margin({ right: 5 })
-            .onClick(() => {
-              this.isLikesOn ? this.postData.post_likes_number-- : this.postData.post_likes_number++
-              this.isLikesOn = !this.isLikesOn
-            })
+            .onClick(() => this.handleLikeClick())
 
           Text(this.postData.post_likes_number.toString())
             .textAlign(TextAlign.Start)

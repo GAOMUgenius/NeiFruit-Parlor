@@ -2,6 +2,7 @@ import { ProductData } from "uicomponents"
 
 export class ShopInfoData {
   id: number = 1
+  post_id: number = 1
   shop_picture: ResourceStr[] = [$r('app.media.ShopInfoSwiper1'), $r('app.media.ShopInfoSwiper2'), $r('app.media.ShopInfoSwiper3')]
   shop_name: string = '引力舍'
   shop_rating: number = 3.5
@@ -14,14 +15,16 @@ export class ShopInfoData {
 
 export class ShopAppraise {
   id: number
+  post_id: number
   user_name: string
   user_picture: ResourceStr
   user_rating: number
   user_content: string
   user_content_picture?: ResourceStr[]
 
-  constructor(id: number = 1000, user_name: string = '嘻嘻学啥呢', user_picture: ResourceStr = $r('app.media.shopPicture'), user_rating: number = 4, user_content: string = '非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满') {
+  constructor(id: number = 1000, post_id: number = 0, user_name: string = '嘻嘻学啥呢', user_picture: ResourceStr = $r('app.media.shopPicture'), user_rating: number = 4, user_content: string = '非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满非常好吃，感觉人生得到了圆满') {
     this.id = id
+    this.post_id = post_id
     this.user_name = user_name
     this.user_picture = user_picture
     this.user_rating = user_rating

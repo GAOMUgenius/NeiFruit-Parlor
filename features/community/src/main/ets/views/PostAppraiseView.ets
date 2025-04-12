@@ -1,21 +1,23 @@
 import { PreferenceConstant } from 'datastore'
-import { AppraiseData, AppraiseDataSource } from 'uicomponents'
+import { AppraiseData, AppraiseDataSource, appraisePostDataList } from 'uicomponents'
 
 @Component
 export struct PostAppraiseView {
+  @Prop postId: number
   @State postAppraise: AppraiseData[] = [new AppraiseData(), new AppraiseData()]
-  @State postAppraiseData: AppraiseDataSource = new AppraiseDataSource()
+  @StorageLink(PreferenceConstant.POST_APPRAISE_LIST) postAppraiseData: AppraiseDataSource = AppStorage.get(PreferenceConstant.POST_APPRAISE_LIST)!
   @State isLoading: boolean = false
 
   aboutToAppear(): void {
-    this.postAppraiseData.pushDataList(this.postAppraise)
+    const filteredData = this.postAppraiseData.dataList.filter(item => item.post_id === this.postId)
+    this.postAppraise = filteredData
   }
 
   build() {
       Stack() {
         Scroll() {
           List() {
-            LazyForEach(this.postAppraiseData, (item: AppraiseData) => {
+            ForEach(this.postAppraise, (item: AppraiseData) => {
               ListItem() {
                 PostAppraiseListItem({
                   postAppraise: item,

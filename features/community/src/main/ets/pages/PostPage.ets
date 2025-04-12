@@ -4,10 +4,61 @@ import { LengthMetrics } from "@kit.ArkUI";
 import { PostInfoView } from "../views/PostInfoView";
 import { PostModel } from "../model/PostModel";
 import { PostAppraiseView } from "../views/PostAppraiseView";
+import { AppraiseData, AppraiseDataSource } from "uicomponents";
+import { PreferenceConstant, UserData } from "datastore";
+import { PostDataSource } from "../model/PostDataResource";
 
 @Component
 struct PostPageStruct {
   @Prop postInfo: PostModel
+  @State commentText: string = ''
+  @State isPublishShow: boolean = false
+  @StorageLink(PreferenceConstant.USER_DATA) userData: UserData = AppStorage.get(PreferenceConstant.USER_DATA)!
+  @StorageLink(PreferenceConstant.POST_APPRAISE_LIST) postAppraiseData: AppraiseDataSource = AppStorage.get(PreferenceConstant.POST_APPRAISE_LIST)!
+  @StorageLink(PreferenceConstant.POST_LIST) postListData: PostDataSource = AppStorage.get(PreferenceConstant.POST_LIST)!
+
+  private publishAppraise() {
+    const newAppraise = new AppraiseData(
+      Date.now(), // 使用时间戳作为唯一ID
+      this.postInfo.post_id,
+      this.userData.username,
+      this.userData.user_picture,
+      5, // 默认评分
+      this.commentText,
+      // this.selectedImages
+    )
+    // 更新数据源
+    this.postAppraiseData.pushDataItem(newAppraise)
+
+    // 清空输入
+    this.commentText = ''
+    // this.selectedImages = []
+
+    // 更新评论数
+    const newAppraiseNumber = this.postInfo.post_appraise_number + 1
+    const index = this.postListData.findIndex(item => item.post_id === this.postInfo.post_id);
+    if (index === -1) return;
+    // 获取原数据
+    const originalData = this.postListData.getData(index);
+
+    // 创建新数据对象
+    const newData = new PostModel(
+      originalData.post_id,
+      originalData.user_id,
+      originalData.user_picture,
+      originalData.user_name,
+      originalData.user_community,
+      newAppraiseNumber,
+      originalData.post_likes_number, // 更新点赞数
+      originalData.post_title,
+      originalData.post_content,
+      originalData.post_content_picture
+    );
+
+    // 调用数据源方法更新
+    this.postInfo = newData
+    this.postListData.changeData(index, newData);
+  }
 
   build() {
     NavDestination() {
@@ -25,6 +76,17 @@ struct PostPageStruct {
             .fontSize(13)
             .fontColor(Color.Gray)
             .borderRadius(8)
+              // 通过选定的半模态接口，绑定模态展示界面，style中包含两个参数，一个是设置半模态的高度，不设置时默认高度是Large，一个是是否显示控制条DragBar，默认是true显示控制条，通过onDisappear控制状态变量变换。
+            .bindSheet(this.isPublishShow, this.inputAppraise(), {
+              height: 300,
+              dragBar: false,
+              onDisappear: () => {
+                this.isPublishShow = false;
+              }
+            })
+            .onClick(() => {
+              this.isPublishShow = !this.isPublishShow;
+            })
 
           Column() {
             Image($r('app.media.community_likes_off_icon'))
@@ -61,6 +123,36 @@ struct PostPageStruct {
       .height('100%')
     }
   }
+  @Builder
+  inputAppraise() {
+    // 评论输入区域
+    Row() {
+      TextArea({ text: this.commentText, placeholder: '说点什么...' })
+        .height('auto')
+        .padding(8)
+        .backgroundColor('#fff')
+        .borderRadius(8)
+        .width('60%')
+        .onChange((value) => {
+          this.commentText = value
+        })
+
+      Button('发布')
+        .width(60)
+        .height(30)
+        .backgroundColor('#007DFF')
+        .fontColor(Color.White)
+        .onClick(() => {
+          this.publishAppraise()
+          this.isPublishShow = !this.isPublishShow
+        })
+        .margin({ top: 10 })
+    }
+    .alignItems(VerticalAlign.Top)
+    .padding(8)
+    .backgroundColor('#f5f5f5')
+    .width('100%')
+  }
 }
 
 @Component
@@ -86,7 +178,7 @@ struct PostTab {
         }
         .tabBar(this.tabBuilder(0, this.tabArray[0]))
         TabContent() {
-          PostAppraiseView()
+          PostAppraiseView({ postId: this.postinfo.post_id })
         }
         .tabBar(this.tabBuilder(1, this.tabArray[1]))
       }

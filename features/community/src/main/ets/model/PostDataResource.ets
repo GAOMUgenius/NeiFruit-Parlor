@@ -63,7 +63,15 @@ export class PostDataSource extends BasicDataSource {
   }
 
   public changeData(index: number, data: PostModel): void {
-    this.dataList.splice(index, 1, data);
+    // 创建新数组实现不可变更新
+    const newDataList = [
+      ...this.dataList.slice(0, index),
+      data,
+      ...this.dataList.slice(index + 1)
+    ];
+
+    // 必须整体替换数组
+    this.dataList = newDataList;
     this.notifyDataChange(index);
   }
 
